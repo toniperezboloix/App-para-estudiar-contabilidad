@@ -71,6 +71,16 @@ function leerImporte(texto) {
 
 const centimos = (n) => Math.round(n * 100);
 
+// Fisher-Yates: devuelve una copia desordenada del array
+function barajar(lista) {
+  const copia = lista.slice();
+  for (let i = copia.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
+
 function vibrar(patron) {
   try {
     if (navigator.vibrate) navigator.vibrate(patron);
@@ -97,7 +107,7 @@ const CUADRO_PGC = [
       { codigo: '11', nombre: 'Reservas', cuentas: [['112', 'Reserva legal'], ['113', 'Reservas voluntarias']] },
       { codigo: '12', nombre: 'Resultados pendientes de aplicación', cuentas: [['129', 'Resultado del ejercicio']] },
       { codigo: '13', nombre: 'Subvenciones, donaciones y legados', cuentas: [['130', 'Subvenciones oficiales de capital']] },
-      { codigo: '17', nombre: 'Deudas a largo plazo por préstamos recibidos', cuentas: [['170', 'Deudas a largo plazo con entidades de crédito']] },
+      { codigo: '17', nombre: 'Deudas a largo plazo por préstamos recibidos', cuentas: [['170', 'Deudas a largo plazo con entidades de crédito'], ['173', 'Proveedores de inmovilizado a largo plazo']] },
     ],
   },
   {
@@ -215,11 +225,17 @@ const ESTILO_DESTINO = {
    teoria: secciones { id, titulo, resumen, piezas: [...] }
            tipos de pieza: html · asiento · consejo · ecuacion · masas ·
            reglas · simulador-balance · explorador-pgc · codificacion
-   test:   { id, pregunta, opciones: [A, B, C], correcta, explicacion }
+   configTest: { preguntasPorIntento, aprobado }   (opcional)
+   test:   banco de preguntas. Cada intento sortea «preguntasPorIntento»
+           y baraja las opciones. Formatos admitidos:
+           { id, pregunta, correcta: 'texto', incorrectas: ['…'], explicacion }
+           { id, pregunta, opciones: ['…'], correcta: índice, explicacion }
    casos:  { id, tipo: 'asiento', titulo, enunciado, cuentasDisponibles,
              solucion: [{ cuenta, debe | haber }], pista, explicacion }
-           { id, tipo: 'clasificar', titulo, enunciado,
-             cuentas: [{ codigo, grupo, pista, explicacion }] }
+           { id, tipo: 'clasificar', titulo, enunciado, rejilla,
+             opciones: [{ valor, etiqueta, tono?, ancho? }],
+             cuentas: [{ codigo, correcta: valor, pista, explicacion }],
+             resumenOk }
    ===================================================================== */
 const ICONOS = {
   balanza: 'M12 3v18M8 21h8M5 7h14M5 7l-3 7a3 3 0 006 0L5 7zm14 0l-3 7a3 3 0 006 0l-3-7z',
@@ -339,49 +355,308 @@ const CONTENIDO_B0 = {
     },
   ],
 
+  // Cada intento sortea 10 preguntas del banco y baraja sus opciones.
+  configTest: { preguntasPorIntento: 10, aprobado: 8 },
+
+  // Banco de preguntas. La opción correcta se escribe en «correcta» y las
+  // erróneas en «incorrectas»; el orden en pantalla se baraja en cada intento,
+  // así que las explicaciones nunca se refieren a letras (A, B, C).
   test: [
+    /* --- Masas patrimoniales --- */
     {
-      id: 'b0-q1',
+      id: 'b0-q01',
       pregunta: 'Revisas el extracto del banco: la cuenta corriente de la empresa tiene 8.500 €. ¿En qué masa patrimonial está ese saldo?',
-      opciones: ['Activo corriente', 'Activo no corriente', 'Patrimonio neto'],
-      correcta: 0,
-      explicacion: 'La 572 Bancos es tesorería: dinero disponible de inmediato. Por eso es activo corriente. El activo no corriente es para bienes que se usan más de un año, como un ordenador o un vehículo.',
+      correcta: 'Activo corriente',
+      incorrectas: ['Activo no corriente', 'Patrimonio neto'],
+      explicacion: 'La 572 Bancos es tesorería: dinero disponible de inmediato, así que es activo corriente. El activo no corriente es para bienes que se usan más de un año, como un ordenador o un vehículo.',
     },
     {
-      id: 'b0-q2',
-      pregunta: 'Contabilizas la factura de un proveedor de mercaderías que pagarás a 60 días. Para la empresa, ¿qué es el saldo de la cuenta 400 Proveedores?',
-      opciones: ['Un activo, porque la mercancía ya está en el almacén', 'Un pasivo corriente', 'Un gasto del grupo 6'],
-      correcta: 1,
-      explicacion: 'La 400 recoge lo que debes al proveedor: es una deuda y vence en menos de un año, así que es pasivo corriente. La mercancía comprada va a la 600 Compras de mercaderías (gasto), no a la 400.',
+      id: 'b0-q02',
+      pregunta: 'Contabilizas la factura de un proveedor de mercaderías que pagarás a 60 días. ¿Qué es el saldo de la cuenta 400 Proveedores para la empresa?',
+      correcta: 'Un pasivo corriente',
+      incorrectas: ['Un activo, porque la mercancía ya está en el almacén', 'Un gasto del grupo 6'],
+      explicacion: 'La 400 recoge lo que debes al proveedor: es una deuda que vence en menos de un año, así que es pasivo corriente. La mercancía comprada va a la 600 Compras de mercaderías (gasto), no a la 400.',
     },
     {
-      id: 'b0-q3',
-      pregunta: 'Pagas por transferencia una factura de proveedor de 1.200 € que ya estaba contabilizada. ¿Cuál es el asiento del pago?',
-      opciones: ['572 Bancos al Debe · 400 Proveedores al Haber', '600 Compras al Debe · 572 Bancos al Haber', '400 Proveedores al Debe · 572 Bancos al Haber'],
-      correcta: 2,
-      explicacion: 'Al pagar, la deuda con el proveedor desaparece (un pasivo baja por el Debe) y sale dinero del banco (un activo baja por el Haber). La opción con la 600 duplicaría el gasto, que ya se registró al contabilizar la factura.',
+      id: 'b0-q03',
+      pregunta: 'La empresa compra una furgoneta de reparto que usará unos 6 años. ¿En qué masa patrimonial la registras?',
+      correcta: 'Activo no corriente',
+      incorrectas: ['Activo corriente', 'Gasto del ejercicio (grupo 6)'],
+      explicacion: 'Un bien que se usa más de un año es inmovilizado: va a la 218 Elementos de transporte, en el activo no corriente. Su coste se reparte entre los años de uso mediante la amortización.',
     },
     {
-      id: 'b0-q4',
-      pregunta: 'Te piden registrar el alquiler mensual de la oficina. ¿En qué grupo del PGC buscas la cuenta del gasto?',
-      opciones: ['Grupo 2 · Activo no corriente', 'Grupo 6 · Compras y gastos', 'Grupo 4 · Acreedores y deudores'],
-      correcta: 1,
-      explicacion: 'El alquiler es un gasto: va a la 621 Arrendamientos y cánones (subgrupo 62, Servicios exteriores). En el grupo 4 estaría la deuda con el arrendador (410) si no lo pagas al momento, pero no el gasto.',
+      id: 'b0-q04',
+      pregunta: 'El banco os concede un préstamo que se devolverá en 4 años. ¿Dónde aparece esa deuda en el balance?',
+      correcta: 'Pasivo no corriente',
+      incorrectas: ['Pasivo corriente', 'Patrimonio neto'],
+      explicacion: 'Las deudas que vencen en más de un año son pasivo no corriente (170 Deudas a largo plazo con entidades de crédito). Al cierre, la parte que vence en los 12 meses siguientes se reclasifica a corto plazo (520).',
     },
     {
-      id: 'b0-q5',
+      id: 'b0-q05',
+      pregunta: 'Tras facturar a varios clientes, la cuenta 430 Clientes tiene saldo. ¿Qué representa ese saldo?',
+      correcta: 'Un derecho de cobro: activo corriente',
+      incorrectas: ['Una deuda de la empresa: pasivo corriente', 'Un ingreso del grupo 7'],
+      explicacion: 'La 430 recoge lo que los clientes deben a la empresa: un derecho de cobro a corto plazo, es decir, activo corriente. El ingreso ya se registró en el grupo 7 (700 o 705) al emitir la factura.',
+    },
+    {
+      id: 'b0-q06',
+      pregunta: '¿En qué masa del balance se encuentra la cuenta 100 Capital social?',
+      correcta: 'Patrimonio neto',
+      incorrectas: ['Pasivo no corriente, porque se debe a los socios', 'Activo, porque es dinero de la empresa'],
+      explicacion: 'El capital es financiación propia que aportan los socios: forma parte del patrimonio neto. No es una deuda exigible como un préstamo, y el dinero aportado está en el activo (572), no en la 100.',
+    },
+    {
+      id: 'b0-q07',
+      pregunta: 'Al pagar la factura de un abogado has retenido el IRPF, que está en la cuenta 4751. ¿Qué masa es?',
+      correcta: 'Pasivo corriente',
+      incorrectas: ['Activo corriente', 'Gasto del grupo 6'],
+      explicacion: 'La 4751 Hacienda Pública, acreedora por retenciones practicadas recoge el dinero que has retenido y que debes ingresar a Hacienda en el trimestre (modelo 111). Es una deuda a corto plazo: pasivo corriente.',
+    },
+    {
+      id: 'b0-q08',
+      pregunta: 'La cuenta 472 Hacienda Pública, IVA soportado tiene saldo antes de la liquidación del trimestre. ¿Qué es?',
+      correcta: 'Activo corriente: IVA que se compensará con Hacienda',
+      incorrectas: ['Pasivo corriente: IVA que debes a Hacienda', 'Un gasto más de la compra'],
+      explicacion: 'El IVA soportado deducible no es gasto: es un crédito frente a Hacienda que se compensa con el IVA repercutido (477) en la liquidación. Por eso es activo corriente.',
+    },
+    {
+      id: 'b0-q09',
+      pregunta: 'En el balance de cierre aparece la cuenta 300 Mercaderías con el valor del inventario final. ¿En qué masa está?',
+      correcta: 'Activo corriente',
+      incorrectas: ['Activo no corriente', 'Gasto del grupo 6'],
+      explicacion: 'Las existencias se venderán en el ciclo normal de la actividad, así que son activo corriente. Las compras del año fueron a la 600 (gasto); la 300 solo recoge lo que queda en el almacén al cierre.',
+    },
+    {
+      id: 'b0-q10',
+      pregunta: '¿Cómo aparece en el balance la cuenta 281 Amortización acumulada del inmovilizado material?',
+      correcta: 'Restando del inmovilizado material, en el activo no corriente',
+      incorrectas: ['En el pasivo, como una deuda', 'Como un gasto en la Cuenta de Pérdidas y Ganancias'],
+      explicacion: 'La 281 tiene saldo acreedor y corrige el valor del inmovilizado: el balance muestra el coste menos la amortización acumulada. El gasto de cada año va a la 681, en Pérdidas y Ganancias.',
+    },
+
+    /* --- Ecuación del balance --- */
+    {
+      id: 'b0-q11',
+      pregunta: 'Una empresa tiene un activo de 50.000 € y un pasivo de 30.000 €. ¿Cuál es su patrimonio neto?',
+      correcta: '20.000 €',
+      incorrectas: ['80.000 €', '30.000 €'],
+      explicacion: 'Activo = Pasivo + Patrimonio neto, así que PN = Activo − Pasivo = 50.000 − 30.000 = 20.000 €.',
+    },
+    {
+      id: 'b0-q12',
       pregunta: 'Los socios amplían capital ingresando 3.000 € en el banco. ¿Qué efecto tiene en la ecuación del balance?',
-      opciones: ['Sube el activo y sube el pasivo', 'Sube el activo y baja el patrimonio neto', 'Sube el activo y sube el patrimonio neto'],
-      correcta: 2,
-      explicacion: 'Aumenta el banco (activo) y aumenta el capital social (100), que es patrimonio neto. El capital no es una deuda con terceros, por eso no es pasivo. Activo = Pasivo + PN sigue cuadrando: +3.000 a cada lado.',
+      correcta: 'Sube el activo y sube el patrimonio neto',
+      incorrectas: ['Sube el activo y sube el pasivo', 'Sube el activo y baja el patrimonio neto'],
+      explicacion: 'Aumenta el banco (activo) y aumenta el capital social (100), que es patrimonio neto. El capital no es una deuda con terceros, por eso no es pasivo. La ecuación sigue cuadrando: +3.000 a cada lado.',
+    },
+    {
+      id: 'b0-q13',
+      pregunta: 'Pagas por banco 1.000 € que debías a un proveedor. ¿Qué ocurre en la ecuación del balance?',
+      correcta: 'Bajan el activo y el pasivo en 1.000 €',
+      incorrectas: ['Baja el activo y sube el pasivo', 'Baja el activo y baja el patrimonio neto'],
+      explicacion: 'Sale dinero del banco (baja el activo) y desaparece la deuda con el proveedor (baja el pasivo). Pagar una deuda no es un gasto: el gasto se registró al recibir la factura.',
+    },
+    {
+      id: 'b0-q14',
+      pregunta: 'Compras un ordenador y lo pagas en el momento por banco. ¿Qué ocurre con el total del activo?',
+      correcta: 'No cambia: sube el inmovilizado y baja el banco en el mismo importe',
+      incorrectas: ['Sube, porque la empresa tiene un ordenador más', 'Baja, porque ha salido dinero del banco'],
+      explicacion: 'Es un intercambio dentro del activo: entra un ordenador (217) y sale el mismo importe del banco (572). El activo total, el pasivo y el patrimonio neto no varían.',
+    },
+    {
+      id: 'b0-q15',
+      pregunta: 'Compras mobiliario para la oficina y lo pagarás en 90 días. ¿Qué efecto tiene al recibirlo?',
+      correcta: 'Sube el activo y sube el pasivo',
+      incorrectas: ['Sube el activo y baja el patrimonio neto', 'No cambia nada hasta que lo pagues'],
+      explicacion: 'El mobiliario (216) entra en el activo desde que lo recibes, y a la vez nace una deuda con el proveedor de inmovilizado (523). La contabilidad registra la operación cuando ocurre, no cuando se paga.',
+    },
+    {
+      id: 'b0-q16',
+      pregunta: 'Un compañero te pregunta qué es el patrimonio neto. ¿Cuál es la respuesta correcta?',
+      correcta: 'Lo que pertenece a los socios: capital, reservas y resultado',
+      incorrectas: ['El dinero que la empresa tiene en el banco', 'Lo que la empresa debe a los bancos'],
+      explicacion: 'El patrimonio neto es la financiación propia: lo aportado por los socios (capital), los beneficios que se han quedado en la empresa (reservas) y el resultado del ejercicio. Es la diferencia entre activo y pasivo.',
+    },
+
+    /* --- Partida doble y Debe / Haber --- */
+    {
+      id: 'b0-q17',
+      pregunta: '¿Qué se cumple siempre en cualquier asiento contable?',
+      correcta: 'La suma del Debe es igual a la suma del Haber',
+      incorrectas: ['Intervienen exactamente dos cuentas', 'El Debe recoge lo que la empresa debe'],
+      explicacion: 'Es la partida doble: todo asiento cuadra. Puede haber más de dos cuentas (por ejemplo, gasto + IVA + proveedor), y «Debe» es solo el nombre de la columna izquierda, no significa deber dinero.',
+    },
+    {
+      id: 'b0-q18',
+      pregunta: 'Tu responsable te dice: «carga la 572». ¿Qué tienes que hacer?',
+      correcta: 'Anotar el importe en el Debe de la 572',
+      incorrectas: ['Anotar el importe en el Haber de la 572', 'Dejar el saldo de la 572 a cero'],
+      explicacion: 'Cargar es anotar en el Debe; abonar es anotar en el Haber. Cargar la 572 significa que entra dinero en el banco.',
+    },
+    {
+      id: 'b0-q19',
+      pregunta: '¿Por qué lado aumenta una cuenta de activo?',
+      correcta: 'Por el Debe',
+      incorrectas: ['Por el Haber', 'Depende de si es corriente o no corriente'],
+      explicacion: 'Todas las cuentas de activo, corrientes o no, aumentan por el Debe y disminuyen por el Haber. Por eso su saldo habitual es deudor.',
+    },
+    {
+      id: 'b0-q20',
+      pregunta: '¿Por qué lado aumenta una cuenta de pasivo?',
+      correcta: 'Por el Haber',
+      incorrectas: ['Por el Debe', 'Por el Debe si es a corto plazo y por el Haber si es a largo'],
+      explicacion: 'Los pasivos (y el patrimonio neto) aumentan por el Haber y disminuyen por el Debe, sea cual sea su plazo. Por eso su saldo habitual es acreedor.',
+    },
+    {
+      id: 'b0-q21',
+      pregunta: 'Registras la factura del alquiler de la oficina. ¿En qué lado va la cuenta de gasto 621?',
+      correcta: 'En el Debe',
+      incorrectas: ['En el Haber', 'Directamente en el patrimonio neto'],
+      explicacion: 'Los gastos del grupo 6 se cargan (Debe). La contrapartida en el Haber es la deuda con el arrendador (410) o el banco (572) si se paga en el momento.',
+    },
+    {
+      id: 'b0-q22',
+      pregunta: 'Emites una factura a un cliente por un servicio prestado. ¿En qué lado va la cuenta de ingreso 705?',
+      correcta: 'En el Haber',
+      incorrectas: ['En el Debe', 'En el activo corriente'],
+      explicacion: 'Los ingresos del grupo 7 se abonan (Haber). La contrapartida en el Debe es el derecho de cobro: 430 Clientes.',
+    },
+    {
+      id: 'b0-q23',
+      pregunta: 'En el mayor de una cuenta ves que tiene «saldo deudor». ¿Qué significa?',
+      correcta: 'Que la suma de su Debe es mayor que la de su Haber',
+      incorrectas: ['Que alguien debe dinero a la empresa', 'Que la suma de su Haber es mayor que la de su Debe'],
+      explicacion: 'El saldo es la diferencia entre Debe y Haber. Deudor: gana el Debe (activos y gastos). Acreedor: gana el Haber (pasivos, patrimonio neto e ingresos).',
+    },
+    {
+      id: 'b0-q24',
+      pregunta: '¿Cuál es el saldo habitual de la cuenta 400 Proveedores?',
+      correcta: 'Acreedor',
+      incorrectas: ['Deudor, porque la empresa le debe dinero', 'No tiene saldo habitual: depende del mes'],
+      explicacion: 'Es un pasivo: se abona al recibir la factura y se carga al pagarla. Mientras queden facturas pendientes, su saldo es acreedor. Un saldo deudor en un proveedor suele indicar un pago duplicado o una factura sin contabilizar.',
+    },
+    {
+      id: 'b0-q25',
+      pregunta: '¿Cuál es el saldo habitual de la cuenta 572 Bancos?',
+      correcta: 'Deudor',
+      incorrectas: ['Acreedor, porque el banco nos guarda el dinero', 'No tiene saldo habitual: depende del mes'],
+      explicacion: 'Es un activo: el dinero de la empresa. Si un día ves la 572 con saldo acreedor, la cuenta está en descubierto (o hay un error de registro): revísalo con el extracto.',
+    },
+    {
+      id: 'b0-q26',
+      pregunta: 'Pagas por transferencia una factura de proveedor de 1.200 € que ya estaba contabilizada. ¿Cuál es el asiento del pago?',
+      correcta: '400 Proveedores al Debe · 572 Bancos al Haber',
+      incorrectas: ['572 Bancos al Debe · 400 Proveedores al Haber', '600 Compras al Debe · 572 Bancos al Haber'],
+      explicacion: 'Al pagar, la deuda con el proveedor desaparece (un pasivo baja por el Debe) y sale dinero del banco (un activo baja por el Haber). Usar la 600 duplicaría el gasto, que ya se registró con la factura.',
+    },
+    {
+      id: 'b0-q27',
+      pregunta: 'Un cliente te paga por transferencia una factura que ya estaba contabilizada. ¿Cuál es el asiento del cobro?',
+      correcta: '572 Bancos al Debe · 430 Clientes al Haber',
+      incorrectas: ['430 Clientes al Debe · 572 Bancos al Haber', '572 Bancos al Debe · 700 Ventas al Haber'],
+      explicacion: 'Entra dinero en el banco (activo sube por el Debe) y se cancela el derecho de cobro (activo baja por el Haber). Abonar la 700 duplicaría la venta, que ya se registró al facturar.',
+    },
+    {
+      id: 'b0-q28',
+      pregunta: 'Sacas 500 € del banco para el fondo de caja de la oficina. ¿Qué asiento haces?',
+      correcta: '570 Caja al Debe · 572 Bancos al Haber',
+      incorrectas: ['572 Bancos al Debe · 570 Caja al Haber', '629 Otros servicios al Debe · 572 Bancos al Haber'],
+      explicacion: 'El dinero solo cambia de sitio: aumenta la caja (Debe) y disminuye el banco (Haber). No hay gasto hasta que se pague algo con ese efectivo.',
+    },
+    {
+      id: 'b0-q29',
+      pregunta: 'Al final del día ingresas en el banco 800 € en efectivo que había en la caja. ¿Qué asiento haces?',
+      correcta: '572 Bancos al Debe · 570 Caja al Haber',
+      incorrectas: ['570 Caja al Debe · 572 Bancos al Haber', '572 Bancos al Debe · 705 Prestaciones de servicios al Haber'],
+      explicacion: 'Es el traspaso inverso: aumenta el banco (Debe) y disminuye la caja (Haber). No es un ingreso nuevo: si ese efectivo venía de un cobro, ya se registró en su momento.',
+    },
+    {
+      id: 'b0-q30',
+      pregunta: 'Un asiento descuadra por 270 €. ¿Cuál es la causa más probable?',
+      correcta: 'Has intercambiado dos cifras al teclear un importe',
+      incorrectas: ['Falta siempre la línea del IVA', 'El programa contable tiene un error'],
+      explicacion: 'Cuando la diferencia es divisible entre 9 (270 = 9 × 30), casi siempre hay dos cifras traspuestas: por ejemplo, 1.250 en lugar de 1.520. Es la primera comprobación ante un descuadre.',
+    },
+
+    /* --- Estructura del PGC --- */
+    {
+      id: 'b0-q31',
+      pregunta: '¿Qué grupos del PGC forman el Balance de situación?',
+      correcta: 'Los grupos 1 a 5',
+      incorrectas: ['Los grupos 1 a 7', 'Solo los grupos 6 y 7'],
+      explicacion: 'Los grupos 1 a 5 son cuentas de balance (patrimoniales). Los grupos 6 y 7, gastos e ingresos, forman la Cuenta de Pérdidas y Ganancias; su diferencia, el resultado, acaba en el patrimonio neto (129).',
+    },
+    {
+      id: 'b0-q32',
+      pregunta: 'Te piden registrar el alquiler mensual de la oficina. ¿En qué grupo del PGC buscas la cuenta del gasto?',
+      correcta: 'Grupo 6 · Compras y gastos',
+      incorrectas: ['Grupo 2 · Activo no corriente', 'Grupo 4 · Acreedores y deudores'],
+      explicacion: 'El alquiler es un gasto: va a la 621 Arrendamientos y cánones (subgrupo 62, Servicios exteriores). En el grupo 4 estaría la deuda con el arrendador (410), no el gasto.',
+    },
+    {
+      id: 'b0-q33',
+      pregunta: 'Llega la factura mensual de la gestoría que lleva las nóminas. ¿En qué cuenta registras el gasto?',
+      correcta: '623 Servicios de profesionales independientes',
+      incorrectas: ['621 Arrendamientos y cánones', '410 Acreedores por prestaciones de servicios'],
+      explicacion: 'Asesores, abogados, gestorías y notarios van a la 623. La 410 es la cuenta del acreedor (a quien se le debe la factura), no la del gasto.',
+    },
+    {
+      id: 'b0-q34',
+      pregunta: 'Recibes la factura de la luz de la oficina. ¿Qué cuenta de gasto usas?',
+      correcta: '628 Suministros',
+      incorrectas: ['622 Reparaciones y conservación', '631 Otros tributos'],
+      explicacion: 'Electricidad, agua y gas son suministros: cuenta 628. La 622 es para reparaciones y mantenimiento, y la 631 para tributos como el IBI o tasas municipales.',
+    },
+    {
+      id: 'b0-q35',
+      pregunta: 'En el extracto aparece una comisión de mantenimiento de la cuenta de 15 €. ¿Qué cuenta de gasto usas?',
+      correcta: '626 Servicios bancarios y similares',
+      incorrectas: ['662 Intereses de deudas', '629 Otros servicios'],
+      explicacion: 'Las comisiones bancarias van a la 626, con abono a la 572. Los intereses de un préstamo son otra cosa: gasto financiero en la 662.',
+    },
+    {
+      id: 'b0-q36',
+      pregunta: 'En el programa contable ves la subcuenta 40000012. ¿Qué te indica?',
+      correcta: 'Un proveedor concreto dentro de la cuenta 400 Proveedores',
+      incorrectas: ['El grupo 4000 del PGC', 'La factura número 12 de un proveedor'],
+      explicacion: 'Los tres primeros dígitos son la cuenta del PGC (400) y el resto identifica a cada proveedor. Así se puede ver qué se debe a cada uno sin perder la cuenta general.',
+    },
+    {
+      id: 'b0-q37',
+      pregunta: 'Recibes la factura del taller que ha reparado la máquina del almacén. ¿En qué cuenta registras la deuda con el taller?',
+      correcta: '410 Acreedores por prestaciones de servicios',
+      incorrectas: ['400 Proveedores', '523 Proveedores de inmovilizado a corto plazo'],
+      explicacion: 'La 400 es para quien te vende mercaderías u otros aprovisionamientos. Quien te presta un servicio (taller, gestoría, limpieza) es un acreedor: 410. El gasto de la reparación va a la 622.',
+    },
+    {
+      id: 'b0-q38',
+      pregunta: 'Una tienda de informática te vende un ordenador para la oficina y te lo cobrará en 30 días. ¿En qué cuenta registras la deuda?',
+      correcta: '523 Proveedores de inmovilizado a corto plazo',
+      incorrectas: ['400 Proveedores', '410 Acreedores por prestaciones de servicios'],
+      explicacion: 'El ordenador es inmovilizado (217), así que la deuda con quien lo vende va a la 523 si vence en menos de un año, o a la 173 si vence a más plazo. La 400 se reserva para mercaderías y aprovisionamientos.',
+    },
+    {
+      id: 'b0-q39',
+      pregunta: 'Contabilizas una factura de compra de mercaderías para revender. ¿Qué cuenta de gasto usas?',
+      correcta: '600 Compras de mercaderías',
+      incorrectas: ['300 Mercaderías', '700 Ventas de mercaderías'],
+      explicacion: 'Las compras del día a día van a la 600 (gasto). La 300 solo se ajusta al cierre con el inventario final, y la 700 es para las ventas.',
+    },
+    {
+      id: 'b0-q40',
+      pregunta: 'Emites una factura por un servicio de consultoría. ¿En qué cuenta registras el ingreso?',
+      correcta: '705 Prestaciones de servicios',
+      incorrectas: ['700 Ventas de mercaderías', '430 Clientes'],
+      explicacion: 'Los servicios facturados van a la 705; la 700 es para la venta de productos. La 430 es la contrapartida: el derecho de cobro sobre el cliente, no el ingreso.',
     },
   ],
 
+  // Circuito de casos: se recomienda hacerlos en orden (cada uno se apoya en el anterior).
   casos: [
     {
-      id: 'b0-c1',
+      id: 'b0-capital',
       tipo: 'asiento',
-      titulo: 'Aportación del capital inicial',
+      titulo: 'Aportación de capital social',
       enunciado: 'Se constituye <strong>Distribuciones Levante, S.L.</strong> Los dos socios ingresan <strong>3.000 € cada uno</strong> en la cuenta de la empresa en el banco. El capital social total es de 6.000 €. Registra el asiento.',
       cuentasDisponibles: ['572', '570', '100', '551', '129', '400'],
       solucion: [{ cuenta: '572', debe: 6000 }, { cuenta: '100', haber: 6000 }],
@@ -389,30 +664,89 @@ const CONTENIDO_B0 = {
       explicacion: 'El banco (activo) aumenta: se carga la 572 por 6.000 €. El capital social (patrimonio neto) aumenta: se abona la 100 por 6.000 €. Puedes registrarlo en dos líneas de 3.000 € por socio o en una sola: el resultado es el mismo.',
     },
     {
-      id: 'b0-c2',
+      id: 'b0-banco-caja',
       tipo: 'asiento',
       titulo: 'Traspaso del banco a la caja',
-      enunciado: 'Sacas <strong>300 €</strong> del cajero con la tarjeta de la empresa para reponer el fondo de caja de la oficina (mensajería, pequeños gastos…). Registra el asiento.',
+      enunciado: 'Sacas <strong>300 €</strong> del cajero con la tarjeta de la empresa para el fondo de caja de la oficina (mensajería, pequeños gastos…). Registra el asiento.',
       cuentasDisponibles: ['570', '572', '629', '626', '551', '100'],
       solucion: [{ cuenta: '570', debe: 300 }, { cuenta: '572', haber: 300 }],
       pista: 'No se ha gastado nada todavía: el dinero solo cambia de sitio.',
       explicacion: 'La caja (570, activo) aumenta y se carga; el banco (572, activo) disminuye y se abona. No es un gasto (629) ni una comisión (626): el gasto se registrará cuando pagues algo con ese efectivo y tengas el ticket o la factura.',
     },
     {
-      id: 'b0-c3',
+      id: 'b0-compra-equipos',
+      tipo: 'asiento',
+      titulo: 'Compra de equipos informáticos a crédito',
+      enunciado: 'Compras <strong>dos ordenadores y una impresora</strong> a Informática Mediterráneo, S.L. por <strong>2.400 €</strong> (sin IVA, de momento). Te los cobrará <strong>a 60 días</strong>. Registra el asiento de la compra.',
+      cuentasDisponibles: ['217', '600', '523', '400', '173', '572'],
+      solucion: [{ cuenta: '217', debe: 2400 }, { cuenta: '523', haber: 2400 }],
+      pista: '¿Es algo que se consume o que usarás varios años? ¿Y la deuda es con un proveedor de mercaderías o de un bien de inmovilizado?',
+      explicacion: 'Los equipos se usarán varios años: son inmovilizado (217, activo no corriente) y se cargan. La deuda con quien vende inmovilizado va a la 523 Proveedores de inmovilizado a corto plazo, porque vence en menos de un año. No es la 400 (mercaderías) ni la 173 (más de un año), ni la 600, porque no es una compra para revender.',
+    },
+    {
+      id: 'b0-pago-equipos',
+      tipo: 'asiento',
+      titulo: 'Pago de la deuda de los equipos',
+      enunciado: 'Pasados los 60 días, pagas por <strong>transferencia</strong> los <strong>2.400 €</strong> que debías a Informática Mediterráneo, S.L. por los equipos del caso anterior. Registra el asiento del pago.',
+      cuentasDisponibles: ['523', '572', '217', '400', '570', '626'],
+      solucion: [{ cuenta: '523', debe: 2400 }, { cuenta: '572', haber: 2400 }],
+      pista: 'Los ordenadores se quedan en la empresa. ¿Qué desaparece al pagar y de dónde sale el dinero?',
+      explicacion: 'La deuda con el proveedor de inmovilizado se cancela: un pasivo disminuye por el Debe (523). Sale dinero del banco: un activo disminuye por el Haber (572). La 217 no se toca, porque los equipos siguen siendo de la empresa.',
+    },
+    {
+      id: 'b0-prestamo-lp',
+      tipo: 'asiento',
+      titulo: 'Préstamo bancario a largo plazo',
+      enunciado: 'El banco aprueba un préstamo de <strong>20.000 €</strong> para la empresa, a devolver en <strong>5 años</strong>, y te ingresa el importe en la cuenta corriente. Registra el asiento de la recepción (sin intereses ni comisiones).',
+      cuentasDisponibles: ['572', '170', '520', '100', '769', '551'],
+      solucion: [{ cuenta: '572', debe: 20000 }, { cuenta: '170', haber: 20000 }],
+      pista: 'Entra dinero en el banco. ¿La deuda vence antes o después de un año? ¿Es un ingreso?',
+      explicacion: 'El banco (activo) aumenta: se carga la 572. Nace una deuda con el banco a más de un año: se abona la 170 Deudas a largo plazo con entidades de crédito (pasivo no corriente). No es un ingreso (769) ni capital (100). Al cierre, la parte que venza en los 12 meses siguientes se reclasificará a la 520.',
+    },
+    {
+      id: 'b0-masas',
       tipo: 'clasificar',
-      titulo: 'Clasifica cada cuenta en su grupo',
-      enunciado: 'Te pasan el listado de saldos de un cliente nuevo. Toca el número del grupo del PGC al que pertenece cada cuenta.',
-      cuentas: [
-        { codigo: '623', grupo: 6, pista: 'Es lo que pagas a un asesor o a un abogado. ¿Algo que tienes, que debes o que consumes?', explicacion: 'Gasto (servicios exteriores): va a Pérdidas y Ganancias.' },
-        { codigo: '572', grupo: 5, pista: 'Es el dinero de la cuenta corriente.', explicacion: 'Tesorería: activo corriente.' },
-        { codigo: '100', grupo: 1, pista: 'Es lo que aportaron los socios al crear la empresa.', explicacion: 'Financiación básica: patrimonio neto.' },
-        { codigo: '472', grupo: 4, pista: 'Recoge el IVA de tus compras. Está en el mismo grupo que proveedores y clientes.', explicacion: 'Administraciones Públicas: activo corriente (crédito con Hacienda).' },
-        { codigo: '705', grupo: 7, pista: 'Es lo que facturas a tus clientes por los servicios prestados.', explicacion: 'Ingreso: va a Pérdidas y Ganancias.' },
-        { codigo: '217', grupo: 2, pista: 'Ordenadores que la empresa usará durante varios años.', explicacion: 'Inmovilizado material: activo no corriente.' },
-        { codigo: '400', grupo: 4, pista: 'Lo que debes a quien te vende la mercancía.', explicacion: 'Deuda comercial: pasivo corriente.' },
-        { codigo: '300', grupo: 3, pista: 'Mercancía que queda en el almacén al cierre.', explicacion: 'Existencias: activo corriente.' },
+      titulo: 'Clasifica las cuentas en su masa patrimonial',
+      enunciado: 'Preparas el balance de un cliente nuevo. Toca la <strong>masa patrimonial</strong> a la que pertenece cada una de estas 8 cuentas (grupos 1 a 5).',
+      rejilla: 'grid-cols-2 sm:grid-cols-5',
+      opciones: [
+        { valor: 'anc', etiqueta: 'Activo no corriente', tono: 'activo' },
+        { valor: 'ac', etiqueta: 'Activo corriente', tono: 'activo' },
+        { valor: 'pn', etiqueta: 'Patrimonio neto', tono: 'pn', ancho: true },
+        { valor: 'pnc', etiqueta: 'Pasivo no corriente', tono: 'pasivo' },
+        { valor: 'pc', etiqueta: 'Pasivo corriente', tono: 'pasivo' },
       ],
+      cuentas: [
+        { codigo: '430', correcta: 'ac', pista: 'Es dinero que te pagarán tus clientes en pocas semanas.', explicacion: 'Derecho de cobro a corto plazo.' },
+        { codigo: '217', correcta: 'anc', pista: 'Ordenadores que la empresa usará durante varios años.', explicacion: 'Inmovilizado material.' },
+        { codigo: '400', correcta: 'pc', pista: 'Es lo que debes a quien te vende la mercancía, normalmente a 30–90 días.', explicacion: 'Deuda comercial a corto plazo.' },
+        { codigo: '100', correcta: 'pn', pista: 'Lo aportaron los socios y no es una deuda que haya que devolver en una fecha.', explicacion: 'Financiación propia aportada por los socios.' },
+        { codigo: '4751', correcta: 'pc', pista: 'Son retenciones de IRPF que has descontado y debes ingresar a Hacienda este trimestre.', explicacion: 'Deuda con Hacienda a corto plazo.' },
+        { codigo: '170', correcta: 'pnc', pista: 'Préstamo del banco que vence dentro de varios años.', explicacion: 'Deuda que vence a más de un año.' },
+        { codigo: '472', correcta: 'ac', pista: 'Es el IVA de tus compras, que compensarás en la próxima liquidación.', explicacion: 'Crédito con Hacienda a corto plazo.' },
+        { codigo: '572', correcta: 'ac', pista: 'Es el dinero disponible en la cuenta corriente.', explicacion: 'Tesorería disponible.' },
+      ],
+      resumenOk: 'Ya sabes colocar cada cuenta en el balance: es justo lo que necesitarás para leer un balance en el Bloque 5.',
+    },
+    {
+      id: 'b0-saldos',
+      tipo: 'clasificar',
+      titulo: 'Identifica el saldo habitual',
+      enunciado: 'Repasas el balance de sumas y saldos. Toca si el <strong>saldo habitual</strong> de cada cuenta es <strong>deudor</strong> (Debe mayor que Haber) o <strong>acreedor</strong> (Haber mayor que Debe).',
+      rejilla: 'grid-cols-2',
+      opciones: [
+        { valor: 'deudor', etiqueta: 'Deudor' },
+        { valor: 'acreedor', etiqueta: 'Acreedor' },
+      ],
+      cuentas: [
+        { codigo: '400', correcta: 'acreedor', pista: 'Es lo que debes al proveedor: un pasivo.', explicacion: 'Pasivo: se abona al recibir la factura y se carga al pagarla.' },
+        { codigo: '572', correcta: 'deudor', pista: 'Es el dinero que tiene la empresa: un activo.', explicacion: 'Activo. Si la ves con saldo acreedor, hay un descubierto o un error: revísalo con el extracto.' },
+        { codigo: '705', correcta: 'acreedor', pista: 'Es un ingreso del grupo 7.', explicacion: 'Ingreso: se abona al emitir cada factura.' },
+        { codigo: '430', correcta: 'deudor', pista: 'Es lo que te deben los clientes: un activo.', explicacion: 'Activo: se carga al facturar y se abona al cobrar.' },
+        { codigo: '4751', correcta: 'acreedor', pista: 'Es una deuda con Hacienda.', explicacion: 'Pasivo: se abona al practicar la retención y se carga al ingresarla (modelo 111 o 115).' },
+        { codigo: '621', correcta: 'deudor', pista: 'Es un gasto del grupo 6.', explicacion: 'Gasto: se carga por el importe de cada recibo de alquiler.' },
+      ],
+      resumenOk: 'Conocer el saldo habitual te permite detectar errores de un vistazo: un proveedor con saldo deudor o un banco con saldo acreedor siempre merecen una revisión.',
     },
   ],
 };
@@ -511,7 +845,16 @@ const IDS_PESTANAS = PESTANAS.map((p) => p.id);
 const LETRAS = ['A', 'B', 'C', 'D'];
 const CLAVE_RUTA = 'repasoPGC.ruta';
 const CLAVE_PROGRESO = 'repasoPGC.progreso';
-const PORCENTAJE_APROBADO = 0.8; // 4 de 5 en el test
+const PORCENTAJE_APROBADO = 0.8; // por defecto, si el bloque no define configTest
+
+// Nº de preguntas por intento y aciertos necesarios para aprobar
+function configTest(bloque) {
+  const total = bloque.contenido.test.length;
+  const cfg = bloque.contenido.configTest || {};
+  const porIntento = Math.min(cfg.preguntasPorIntento || total, total);
+  const aprobado = Math.min(cfg.aprobado || Math.ceil(porIntento * PORCENTAJE_APROBADO), porIntento);
+  return { total, porIntento, aprobado };
+}
 
 /* =====================================================================
    4. ESTADO Y RUTAS
@@ -533,7 +876,7 @@ const ui = {
 };
 
 // Progreso persistente por bloque:
-// { 0: { mejorTest: 4, casosResueltos: ['b0-c1'], completado: false } }
+// { 0: { mejorTest: 8, preguntasTest: 10, casosResueltos: ['b0-capital'], completado: false } }
 let progreso = cargarJSON(CLAVE_PROGRESO, {});
 
 function crearRuta(bloque, pestana) {
@@ -567,24 +910,25 @@ function aplicarRuta({ bloque, pestana }) {
 const bloqueActivo = () => BLOQUES.find((b) => b.id === estado.bloque);
 
 function progresoDe(idBloque) {
-  if (!progreso[idBloque]) progreso[idBloque] = { mejorTest: 0, casosResueltos: [], completado: false };
+  if (!progreso[idBloque]) progreso[idBloque] = { mejorTest: 0, preguntasTest: 0, casosResueltos: [], completado: false };
   return progreso[idBloque];
 }
 
 // Recalcula si el bloque está completado: test aprobado + todos los casos resueltos
-function evaluarProgreso(bloque) {
+function evaluarProgreso(bloque, { avisar = true } = {}) {
   const p = progresoDe(bloque.id);
-  const nTest = bloque.contenido.test.length;
+  const cfg = configTest(bloque);
   const nCasos = bloque.contenido.casos.length;
-  if (nTest + nCasos === 0) return;
-  const testOk = nTest === 0 || p.mejorTest >= Math.ceil(nTest * PORCENTAJE_APROBADO);
+  if (cfg.total + nCasos === 0) return;
+  const testOk = cfg.total === 0 || p.mejorTest >= cfg.aprobado;
   const casosOk = bloque.contenido.casos.every((c) => p.casosResueltos.includes(c.id));
   const antes = p.completado;
   p.completado = testOk && casosOk;
   guardarJSON(CLAVE_PROGRESO, progreso);
+  if (!avisar) return;
   actualizarMenu();
   actualizarProgresoBloque(bloque);
-  if (!antes && p.completado) mostrarAviso(`¡${bloque.codigo} completado! Test aprobado y todos los casos resueltos.`);
+  if (!antes && p.completado) mostrarAviso(`¡${bloque.codigo} completado! Test aprobado y los ${nCasos} casos resueltos.`);
 }
 
 /* =====================================================================
@@ -668,7 +1012,8 @@ function actualizarProgresoBloque(bloque) {
     return;
   }
   const p = progresoDe(bloque.id);
-  const aprobado = p.mejorTest >= Math.ceil(nTest * PORCENTAJE_APROBADO);
+  const cfg = configTest(bloque);
+  const aprobado = p.mejorTest >= cfg.aprobado;
   const resueltos = bloque.contenido.casos.filter((c) => p.casosResueltos.includes(c.id)).length;
   const chip = (ok, texto) => `
     <span class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold ${ok ? 'bg-acento-50 text-acento-700' : 'bg-tinta-900/5 text-tinta-700/70'}">
@@ -678,7 +1023,7 @@ function actualizarProgresoBloque(bloque) {
   caja.classList.add('flex');
   caja.innerHTML = `
     <span class="text-xs font-medium text-tinta-700/60">Tu avance:</span>
-    ${chip(aprobado, `Test ${p.mejorTest}/${nTest}`)}
+    ${chip(aprobado, `Test ${p.mejorTest}/${cfg.porIntento}`)}
     ${chip(resueltos === nCasos, `Casos ${resueltos}/${nCasos}`)}
     ${p.completado ? chip(true, 'Bloque completado') : ''}`;
 }
@@ -690,7 +1035,7 @@ function actualizarPestanas(bloque) {
     tab.setAttribute('aria-selected', String(activa));
     tab.tabIndex = activa ? 0 : -1;
     const contador = $(`[data-contador="${id}"]`, tab);
-    const n = bloque.contenido[id].length;
+    const n = id === 'test' ? configTest(bloque).porIntento : bloque.contenido[id].length;
     contador.textContent = n;
     contador.classList.toggle('hidden', n === 0);
   });
@@ -1207,20 +1552,53 @@ function piezaCodificacion() {
 /* =====================================================================
    7. TEST
    ===================================================================== */
+// Convierte una pregunta del banco al formato de pantalla con las opciones barajadas
+function prepararPregunta(q) {
+  const opciones = Array.isArray(q.incorrectas)
+    ? [{ texto: q.correcta, ok: true }, ...q.incorrectas.map((t) => ({ texto: t, ok: false }))]
+    : q.opciones.map((t, i) => ({ texto: t, ok: i === q.correcta }));
+  const barajadas = barajar(opciones);
+  return {
+    id: q.id,
+    pregunta: q.pregunta,
+    explicacion: q.explicacion,
+    opciones: barajadas.map((o) => o.texto),
+    correcta: barajadas.findIndex((o) => o.ok),
+  };
+}
+
+// Sortea un intento nuevo. Da prioridad a las preguntas que no salieron en
+// el intento anterior, para que repetir el test no sea repetir preguntas.
+function nuevoIntento(bloque, anterior = null) {
+  const cfg = configTest(bloque);
+  const usadas = new Set(anterior ? anterior.preguntas.map((q) => q.id) : []);
+  const banco = bloque.contenido.test;
+  const orden = [...barajar(banco.filter((q) => !usadas.has(q.id))), ...barajar(banco.filter((q) => usadas.has(q.id)))];
+  return {
+    preguntas: orden.slice(0, cfg.porIntento).map(prepararPregunta),
+    indice: 0,
+    respuestas: [],
+    terminado: false,
+    intento: anterior ? anterior.intento + 1 : 1,
+  };
+}
+
 function estadoTest(idBloque) {
-  if (!ui.test[idBloque]) ui.test[idBloque] = { indice: 0, respuestas: [], terminado: false };
+  if (!ui.test[idBloque]) ui.test[idBloque] = nuevoIntento(BLOQUES.find((b) => b.id === idBloque));
   return ui.test[idBloque];
 }
 
+const contarAciertos = (st) => st.respuestas.filter((r, i) => r === st.preguntas[i].correcta).length;
+
 function renderizarTest(bloque) {
-  const preguntas = bloque.contenido.test;
-  if (preguntas.length === 0) return estadoVacio(bloque, 'test');
+  if (bloque.contenido.test.length === 0) return estadoVacio(bloque, 'test');
   const st = estadoTest(bloque.id);
-  return st.terminado ? htmlResultadoTest(bloque, preguntas, st) : htmlPreguntaTest(preguntas, st);
+  const cfg = configTest(bloque);
+  return st.terminado ? htmlResultadoTest(bloque, st, cfg) : htmlPreguntaTest(st, cfg);
 }
 
-function puntosProgresoTest(preguntas, st) {
-  return preguntas.map((q, i) => {
+function puntosProgresoTest(st) {
+  return st.preguntas.map((q, i) => {
     const r = st.respuestas[i];
     let color = 'bg-tinta-900/10';
     if (r !== undefined) color = r === q.correcta ? 'bg-acento-500' : 'bg-rose-500';
@@ -1229,12 +1607,15 @@ function puntosProgresoTest(preguntas, st) {
   }).join('');
 }
 
-function htmlPreguntaTest(preguntas, st) {
-  const q = preguntas[st.indice];
+function htmlPreguntaTest(st, cfg) {
+  const q = st.preguntas[st.indice];
   const respuesta = st.respuestas[st.indice];
   const respondida = respuesta !== undefined;
   const acierto = respuesta === q.correcta;
-  const ultima = st.indice === preguntas.length - 1;
+  const ultima = st.indice === st.preguntas.length - 1;
+  const aciertos = contarAciertos(st);
+  const fallos = st.respuestas.length - aciertos;
+  const margen = st.preguntas.length - cfg.aprobado; // fallos permitidos
 
   const opciones = q.opciones.map((texto, i) => {
     let estilo = 'border-tinta-900/15 bg-white hover:border-tinta-900/35 active:bg-tinta-900/[0.03]';
@@ -1267,17 +1648,27 @@ function htmlPreguntaTest(preguntas, st) {
 
   const feedback = respondida
     ? htmlFeedback(acierto,
-        acierto ? '¡Correcto!' : `No es correcto. La respuesta es la ${LETRAS[q.correcta]}.`,
+        acierto ? '¡Correcto!' : `No es correcto. La respuesta es la ${LETRAS[q.correcta]}: «${escaparHTML(q.opciones[q.correcta])}».`,
         escaparHTML(q.explicacion))
     : '';
 
+  const aviso = fallos > margen
+    ? `<span class="text-amber-700">Este intento ya no llega a ${cfg.aprobado}: termínalo y repite</span>`
+    : `Apruebas con ${cfg.aprobado} de ${st.preguntas.length}`;
+
   return `
     <div id="tarjeta-test" class="scroll-mt-40 lg:scroll-mt-24 rounded-2xl border border-tinta-900/10 bg-white p-4 shadow-sm sm:p-6">
+      ${st.indice === 0 && !respondida ? `
+        <p class="mb-4 flex gap-2 rounded-xl bg-tinta-900/[0.03] p-3 text-[13px] leading-snug text-tinta-700/90">
+          <span class="mt-px shrink-0 text-acento-600">${svgIcono(ICONO_INFO, 'h-4 w-4')}</span>
+          <span>Intento ${st.intento}: <strong>${st.preguntas.length} preguntas al azar</strong> de un banco de ${cfg.total}, con las opciones desordenadas. Necesitas <strong>${cfg.aprobado} aciertos</strong> para aprobar.</span>
+        </p>` : ''}
       <div class="mb-4 flex items-center justify-between gap-3">
-        <p class="font-mono text-xs font-semibold uppercase tracking-wider text-tinta-700/60">Pregunta ${st.indice + 1} de ${preguntas.length}</p>
-        <p class="text-xs font-semibold text-tinta-700/60">${st.respuestas.filter((r, i) => r === preguntas[i].correcta).length} aciertos</p>
+        <p class="font-mono text-xs font-semibold uppercase tracking-wider text-tinta-700/60">Pregunta ${st.indice + 1} de ${st.preguntas.length}</p>
+        <p class="text-xs font-semibold text-tinta-700/60"><span class="text-acento-700">${aciertos} ✓</span> · <span class="${fallos ? 'text-rose-600' : ''}">${fallos} ✗</span></p>
       </div>
-      <div class="mb-5 flex gap-1.5" aria-hidden="true">${puntosProgresoTest(preguntas, st)}</div>
+      <div class="mb-2 flex gap-1" aria-hidden="true">${puntosProgresoTest(st)}</div>
+      <p class="mb-5 text-[11px] font-medium text-tinta-700/50">${aviso}</p>
       <h2 class="mb-5 text-lg font-semibold leading-snug">${escaparHTML(q.pregunta)}</h2>
       <ol class="space-y-2.5" aria-label="Opciones de respuesta">${opciones}</ol>
       <div id="feedback-test" class="mt-5 space-y-4" aria-live="polite">
@@ -1290,22 +1681,32 @@ function htmlPreguntaTest(preguntas, st) {
     </div>`;
 }
 
-function htmlResultadoTest(bloque, preguntas, st) {
-  const aciertos = st.respuestas.filter((r, i) => r === preguntas[i].correcta).length;
+function htmlResultadoTest(bloque, st, cfg) {
+  const preguntas = st.preguntas;
+  const aciertos = contarAciertos(st);
   const total = preguntas.length;
-  const aprobado = aciertos >= Math.ceil(total * PORCENTAJE_APROBADO);
+  const aprobado = aciertos >= cfg.aprobado;
   const mejor = progresoDe(bloque.id).mejorTest;
+  const casosPendientes = bloque.contenido.casos.filter((c) => !progresoDe(bloque.id).casosResueltos.includes(c.id)).length;
   const mensaje = aciertos === total
     ? '¡Pleno! Tienes los fundamentos muy claros.'
     : aprobado
-      ? 'Muy bien. Repasa la explicación de la pregunta fallada y pasa a los casos prácticos.'
-      : 'Conviene repasar la teoría del bloque antes de seguir. Revisa las explicaciones de abajo.';
+      ? `Aprobado. Repasa abajo las preguntas falladas${casosPendientes ? ' y sigue con los casos prácticos' : ''}.`
+      : `Necesitas ${cfg.aprobado} aciertos para aprobar. Revisa las explicaciones de abajo y prueba otro intento: saldrán preguntas distintas.`;
+
+  const botonRepetir = `<button type="button" data-accion="test-repetir" data-foco="test-rep" class="${aprobado ? claseBoton.secundario : claseBoton.primario}">${svgIcono('M4 4v6h6M20 20v-6h-6M5 15a7 7 0 0012 3M19 9A7 7 0 007 6', 'h-4 w-4', 2.2)} Nuevo intento (otras ${total} preguntas)</button>`;
+  const botonSeguir = aprobado
+    ? `<button type="button" data-accion="ir-pestana" data-pestana="casos" class="${claseBoton.acento}">Ir a los casos prácticos ${svgIcono('M9 6l6 6-6 6', 'h-4 w-4', 2.5)}</button>`
+    : `<button type="button" data-accion="ir-pestana" data-pestana="teoria" class="${claseBoton.secundario}">Repasar la teoría</button>`;
 
   return `
     <div id="tarjeta-test" class="${ui.animar ? 'animate-aparecer' : ''} scroll-mt-40 lg:scroll-mt-24 overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm">
       <div class="p-6 text-center ${aprobado ? 'bg-acento-50' : 'bg-amber-50'}">
-        <p class="font-mono text-xs font-semibold uppercase tracking-wider text-tinta-700/60">Resultado del test</p>
+        <p class="font-mono text-xs font-semibold uppercase tracking-wider text-tinta-700/60">Resultado · intento ${st.intento}</p>
         <p class="mt-2 font-mono text-5xl font-bold ${aprobado ? 'text-acento-700' : 'text-amber-700'}">${aciertos}<span class="text-2xl text-tinta-700/40">/${total}</span></p>
+        <p class="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${aprobado ? 'bg-acento-500 text-white' : 'bg-amber-200 text-amber-900'}">
+          ${aprobado ? `${svgIcono(ICONO_OK, 'h-3.5 w-3.5', 3)} Aprobado` : `No aprobado · mínimo ${cfg.aprobado}`}
+        </p>
         <p class="mx-auto mt-3 max-w-sm text-sm leading-relaxed">${mensaje}</p>
         ${mejor > 0 ? `<p class="mt-2 text-xs text-tinta-700/60">Tu mejor resultado: ${mejor}/${total}</p>` : ''}
       </div>
@@ -1316,16 +1717,17 @@ function htmlResultadoTest(bloque, preguntas, st) {
             <li class="flex gap-3 p-4">
               <span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${ok ? 'bg-acento-500' : 'bg-rose-500'} text-white">${svgIcono(ok ? ICONO_OK : ICONO_MAL, 'h-3.5 w-3.5', 3)}</span>
               <div class="min-w-0 text-sm leading-relaxed">
-                <p class="font-semibold">${escaparHTML(q.pregunta)}</p>
-                <p class="mt-1 text-tinta-700/80"><span class="font-semibold">${LETRAS[q.correcta]}) ${escaparHTML(q.opciones[q.correcta])}</span>${ok ? '' : ` · tu respuesta: ${LETRAS[st.respuestas[i]]}`}</p>
-                ${ok ? '' : `<p class="mt-1 text-tinta-700/70">${escaparHTML(q.explicacion)}</p>`}
+                <p class="font-semibold">${i + 1}. ${escaparHTML(q.pregunta)}</p>
+                <p class="mt-1 text-acento-800"><span class="font-semibold">Correcta:</span> ${escaparHTML(q.opciones[q.correcta])}</p>
+                ${ok ? '' : `
+                  <p class="text-rose-700"><span class="font-semibold">Tu respuesta:</span> ${escaparHTML(q.opciones[st.respuestas[i]])}</p>
+                  <p class="mt-1 text-tinta-700/70">${escaparHTML(q.explicacion)}</p>`}
               </div>
             </li>`;
         }).join('')}
       </ol>
       <div class="flex flex-col gap-2 border-t border-tinta-900/10 p-4 sm:flex-row">
-        <button type="button" data-accion="test-repetir" data-foco="test-rep" class="${claseBoton.secundario}">Repetir el test</button>
-        <button type="button" data-accion="ir-pestana" data-pestana="casos" class="${claseBoton.acento}">Ir a los casos prácticos ${svgIcono('M9 6l6 6-6 6', 'h-4 w-4', 2.5)}</button>
+        ${aprobado ? botonSeguir + botonRepetir : botonRepetir + botonSeguir}
       </div>
     </div>`;
 }
@@ -1353,43 +1755,66 @@ function renderizarCasos(bloque) {
   const sc = estadoCasos(bloque.id);
   const caso = casos[sc.activo];
   const resueltos = progresoDe(bloque.id).casosResueltos;
+  const nResueltos = casos.filter((c) => resueltos.includes(c.id)).length;
+  const completo = nResueltos === casos.length;
 
-  const selector = `
-    <div class="mb-5 grid gap-2 ${casos.length === 3 ? 'grid-cols-3' : 'grid-cols-2 sm:grid-cols-4'}" role="group" aria-label="Elige un caso">
-      ${casos.map((c, i) => {
-        const activo = i === sc.activo;
-        const hecho = resueltos.includes(c.id);
-        return `
-          <button type="button" data-accion="caso-elegir" data-caso="${i}" data-foco="caso-${i}" aria-pressed="${activo}"
-                  class="flex min-h-[64px] flex-col items-start justify-center gap-0.5 rounded-xl border-2 px-3 py-2 text-left transition active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${activo ? 'border-tinta-900 bg-tinta-900 text-white' : 'border-tinta-900/10 bg-white hover:border-tinta-900/25'}">
-            <span class="flex w-full items-center justify-between gap-1">
-              <span class="font-mono text-[11px] font-bold uppercase tracking-wider ${activo ? 'text-white/60' : 'text-tinta-700/50'}">Caso ${i + 1}</span>
-              ${hecho ? `<span class="flex h-5 w-5 items-center justify-center rounded-full bg-acento-500 text-white">${svgIcono(ICONO_OK, 'h-3 w-3', 3)}</span>` : ''}
-            </span>
-            <span class="line-clamp-2 text-xs font-semibold leading-tight">${escaparHTML(c.titulo)}</span>
-          </button>`;
-      }).join('')}
-    </div>`;
+  // Circuito: una casilla por caso (resuelto ✓, activo, pendiente)
+  const pasos = casos.map((c, i) => {
+    const activo = i === sc.activo;
+    const hecho = resueltos.includes(c.id);
+    let estilo = 'border-tinta-900/15 bg-white text-tinta-900 hover:border-tinta-900/35';
+    if (hecho) estilo = 'border-acento-500 bg-acento-500 text-white';
+    if (activo) estilo = hecho
+      ? 'border-tinta-900 bg-acento-500 text-white ring-2 ring-tinta-900 ring-offset-2 ring-offset-papel'
+      : 'border-tinta-900 bg-tinta-900 text-white ring-2 ring-tinta-900/20 ring-offset-2 ring-offset-papel';
+    return `
+      <li>
+        <button type="button" data-accion="caso-elegir" data-caso="${i}" data-foco="caso-${i}"
+                aria-current="${activo ? 'step' : 'false'}"
+                aria-label="Caso ${i + 1}: ${escaparHTML(c.titulo)}${hecho ? ' (resuelto)' : ''}"
+                class="flex h-12 w-full items-center justify-center rounded-xl border-2 font-mono text-base font-bold transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${estilo}">
+          ${hecho && !activo ? svgIcono(ICONO_OK, 'h-5 w-5', 3) : i + 1}
+        </button>
+      </li>`;
+  }).join('');
+
+  const circuito = `
+    <nav aria-label="Circuito de casos prácticos" class="mb-5">
+      <div class="mb-2 flex items-center justify-between gap-3">
+        <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-tinta-700/60">Circuito de ${casos.length} casos</p>
+        <p class="text-xs font-semibold ${completo ? 'text-acento-700' : 'text-tinta-700/70'}">${completo ? '✓ Circuito completado' : `${nResueltos} de ${casos.length} resueltos`}</p>
+      </div>
+      <ol class="grid gap-1.5" style="grid-template-columns:repeat(${casos.length},minmax(0,1fr))">${pasos}</ol>
+      <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-tinta-900/10">
+        <div class="h-full rounded-full bg-acento-500 transition-all duration-500" style="width:${(nResueltos / casos.length) * 100}%"></div>
+      </div>
+    </nav>`;
 
   const cuerpo = caso.tipo === 'asiento' ? htmlCasoAsiento(caso, bloque) : htmlCasoClasificar(caso, bloque);
+  const anterior = casos[sc.activo - 1];
   const siguiente = casos[sc.activo + 1];
   const resuelto = resueltos.includes(caso.id);
 
+  const navegacion = `
+    <div class="mt-4 grid grid-cols-2 gap-2">
+      <button type="button" data-accion="caso-elegir" data-caso="${sc.activo - 1}" data-foco="caso-ant" class="${claseBoton.secundario}" ${anterior ? '' : 'disabled'}>
+        ${svgIcono('M15 18l-6-6 6-6', 'h-4 w-4', 2.5)} Anterior
+      </button>
+      <button type="button" data-accion="caso-elegir" data-caso="${sc.activo + 1}" data-foco="caso-sig" class="${resuelto ? claseBoton.primario : claseBoton.secundario}" ${siguiente ? '' : 'disabled'}>
+        Siguiente caso ${svgIcono('M9 6l6 6-6 6', 'h-4 w-4', 2.5)}
+      </button>
+    </div>`;
+
   return `
-    ${selector}
+    ${circuito}
     <div id="tarjeta-caso" class="scroll-mt-40 lg:scroll-mt-24">${cuerpo}</div>
-    ${resuelto && siguiente ? `
-      <div class="mt-4">
-        <button type="button" data-accion="caso-elegir" data-caso="${sc.activo + 1}" class="${claseBoton.primario} w-full sm:w-auto">
-          Siguiente caso: ${escaparHTML(siguiente.titulo)} ${svgIcono('M9 6l6 6-6 6', 'h-4 w-4', 2.5)}
-        </button>
-      </div>` : ''}`;
+    ${navegacion}`;
 }
 
-function cabeceraCaso(caso, numero) {
+function cabeceraCaso(caso, numero, total) {
   return `
     <header class="border-b border-tinta-900/10 p-4 sm:p-5">
-      <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-acento-700">Caso ${numero} · ${caso.tipo === 'asiento' ? 'Registra el asiento' : 'Clasifica'}</p>
+      <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-acento-700">Caso ${numero} de ${total} · ${caso.tipo === 'asiento' ? 'Registra el asiento' : 'Clasifica'}</p>
       <h2 class="mt-0.5 text-lg font-bold leading-snug">${escaparHTML(caso.titulo)}</h2>
       <p class="mt-2 text-[15px] leading-relaxed text-tinta-900/85">${caso.enunciado}</p>
     </header>`;
@@ -1574,7 +1999,7 @@ function htmlCasoAsiento(caso, bloque) {
 
   return `
     <article class="overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm">
-      ${cabeceraCaso(caso, numero)}
+      ${cabeceraCaso(caso, numero, bloque.contenido.casos.length)}
       <div class="space-y-4 p-4 sm:p-5">
         <details class="group rounded-xl bg-amber-50/70 text-sm text-amber-950">
           <summary class="flex min-h-[44px] cursor-pointer list-none items-center gap-2 px-3.5 font-semibold [&::-webkit-details-marker]:hidden">
@@ -1595,17 +2020,23 @@ function htmlCasoAsiento(caso, bloque) {
 }
 
 /* ---------- Caso tipo «clasificar» (tocar el grupo) ---------- */
+const TONO_OPCION = {
+  activo: 'border-acento-500/35 text-acento-800',
+  pn: 'border-indigo-300 text-indigo-900',
+  pasivo: 'border-amber-300 text-amber-900',
+};
+
 function htmlCasoClasificar(caso, bloque) {
   const st = estadoCaso(caso);
   const numero = bloque.contenido.casos.indexOf(caso) + 1;
   const hechas = caso.cuentas.filter((c) => st.respuestas[c.codigo]).length;
   const total = caso.cuentas.length;
   const terminado = hechas === total;
+  const opcionPorValor = (v) => caso.opciones.find((o) => o.valor === v);
 
   const tarjetas = caso.cuentas.map((c) => {
     const acertada = st.respuestas[c.codigo];
     const fallos = st.fallos[c.codigo] || [];
-    const g = grupoPGC(c.grupo);
     if (acertada) {
       return `
         <li class="${ui.sacudir === 'ok-' + c.codigo ? 'animate-aparecer' : ''} rounded-xl border-2 border-acento-500/40 bg-acento-50 p-3">
@@ -1613,52 +2044,53 @@ function htmlCasoClasificar(caso, bloque) {
             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-acento-500 text-white">${svgIcono(ICONO_OK, 'h-4 w-4', 3)}</span>
             <span class="min-w-0 flex-1">
               <span class="block text-sm font-semibold leading-snug"><span class="font-mono">${c.codigo}</span> · ${escaparHTML(nombreCuenta(c.codigo))}</span>
-              <span class="block text-[13px] leading-snug text-acento-800">Grupo ${g.grupo} · ${escaparHTML(g.nombreCorto)} — ${escaparHTML(c.explicacion)}</span>
+              <span class="block text-[13px] leading-snug text-acento-800"><strong>${escaparHTML(opcionPorValor(acertada).etiqueta)}</strong> — ${escaparHTML(c.explicacion)}</span>
             </span>
           </div>
         </li>`;
     }
+    const botones = caso.opciones.map((o) => {
+      const fallado = fallos.includes(o.valor);
+      const sacude = ui.sacudir === `${c.codigo}-${o.valor}`;
+      const estilo = fallado
+        ? 'border-rose-300 bg-rose-50 text-rose-400 line-through'
+        : `bg-white hover:bg-tinta-900/[0.03] active:bg-tinta-900/5 ${TONO_OPCION[o.tono] || 'border-tinta-900/15 text-tinta-900'}`;
+      return `
+        <button type="button" data-accion="clasif-elegir" data-cuenta="${c.codigo}" data-valor="${o.valor}" data-foco="cl-${c.codigo}-${o.valor}"
+                ${fallado ? 'disabled aria-disabled="true"' : ''}
+                class="min-h-[48px] rounded-lg border-2 px-2 py-1.5 text-[13px] font-semibold leading-tight transition active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${o.ancho ? 'col-span-2 sm:col-span-1' : ''} ${estilo} ${sacude ? 'animate-sacudir' : ''}">
+          ${escaparHTML(o.etiqueta)}
+        </button>`;
+    }).join('');
     return `
       <li class="rounded-xl border-2 ${fallos.length ? 'border-rose-200' : 'border-tinta-900/10'} bg-white p-3">
         <p class="text-sm font-semibold leading-snug"><span class="mr-1 rounded-md bg-tinta-900/[0.06] px-1.5 py-0.5 font-mono">${c.codigo}</span> ${escaparHTML(nombreCuenta(c.codigo))}</p>
-        <div class="mt-3 grid grid-cols-7 gap-1" role="group" aria-label="Grupo de la cuenta ${c.codigo}">
-          ${[1, 2, 3, 4, 5, 6, 7].map((n) => {
-            const fallado = fallos.includes(n);
-            const sacude = ui.sacudir === `${c.codigo}-${n}`;
-            return `
-              <button type="button" data-accion="clasif-grupo" data-cuenta="${c.codigo}" data-grupo="${n}" data-foco="cl-${c.codigo}-${n}"
-                      aria-label="Grupo ${n}" ${fallado ? 'disabled' : ''}
-                      class="h-12 rounded-lg border-2 font-mono text-base font-bold transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${fallado ? 'border-rose-300 bg-rose-50 text-rose-400 line-through' : 'border-tinta-900/10 bg-white hover:border-tinta-900/30 active:bg-tinta-900/5'} ${sacude ? 'animate-sacudir' : ''}">
-                ${n}
-              </button>`;
-          }).join('')}
-        </div>
+        <div class="mt-3 grid gap-1.5 ${caso.rejilla || 'grid-cols-2'}" role="group" aria-label="Respuesta para la cuenta ${c.codigo}">${botones}</div>
         ${fallos.length ? `<p class="${ui.animar ? 'animate-aparecer' : ''} mt-2 flex gap-1.5 text-[13px] leading-snug text-rose-700"><span class="mt-px shrink-0">${svgIcono(ICONO_BOMBILLA, 'h-4 w-4')}</span><span><strong>Pista:</strong> ${escaparHTML(c.pista)}</span></p>` : ''}
       </li>`;
   }).join('');
 
   const resumen = terminado
-    ? htmlFeedback(st.errores === 0, st.errores === 0 ? '¡Perfecto! Todas a la primera.' : 'Caso completado',
-        st.errores === 0
-          ? 'Dominas el primer dígito del PGC: es lo que más vas a usar para orientarte en un listado de saldos.'
-          : `Has clasificado las ${total} cuentas con ${st.errores} ${st.errores === 1 ? 'fallo' : 'fallos'}. Repasa en la teoría el explorador del cuadro de cuentas y vuelve a intentarlo.`)
+    ? htmlFeedback(st.errores === 0,
+        st.errores === 0 ? '¡Perfecto! Todas a la primera.' : `Caso completado con ${st.errores} ${st.errores === 1 ? 'fallo' : 'fallos'}`,
+        escaparHTML(caso.resumenOk || '') + (st.errores ? ' Si quieres afianzarlo, pulsa «Empezar de nuevo».' : ''))
     : '';
 
   return `
     <article class="overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm">
-      ${cabeceraCaso(caso, numero)}
+      ${cabeceraCaso(caso, numero, bloque.contenido.casos.length)}
       <div class="space-y-4 p-4 sm:p-5">
         <div>
           <div class="mb-1.5 flex justify-between text-xs font-semibold text-tinta-700/70">
-            <span>${hechas} de ${total} clasificadas</span><span>${st.errores} ${st.errores === 1 ? 'fallo' : 'fallos'}</span>
+            <span>${hechas} de ${total} acertadas</span><span class="${st.errores ? 'text-rose-600' : ''}">${st.errores} ${st.errores === 1 ? 'fallo' : 'fallos'}</span>
           </div>
           <div class="h-2 overflow-hidden rounded-full bg-tinta-900/10">
             <div class="h-full rounded-full bg-acento-500 transition-all duration-500" style="width:${(hechas / total) * 100}%"></div>
           </div>
         </div>
         <ol class="space-y-2.5">${tarjetas}</ol>
-        <div aria-live="polite">${resumen}</div>
-        ${hechas > 0 ? `<button type="button" data-accion="clasif-reiniciar" class="${claseBoton.secundario} w-full sm:w-auto">Empezar de nuevo</button>` : ''}
+        <div id="correccion-${caso.id}" aria-live="polite">${resumen}</div>
+        ${hechas > 0 || st.errores > 0 ? `<button type="button" data-accion="clasif-reiniciar" class="${claseBoton.secundario} w-full sm:w-auto">Empezar de nuevo</button>` : ''}
       </div>
     </article>`;
 }
@@ -1708,7 +2140,7 @@ const ACCIONES = {
     const opcion = Number(el.dataset.opcion);
     st.respuestas[st.indice] = opcion;
     ui.animar = true;
-    if (opcion !== bloque.contenido.test[st.indice].correcta) {
+    if (opcion !== st.preguntas[st.indice].correcta) {
       ui.sacudir = 'test';
       vibrar([40, 60, 40]);
     } else {
@@ -1719,15 +2151,15 @@ const ACCIONES = {
   'test-siguiente': () => {
     const bloque = bloqueActivo();
     const st = estadoTest(bloque.id);
-    const preguntas = bloque.contenido.test;
-    if (st.indice < preguntas.length - 1) {
+    if (st.respuestas[st.indice] === undefined) return false;
+    if (st.indice < st.preguntas.length - 1) {
       st.indice += 1;
     } else {
       st.terminado = true;
       ui.animar = true;
-      const aciertos = st.respuestas.filter((r, i) => r === preguntas[i].correcta).length;
       const p = progresoDe(bloque.id);
-      p.mejorTest = Math.max(p.mejorTest, aciertos);
+      p.mejorTest = Math.max(p.mejorTest, contarAciertos(st));
+      p.preguntasTest = st.preguntas.length;
       evaluarProgreso(bloque);
     }
     return () => {
@@ -1737,14 +2169,17 @@ const ACCIONES = {
     };
   },
   'test-repetir': () => {
-    ui.test[estado.bloque] = { indice: 0, respuestas: [], terminado: false };
+    const bloque = bloqueActivo();
+    ui.test[bloque.id] = nuevoIntento(bloque, ui.test[bloque.id]);
     return () => asegurarVisible($('#tarjeta-test'));
   },
   'ir-pestana': (el) => { navegar(estado.bloque, el.dataset.pestana); return false; },
 
   /* --- Casos: selector --- */
   'caso-elegir': (el) => {
-    estadoCasos(estado.bloque).activo = Number(el.dataset.caso);
+    const indice = Number(el.dataset.caso);
+    if (!bloqueActivo().contenido.casos[indice]) return false;
+    estadoCasos(estado.bloque).activo = indice;
     return () => asegurarVisible($('#tarjeta-caso'));
   },
 
@@ -1811,21 +2246,22 @@ const ACCIONES = {
   },
 
   /* --- Casos: clasificar --- */
-  'clasif-grupo': (el) => {
+  'clasif-elegir': (el) => {
     const caso = casoActual();
     const st = estadoCaso(caso);
     const codigo = el.dataset.cuenta;
-    const elegido = Number(el.dataset.grupo);
+    const elegido = el.dataset.valor;
     const cuenta = caso.cuentas.find((c) => c.codigo === codigo);
     if (!cuenta || st.respuestas[codigo]) return false;
 
-    if (elegido === cuenta.grupo) {
+    if (elegido === cuenta.correcta) {
       st.respuestas[codigo] = elegido;
       ui.sacudir = `ok-${codigo}`;
       vibrar(25);
       if (caso.cuentas.every((c) => st.respuestas[c.codigo])) {
         ui.animar = true;
         marcarCasoResuelto(caso);
+        return () => asegurarVisible(document.getElementById(`correccion-${caso.id}`), 'abajo');
       }
     } else {
       st.fallos[codigo] = [...(st.fallos[codigo] || []), elegido];
@@ -1834,6 +2270,7 @@ const ACCIONES = {
       ui.animar = true;
       vibrar([40, 60, 40]);
     }
+    return undefined;
   },
   'clasif-reiniciar': () => {
     delete ui.caso[casoActual().id];
@@ -2042,17 +2479,35 @@ function reiniciarProgreso() {
   renderizar();
 }
 
+// Adapta el progreso guardado por versiones anteriores de la app:
+// · un mejor resultado obtenido con otro nº de preguntas no cuenta;
+// · los casos que ya no existen se descartan;
+// · «completado» se recalcula con los criterios actuales.
+function migrarProgreso() {
+  Object.keys(progreso).forEach((k) => {
+    const p = progreso[k] || {};
+    const bloque = BLOQUES.find((b) => String(b.id) === String(k));
+    if (!bloque) { delete progreso[k]; return; }
+    const cfg = configTest(bloque);
+    const idsCasos = bloque.contenido.casos.map((c) => c.id);
+    progreso[k] = {
+      mejorTest: p.preguntasTest === cfg.porIntento ? (p.mejorTest || 0) : 0,
+      preguntasTest: cfg.porIntento,
+      casosResueltos: (Array.isArray(p.casosResueltos) ? p.casosResueltos : []).filter((id) => idsCasos.includes(id)),
+      completado: false,
+    };
+    evaluarProgreso(bloque, { avisar: false });
+  });
+  guardarJSON(CLAVE_PROGRESO, progreso);
+}
+
 function crearRutaGuardada() {
   const guardada = cargarJSON(CLAVE_RUTA, null);
   return guardada ? crearRuta(guardada.bloque, guardada.pestana) : '';
 }
 
 function iniciar() {
-  // Normaliza progreso guardado con versiones anteriores
-  Object.keys(progreso).forEach((k) => {
-    const p = progreso[k] || {};
-    progreso[k] = { mejorTest: p.mejorTest || 0, casosResueltos: Array.isArray(p.casosResueltos) ? p.casosResueltos : [], completado: Boolean(p.completado) };
-  });
+  migrarProgreso();
 
   construirMenu();
   registrarEventos();
