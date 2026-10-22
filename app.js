@@ -155,7 +155,7 @@ const CUADRO_PGC = [
       { codigo: '41', nombre: 'Acreedores varios', clave: true, cuentas: [['410', 'Acreedores por prestaciones de servicios']] },
       { codigo: '43', nombre: 'Clientes', clave: true, cuentas: [['430', 'Clientes'], ['431', 'Clientes, efectos comerciales a cobrar'], ['4311', 'Efectos comerciales descontados'], ['436', 'Clientes de dudoso cobro'], ['438', 'Anticipos de clientes']] },
       { codigo: '46', nombre: 'Personal', cuentas: [['460', 'Anticipos de remuneraciones'], ['465', 'Remuneraciones pendientes de pago']] },
-      { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['472', 'Hacienda Pública, IVA soportado'], ['473', 'Hacienda Pública, retenciones y pagos a cuenta'], ['4750', 'Hacienda Pública, acreedora por IVA'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
+      { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['4700', 'Hacienda Pública, deudora por IVA'], ['472', 'Hacienda Pública, IVA soportado'], ['473', 'Hacienda Pública, retenciones y pagos a cuenta'], ['4750', 'Hacienda Pública, acreedora por IVA'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
       { codigo: '48', nombre: 'Ajustes por periodificación', cuentas: [['480', 'Gastos anticipados'], ['485', 'Ingresos anticipados']] },
       { codigo: '49', nombre: 'Deterioro de valor de créditos comerciales y provisiones a corto plazo', cuentas: [['490', 'Deterioro de valor de créditos por operaciones comerciales']] },
     ],
@@ -188,7 +188,7 @@ const CUADRO_PGC = [
       { codigo: '60', nombre: 'Compras', cuentas: [['600', 'Compras de mercaderías'], ['602', 'Compras de otros aprovisionamientos'], ['606', 'Descuentos sobre compras por pronto pago'], ['607', 'Trabajos realizados por otras empresas'], ['608', 'Devoluciones de compras y operaciones similares'], ['609', 'Rappels por compras']] },
       { codigo: '62', nombre: 'Servicios exteriores', clave: true, cuentas: [['621', 'Arrendamientos y cánones'], ['622', 'Reparaciones y conservación'], ['623', 'Servicios de profesionales independientes'], ['624', 'Transportes'], ['625', 'Primas de seguros'], ['626', 'Servicios bancarios y similares'], ['627', 'Publicidad, propaganda y relaciones públicas'], ['628', 'Suministros'], ['629', 'Otros servicios']] },
       { codigo: '63', nombre: 'Tributos', cuentas: [['631', 'Otros tributos']] },
-      { codigo: '64', nombre: 'Gastos de personal', cuentas: [['640', 'Sueldos y salarios'], ['642', 'Seguridad Social a cargo de la empresa']] },
+      { codigo: '64', nombre: 'Gastos de personal', cuentas: [['640', 'Sueldos y salarios'], ['641', 'Indemnizaciones'], ['642', 'Seguridad Social a cargo de la empresa']] },
       { codigo: '65', nombre: 'Otros gastos de gestión', cuentas: [['650', 'Pérdidas de créditos comerciales incobrables']] },
       { codigo: '66', nombre: 'Gastos financieros', cuentas: [['662', 'Intereses de deudas'], ['665', 'Intereses por descuento de efectos y operaciones de factoring']] },
       { codigo: '68', nombre: 'Dotaciones para amortizaciones', cuentas: [['681', 'Amortización del inmovilizado material']] },
@@ -1074,13 +1074,14 @@ const CONTENIDO_B1 = {
           tipo: 'pasos',
           pasos: [
             { titulo: 'Marzo 2026 · aprobada', texto: 'El Real Decreto 238/2026 (BOE de 31/03/2026) regula la factura electrónica obligatoria entre empresarios y profesionales.' },
-            { titulo: 'Octubre 2027 · previsto', texto: 'Empresas con más de 8 millones de euros de volumen de operaciones (12 meses desde la orden técnica).' },
-            { titulo: 'Octubre 2028 · previsto', texto: 'Resto de empresas y autónomos (24 meses desde la orden técnica).' },
+            { titulo: 'Octubre 2026 · arranca el plazo', texto: 'La Orden HAC/1028/2026 (BOE de 5/10/2026, en vigor el 6/10/2026) regula la solución pública de facturación electrónica e inicia el cómputo de los plazos.' },
+            { titulo: 'Octubre 2027', texto: 'Obligatoria para empresas con más de 8 millones de euros de volumen de operaciones (un año después).' },
+            { titulo: 'Octubre 2028', texto: 'Obligatoria para el resto de empresas y autónomos (dos años después).' },
           ],
         },
         {
           tipo: 'html',
-          html: '<p><strong>VeriFactu</strong> es otra cosa: afecta al <strong>software con el que se emiten</strong> las facturas, que debe garantizar que no se alteran y poder enviarlas a Hacienda. Las fechas legales vigentes son el 1/1/2027 para sociedades y el 1/7/2027 para el resto, pero Hacienda anunció en octubre de 2026 su intención de aplazarlo a octubre de 2028, pendiente de publicarse en el BOE.</p>',
+          html: '<p><strong>VeriFactu</strong> es otra cosa: afecta al <strong>software con el que se emiten</strong> las facturas, que debe garantizar que no se alteran y poder enviarlas a Hacienda. Las fechas legales vigentes son las del Real Decreto-ley 15/2025: el 1/1/2027 para sociedades y el 1/7/2027 para el resto. Hacienda anunció el 5/10/2026 su intención de aplazarlo a octubre de 2028, pero a mediados de octubre seguía sin publicarse en el BOE. En el Bloque 4 tienes el detalle actualizado.</p>',
         },
         {
           tipo: 'consejo',
@@ -1380,9 +1381,9 @@ const CONTENIDO_B1 = {
     {
       id: 'b1-q40',
       pregunta: 'Según el calendario previsto, ¿cuándo será obligatoria la factura electrónica para una pyme con menos de 8 millones de volumen de operaciones?',
-      correcta: 'Hacia octubre de 2028: 24 meses después de la orden técnica',
+      correcta: 'Hacia octubre de 2028: dos años después de la orden técnica',
       incorrectas: ['Ya es obligatoria desde enero de 2026', 'Nunca: solo afecta a empresas de más de 8 millones'],
-      explicacion: 'Las empresas de más de 8 millones tienen 12 meses desde la orden técnica (previsto octubre de 2027) y el resto 24 meses (previsto octubre de 2028). Conviene comprobar las fechas en la AEAT, porque pueden cambiar.',
+      explicacion: 'La Orden HAC/1028/2026 (en vigor desde el 6/10/2026) inició el cómputo: un año para las empresas de más de 8 millones (octubre de 2027) y dos años para el resto (octubre de 2028).',
     },
   ],
 
@@ -3453,6 +3454,926 @@ const CONTENIDO_B3 = {
   ],
 };
 
+/* ---------- Bloque 4: Nóminas e Impuestos (gestoría) ---------- */
+
+const HOJA_NOMINAS_MESON = {
+  tipo: 'nominas',
+  empresa: 'Mesón La Encina, S.L.',
+  nif: 'B98556677',
+  periodo: 'Octubre 2026',
+  trabajadores: [
+    { nombre: 'Andrés Molina Vidal', puesto: 'Cocinero', bruto: 2400, ssTrab: 156, irpf: 336, ssEmp: 768 },
+    { nombre: 'Lucía Serrano Gil', puesto: 'Camarera', bruto: 1900, ssTrab: 123.5, irpf: 228, ssEmp: 608 },
+    { nombre: 'Pablo Ruiz Catalá', puesto: 'Ayudante de cocina', bruto: 1700, ssTrab: 110.5, irpf: 156, ssEmp: 544 },
+  ],
+  notas: ['Seguridad Social a cargo de la empresa: 32 % (incluye accidentes de trabajo de hostelería).', 'Pago de las nóminas: por transferencia el último día del mes.'],
+};
+
+const CONTENIDO_B4 = {
+  teoria: [
+    {
+      id: 'calendario',
+      titulo: 'El calendario fiscal de la gestoría',
+      resumen: 'Cuándo se presenta cada modelo.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>En una gestoría el año se organiza alrededor de los <strong>plazos de presentación</strong>. Cada trimestre se presentan las liquidaciones de todos los clientes, y en enero y febrero, además, los resúmenes anuales. Saber qué toca y cuándo es tan importante como saber hacerlo.</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Modelos trimestrales',
+          columnas: ['Modelo', 'Plazo'],
+          filas: [
+            ['303 · IVA', 'Del 1 al 20 de abril, julio y octubre. El 4.º trimestre, hasta el 30 de enero'],
+            ['111 · Retenciones de trabajo y profesionales', 'Del 1 al 20 de abril, julio, octubre y enero'],
+            ['115 · Retenciones de alquileres', 'Del 1 al 20 de abril, julio, octubre y enero'],
+            ['349 · Operaciones intracomunitarias', 'Del 1 al 20 del mes siguiente; el 4.º trimestre, hasta el 30 de enero'],
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Declaraciones anuales',
+          columnas: ['Modelo', 'Plazo'],
+          filas: [
+            ['390 · Resumen anual del IVA', 'Del 1 al 30 de enero'],
+            ['190 · Resumen anual de retenciones del 111', 'Del 1 al 31 de enero'],
+            ['180 · Resumen anual de retenciones del 115', 'Del 1 al 31 de enero'],
+            ['347 · Operaciones con terceros', 'Durante el mes de febrero'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Si un plazo acaba en sábado, domingo o festivo, se traslada al siguiente día hábil: consulta cada año el <strong>calendario del contribuyente</strong> de la AEAT. Y si el cliente paga por <strong>domiciliación</strong>, el plazo para presentarla termina unos días antes que el general (en los trimestres ordinarios, el día 15).',
+        },
+      ],
+    },
+    {
+      id: 'nomina',
+      titulo: 'Nóminas: el asiento resumen',
+      resumen: 'De la hoja del departamento laboral al diario.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Las nóminas las calcula el departamento laboral (o una asesoría externa). A contabilidad llega una <strong>hoja resumen</strong> con, para cada trabajador, el salario bruto, lo que se le descuenta (Seguridad Social e IRPF), lo que cobra (líquido) y lo que cuesta a la empresa la Seguridad Social. Con ella se hace <strong>un asiento por mes</strong>, no uno por trabajador.</p>',
+        },
+        { tipo: 'documento', documento: HOJA_NOMINAS_MESON },
+        {
+          tipo: 'asiento',
+          titulo: 'Asiento de las nóminas de octubre',
+          lineas: [
+            { cuenta: '640', debe: 6000 },
+            { cuenta: '642', debe: 1920 },
+            { cuenta: '476', haber: 2310 },
+            { cuenta: '4751', haber: 720 },
+            { cuenta: '465', haber: 4890 },
+          ],
+          nota: '640: el bruto. 642: la Seguridad Social a cargo de la empresa. 476: toda la Seguridad Social que se ingresará (empresa 1.920 + trabajadores 390). 4751: el IRPF retenido. 465: lo que se paga a los trabajadores.',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Tipos de cotización 2026 (contrato indefinido, régimen general)',
+          columnas: ['Concepto', 'Empresa', 'Trabajador'],
+          filas: [
+            ['Contingencias comunes', '23,60 %', '4,70 %'],
+            ['Desempleo', '5,50 %', '1,55 %'],
+            ['FOGASA y formación profesional', '0,80 %', '0,10 %'],
+            ['Mecanismo de Equidad Intergeneracional (MEI)', '0,75 %', '0,15 %'],
+            ['Accidentes de trabajo', 'Según la actividad', '—'],
+            ['Total aproximado', 'Más del 30 %', '6,50 %'],
+          ],
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Comprobación rápida:</strong> el asiento cuadra si bruto + Seguridad Social de la empresa = Seguridad Social total + IRPF + líquido. Si no cuadra, revisa la hoja antes de tocar nada.',
+        },
+      ],
+    },
+    {
+      id: 'pagos-nomina',
+      titulo: 'Pago de nóminas, seguros sociales y otros conceptos',
+      resumen: 'Cancelar la 465 y la 476.',
+      piezas: [
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Pago de las nóminas', texto: 'Normalmente a final de mes, por transferencia: 465 al Debe, 572 al Haber.' },
+            { titulo: 'Pago de los seguros sociales', texto: 'La Seguridad Social del mes se paga el mes siguiente, por domiciliación el último día hábil: 476 al Debe, 572 al Haber.' },
+            { titulo: 'Ingreso del IRPF retenido', texto: 'Se acumula en la 4751 y se paga con el modelo 111 del trimestre.' },
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Otros conceptos de nómina',
+          columnas: ['Situación', 'Cuenta'],
+          filas: [
+            ['Anticipo pagado a un trabajador a mitad de mes', '460 Anticipos de remuneraciones (al Debe); en la nómina se descuenta abonando la 460'],
+            ['Indemnización por despido', '641 Indemnizaciones'],
+            ['Nómina calculada y no pagada a fin de mes', '465 Remuneraciones pendientes de pago (queda con saldo)'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Cuadra cada mes la <strong>476</strong> con el recibo de liquidación de cotizaciones (RLC) y la <strong>465</strong> con las transferencias del banco. Si a final de trimestre la 465 tiene saldo, hay una nómina sin pagar o un pago sin registrar.',
+        },
+      ],
+    },
+    {
+      id: 'modelo-303',
+      titulo: 'Modelo 303: liquidar el IVA del trimestre',
+      resumen: 'Compensar 477 y 472: ¿a ingresar o a compensar?',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Al final de cada trimestre, el IVA repercutido (477) se compensa con el IVA soportado deducible (472). Las dos cuentas quedan a cero y la diferencia es el resultado del 303:</p>',
+        },
+        {
+          tipo: 'tabla',
+          columnas: ['Resultado', 'Cuenta', 'Qué pasa después'],
+          filas: [
+            ['477 mayor que 472: a ingresar', '4750 Hacienda Pública, acreedora por IVA (Haber)', 'Se paga en el plazo: 4750 a 572'],
+            ['472 mayor que 477: a compensar', '4700 Hacienda Pública, deudora por IVA (Debe)', 'Se aplica en las siguientes liquidaciones; en el último periodo del año se puede pedir la devolución'],
+          ],
+        },
+        { tipo: 'liquidador-iva' },
+        {
+          tipo: 'consejo',
+          html: '<strong>Antes de presentar</strong>, comprueba que las cuotas del borrador coinciden con los saldos de la 477 y la 472 y con los libros registro. Si hay diferencias, suele ser una factura con fecha de otro trimestre o un IVA no deducible registrado en la 472.',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Si el 303 sale a ingresar y el cliente no puede pagarlo, <strong>preséntalo en plazo igualmente</strong> con solicitud de aplazamiento o fraccionamiento. No presentarlo genera recargos y sanciones mucho mayores.',
+        },
+      ],
+    },
+    {
+      id: 'modelos-111-115',
+      titulo: 'Modelos 111 y 115: ingresar las retenciones',
+      resumen: 'La 4751 vuelve a cero cada trimestre.',
+      piezas: [
+        {
+          tipo: 'tabla',
+          columnas: ['', 'Modelo 111', 'Modelo 115'],
+          filas: [
+            ['Qué recoge', 'Retenciones de trabajadores (nóminas) y de profesionales', 'Retenciones de alquileres de inmuebles urbanos'],
+            ['De dónde salen', 'Hojas de nóminas y facturas de profesionales', 'Facturas del arrendador'],
+            ['Resumen anual', 'Modelo 190', 'Modelo 180'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Pago del 111 del trimestre: 2.227,50 €',
+          lineas: [{ cuenta: '4751', debe: 2227.5 }, { cuenta: '572', haber: 2227.5 }],
+          nota: 'No es un gasto: las retenciones ya se registraron como deuda en cada nómina o factura. El pago solo la cancela.',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Separa la 4751 en <strong>subcuentas</strong>: por ejemplo, 47510001 para trabajo y profesionales (111) y 47510002 para alquileres (115). Así cada una cuadra con su modelo y detectas al momento una retención mal clasificada.',
+        },
+      ],
+    },
+    {
+      id: 'informativas',
+      titulo: 'Las declaraciones informativas anuales',
+      resumen: '390, 190, 180 y el temido 347.',
+      piezas: [
+        {
+          tipo: 'tabla',
+          columnas: ['Modelo', 'Qué es', 'Con qué cuadra'],
+          filas: [
+            ['390', 'Resumen anual del IVA', 'La suma de los cuatro 303 del año'],
+            ['190', 'Retenciones de trabajo y profesionales, detalladas por perceptor', 'La suma de los cuatro 111 y los certificados de retenciones'],
+            ['180', 'Retenciones de alquileres, detalladas por arrendador', 'La suma de los cuatro 115'],
+            ['347', 'Operaciones con cada tercero que superen 3.005,06 € al año (IVA incluido)', 'Los saldos de clientes y proveedores, y el 347 de cada tercero'],
+          ],
+        },
+        {
+          tipo: 'html',
+          html: '<p><strong>El modelo 347.</strong> Recoge, por cada cliente y proveedor, el total anual de operaciones con él cuando supera 3.005,06 € IVA incluido, desglosado por trimestres. <strong>No se incluyen</strong> las operaciones que ya se declaran en otros modelos: las que llevan retención (190 y 180) y las intracomunitarias (349). Los cobros en efectivo de más de 6.000 € de un mismo tercero se declaran además por separado.</p>',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Las empresas que llevan los libros por el Suministro Inmediato de Información (SII) no presentan el 347: Hacienda ya tiene los datos factura a factura.',
+        },
+      ],
+    },
+    {
+      id: 'enero',
+      titulo: 'Enero en la gestoría: cuadrar y puntear',
+      resumen: 'La tarea de junior que más se repite.',
+      piezas: [
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: '390 contra los 303', texto: 'Suma los cuatro 303 presentados. Si el 390 no coincide, hay una complementaria olvidada o un error en algún trimestre.' },
+            { titulo: '190 y 180 contra los 111 y 115', texto: 'La suma de retenciones por perceptor debe coincidir con lo ingresado en el año. Emite a cada perceptor su certificado de retenciones.' },
+            { titulo: 'Listado de terceros para el 347', texto: 'Saca del programa los clientes y proveedores que superan 3.005,06 € y quita los que llevan retención o son intracomunitarios.' },
+            { titulo: 'Cartas de 347', texto: 'Envía a cada tercero el importe que vas a declarar. Si su cifra no coincide, busca la diferencia antes de presentar: una factura que falta, otra de un ejercicio distinto o un abono.' },
+          ],
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Hacienda cruza los 347.</strong> Si tu cliente declara 11.900 € con un proveedor y el proveedor declara 12.400 € con tu cliente, la diferencia aparecerá en una comprobación. Por eso las diferencias se resuelven en febrero, no después.',
+        },
+      ],
+    },
+    {
+      id: 'normativa',
+      titulo: 'Actualización normativa: factura electrónica y VeriFactu',
+      resumen: 'Lo que ya es oficial y lo que está solo anunciado.',
+      piezas: [
+        {
+          tipo: 'tabla',
+          titulo: 'Factura electrónica obligatoria entre empresas',
+          columnas: ['Hito', 'Situación'],
+          filas: [
+            ['Real Decreto 238/2026, de 25 de marzo', 'Aprobado y publicado (BOE de 31/03/2026)'],
+            ['Orden HAC/1028/2026, de 2 de octubre', 'Publicada en el BOE el 5/10/2026 y en vigor desde el 6/10/2026: inicia el cómputo de los plazos'],
+            ['Empresas con más de 8 millones de volumen de operaciones', 'Obligatoria un año después: hacia octubre de 2027'],
+            ['Resto de empresas y autónomos', 'Obligatoria dos años después: hacia octubre de 2028'],
+            ['Comunicación del estado de las facturas (rechazo, pago)', 'La hace el destinatario. Para autónomos y entidades de hasta 8 millones, es voluntaria durante los primeros 12 meses'],
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'VeriFactu (software de facturación)',
+          columnas: ['Hito', 'Situación'],
+          filas: [
+            ['Real Decreto-ley 15/2025 (BOE de 3/12/2025)', 'Fechas legales vigentes: 1/1/2027 para sociedades y 1/7/2027 para el resto'],
+            ['Anuncio de Hacienda (5/10/2026)', 'Intención de aplazarlo a octubre de 2028 para alinearlo con la factura electrónica'],
+            ['Estado del aplazamiento a mediados de octubre de 2026', 'Pendiente de aprobación: sin norma publicada en el BOE'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Mientras el aplazamiento de VeriFactu no se publique en el BOE, <strong>las fechas que obligan son las de 2027</strong>. Aconseja a los clientes que facturan con su propio programa que confirmen con su proveedor de software que está adaptado, y revisa la web de la AEAT antes de cada fecha.',
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Datos comprobados el 22 de octubre de 2026.</strong> Es normativa en movimiento: vuelve a comprobarla antes de asesorar a un cliente.',
+        },
+      ],
+    },
+  ],
+
+  configTest: { preguntasPorIntento: 10, aprobado: 8 },
+
+  test: [
+    /* --- Calendario --- */
+    {
+      id: 'b4-q01',
+      pregunta: '¿Cuál es el plazo general para presentar el 303 del tercer trimestre?',
+      correcta: 'Del 1 al 20 de octubre',
+      incorrectas: ['Del 1 al 30 de septiembre', 'Hasta el 31 de diciembre'],
+      explicacion: 'El 303 trimestral se presenta del 1 al 20 del mes siguiente al trimestre. Solo el cuarto trimestre tiene plazo hasta el 30 de enero.',
+    },
+    {
+      id: 'b4-q02',
+      pregunta: '¿Hasta cuándo se presentan los modelos 111 y 115 del cuarto trimestre?',
+      correcta: 'Hasta el 20 de enero',
+      incorrectas: ['Hasta el 30 de enero, como el 303', 'Hasta el 28 de febrero'],
+      explicacion: 'El 111 y el 115 del cuarto trimestre siguen el plazo general (del 1 al 20 de enero). El 303 del cuarto trimestre se amplía hasta el 30 de enero.',
+    },
+    {
+      id: 'b4-q03',
+      pregunta: '¿Cuándo se presenta el modelo 390?',
+      correcta: 'Del 1 al 30 de enero',
+      incorrectas: ['Durante el mes de febrero', 'Junto con el impuesto sobre sociedades, en julio'],
+      explicacion: 'El 390 es el resumen anual del IVA y se presenta en enero, a la vez que el 303 del cuarto trimestre.',
+    },
+    {
+      id: 'b4-q04',
+      pregunta: '¿Cuándo se presenta el modelo 347?',
+      correcta: 'Durante el mes de febrero',
+      incorrectas: ['Del 1 al 20 de enero', 'Cada trimestre, con el 303'],
+      explicacion: 'El 347 se presenta en febrero, después de los resúmenes de enero. Así hay tiempo para cuadrar las cifras con clientes y proveedores.',
+    },
+    {
+      id: 'b4-q05',
+      pregunta: 'Un cliente quiere pagar el 303 del segundo trimestre por domiciliación. ¿Hasta cuándo puede presentarlo?',
+      correcta: 'Hasta el 15 de julio, antes que el plazo general',
+      incorrectas: ['Hasta el 20 de julio, como cualquier otro', 'Hasta el 31 de julio'],
+      explicacion: 'La domiciliación tiene un plazo más corto que el general: en los trimestres ordinarios termina el día 15. El cargo en cuenta se hace el último día del plazo.',
+    },
+
+    /* --- Nóminas --- */
+    {
+      id: 'b4-q06',
+      pregunta: 'En el asiento de nóminas, ¿qué importe va a la cuenta 640 Sueldos y salarios?',
+      correcta: 'El salario bruto',
+      incorrectas: ['El líquido que cobra el trabajador', 'El bruto más la Seguridad Social de la empresa'],
+      explicacion: 'La 640 recoge el salario bruto devengado. Las retenciones y la Seguridad Social del trabajador se descuentan después, en las cuentas de pasivo.',
+    },
+    {
+      id: 'b4-q07',
+      pregunta: '¿Dónde registras la Seguridad Social que paga la empresa por sus trabajadores?',
+      correcta: '642 Seguridad Social a cargo de la empresa',
+      incorrectas: ['640 Sueldos y salarios', '476 Organismos de la Seguridad Social, acreedores'],
+      explicacion: 'Es un gasto adicional al salario: 642, al Debe. La 476 es la deuda que se paga a la Seguridad Social, no el gasto.',
+    },
+    {
+      id: 'b4-q08',
+      pregunta: '¿Qué importe se abona a la 476 en el asiento de nóminas?',
+      correcta: 'La cuota de la empresa más la cuota de los trabajadores',
+      incorrectas: ['Solo la cuota de la empresa', 'Solo la cuota descontada a los trabajadores'],
+      explicacion: 'La empresa ingresa a la Seguridad Social las dos partes: la suya y la que ha descontado a los trabajadores. Por eso la 476 recoge el total.',
+    },
+    {
+      id: 'b4-q09',
+      pregunta: '¿Qué cuenta recoge el IRPF retenido en las nóminas?',
+      correcta: '4751 Hacienda Pública, acreedora por retenciones practicadas',
+      incorrectas: ['473 Hacienda Pública, retenciones y pagos a cuenta', '476 Organismos de la Seguridad Social, acreedores'],
+      explicacion: 'Es una deuda con Hacienda que se ingresa con el modelo 111, igual que las retenciones de los profesionales.',
+    },
+    {
+      id: 'b4-q10',
+      pregunta: 'Nómina: bruto 2.000 €, Seguridad Social del trabajador 130 €, IRPF 240 € y Seguridad Social de la empresa 640 €. ¿Cómo queda el asiento?',
+      correcta: '640 por 2.000 y 642 por 640 al Debe; 476 por 770, 4751 por 240 y 465 por 1.630 al Haber',
+      incorrectas: ['640 por 1.630 al Debe; 465 por 1.630 al Haber', '640 por 2.000 al Debe; 476 por 130, 4751 por 240 y 465 por 1.630 al Haber'],
+      explicacion: 'La 476 suma las dos cuotas (640 + 130 = 770 €) y el líquido es 2.000 − 130 − 240 = 1.630 €. Debe 2.640 = Haber 2.640.',
+    },
+    {
+      id: 'b4-q11',
+      pregunta: 'Pagas por transferencia las nóminas del mes. ¿Qué asiento haces?',
+      correcta: '465 Remuneraciones pendientes de pago al Debe; 572 al Haber',
+      incorrectas: ['640 Sueldos y salarios al Debe; 572 al Haber', '476 al Debe; 572 al Haber'],
+      explicacion: 'El gasto ya se registró con la nómina. El pago cancela lo que se debe a los trabajadores (465).',
+    },
+    {
+      id: 'b4-q12',
+      pregunta: '¿Cuándo se pagan, en general, los seguros sociales de las nóminas de octubre?',
+      correcta: 'En noviembre, con cargo el último día hábil del mes',
+      incorrectas: ['El mismo día que las nóminas de octubre', 'En enero, con el 111'],
+      explicacion: 'Las cotizaciones de un mes se ingresan durante el mes siguiente. Mientras tanto, la deuda está en la 476.',
+    },
+    {
+      id: 'b4-q13',
+      pregunta: 'Una trabajadora pidió un anticipo de 300 € a mitad de mes. ¿Qué asiento haces al pagárselo?',
+      correcta: '460 Anticipos de remuneraciones al Debe; 572 al Haber',
+      incorrectas: ['640 Sueldos y salarios al Debe; 572 al Haber', '465 al Debe; 572 al Haber'],
+      explicacion: 'El anticipo es un derecho frente a la trabajadora hasta que se descuente de su nómina. En el asiento de la nómina se abona la 460 y se reduce el líquido.',
+    },
+    {
+      id: 'b4-q14',
+      pregunta: '¿Qué porcentaje aproximado de su base de cotización paga a la Seguridad Social un trabajador con contrato indefinido en 2026?',
+      correcta: 'En torno al 6,5 %',
+      incorrectas: ['Alrededor del 30 %', 'Nada: todo lo paga la empresa'],
+      explicacion: 'Contingencias comunes 4,70 %, desempleo 1,55 %, formación profesional 0,10 % y MEI 0,15 %. La empresa paga bastante más: por encima del 30 %.',
+    },
+    {
+      id: 'b4-q15',
+      pregunta: 'La empresa paga una indemnización por despido. ¿En qué cuenta la registras?',
+      correcta: '641 Indemnizaciones',
+      incorrectas: ['640 Sueldos y salarios', '678 Gastos excepcionales'],
+      explicacion: 'El PGC tiene una cuenta propia para las indemnizaciones al personal: 641. Así no se mezclan con los salarios ordinarios.',
+    },
+    {
+      id: 'b4-q16',
+      pregunta: 'Revisando el trimestre, la cuenta 465 tiene saldo acreedor. ¿Qué puede significar?',
+      correcta: 'Que hay una nómina sin pagar o un pago sin registrar',
+      incorrectas: ['Que todo está correcto: siempre tiene saldo', 'Que hay que ingresar más IRPF'],
+      explicacion: 'Si las nóminas se pagan cada mes, la 465 debe quedar a cero tras cada pago. Un saldo indica algo pendiente de revisar con el banco.',
+    },
+
+    /* --- Modelo 303 --- */
+    {
+      id: 'b4-q17',
+      pregunta: 'Al final del trimestre, la 477 tiene 8.000 € y la 472, 5.000 €. ¿Qué asiento de liquidación haces?',
+      correcta: '477 por 8.000 al Debe; 472 por 5.000 y 4750 por 3.000 al Haber',
+      incorrectas: ['472 por 5.000 al Debe; 477 por 8.000 al Haber', '477 por 8.000 al Debe; 572 por 8.000 al Haber'],
+      explicacion: 'Las dos cuentas de IVA se cancelan y la diferencia, a ingresar, es una deuda con Hacienda: 4750.',
+    },
+    {
+      id: 'b4-q18',
+      pregunta: 'Al final del trimestre, la 477 tiene 2.000 € y la 472, 3.500 €. ¿Qué asiento haces?',
+      correcta: '477 por 2.000 y 4700 por 1.500 al Debe; 472 por 3.500 al Haber',
+      incorrectas: ['477 por 2.000 al Debe; 472 por 2.000 al Haber, y se pierde el resto', '477 por 2.000 y 4750 por 1.500 al Debe; 472 por 3.500 al Haber'],
+      explicacion: 'Sale a compensar: el exceso de IVA soportado es un derecho frente a Hacienda (4700 Hacienda Pública, deudora por IVA).',
+    },
+    {
+      id: 'b4-q19',
+      pregunta: '¿Qué representa el saldo de la cuenta 4700 tras un 303 a compensar?',
+      correcta: 'Un derecho frente a Hacienda que se aplicará en próximas liquidaciones',
+      incorrectas: ['Una deuda con Hacienda pendiente de pago', 'Un gasto del trimestre'],
+      explicacion: 'La 4700 es un activo: IVA que Hacienda «debe» al cliente. Se descuenta en los siguientes 303 o se pide su devolución al final del año.',
+    },
+    {
+      id: 'b4-q20',
+      pregunta: 'Con carácter general, ¿cuándo puede una pyme pedir la devolución del IVA a compensar?',
+      correcta: 'En la declaración del último periodo del año',
+      incorrectas: ['En cualquier trimestre', 'Nunca: solo se puede compensar'],
+      explicacion: 'Lo habitual es compensar trimestre a trimestre y, si en el último periodo sigue saliendo a favor, pedir la devolución. Las empresas inscritas en el registro de devolución mensual (REDEME) pueden pedirla cada mes.',
+    },
+    {
+      id: 'b4-q21',
+      pregunta: 'En el 303 siguiente aplicas 1.260 € que tenías a compensar. ¿Qué pasa con la 4700 en el asiento de liquidación?',
+      correcta: 'Se abona (Haber) por 1.260 €',
+      incorrectas: ['Se carga (Debe) por 1.260 €', 'No aparece: solo se usan la 477 y la 472'],
+      explicacion: 'Aplicar la compensación cancela ese derecho frente a Hacienda: la 4700 se abona y reduce lo que hay que ingresar.',
+    },
+    {
+      id: 'b4-q22',
+      pregunta: 'El 303 sale a ingresar y el cliente no tiene liquidez. ¿Qué le aconsejas?',
+      correcta: 'Presentarlo en plazo con solicitud de aplazamiento o fraccionamiento',
+      incorrectas: ['No presentarlo hasta tener el dinero', 'Presentarlo en blanco y regularizarlo al año siguiente'],
+      explicacion: 'Presentar fuera de plazo o no presentar genera recargos y sanciones. Pedir aplazamiento en plazo es la vía correcta.',
+    },
+    {
+      id: 'b4-q23',
+      pregunta: 'Un cliente con derecho a deducir todo el IVA tiene una factura intracomunitaria con autorrepercusión. ¿Cómo afecta al resultado del 303?',
+      correcta: 'No lo cambia: la cuota aparece como devengada y como deducible',
+      incorrectas: ['Aumenta lo que hay que ingresar', 'Reduce lo que hay que ingresar'],
+      explicacion: 'La inversión del sujeto pasivo suma la misma cuota en el IVA devengado y en el deducible, así que el efecto neto es cero.',
+    },
+    {
+      id: 'b4-q24',
+      pregunta: 'Tu cliente mayorista ha cobrado recargo de equivalencia a varias tiendas. ¿Cómo lo trata en su 303?',
+      correcta: 'Lo declara como IVA devengado, en las casillas de recargo de equivalencia',
+      incorrectas: ['No lo declara: es un ingreso suyo', 'Lo resta del IVA soportado'],
+      explicacion: 'El recargo cobrado no es un ingreso: el mayorista lo ingresa a Hacienda. Por eso está en la 477 y en el IVA devengado del 303.',
+    },
+    {
+      id: 'b4-q25',
+      pregunta: 'Antes de presentar un 303, ¿qué cuadre conviene hacer?',
+      correcta: 'Que las cuotas del borrador coincidan con los saldos de 477 y 472 y con los libros registro',
+      incorrectas: ['Ninguno: el programa lo calcula todo', 'Que el resultado coincida con el del trimestre anterior'],
+      explicacion: 'Si el borrador no coincide con la contabilidad, hay una factura mal fechada, un IVA no deducible en la 472 u otro error que conviene encontrar antes de presentar.',
+    },
+
+    /* --- Modelos 111 y 115 --- */
+    {
+      id: 'b4-q26',
+      pregunta: '¿Qué retenciones se ingresan con el modelo 111?',
+      correcta: 'Las de trabajadores y las de profesionales',
+      incorrectas: ['Solo las de profesionales', 'Las de alquileres de locales'],
+      explicacion: 'El 111 recoge las retenciones de rendimientos del trabajo y de actividades profesionales. Las de alquileres van al 115.',
+    },
+    {
+      id: 'b4-q27',
+      pregunta: '¿Qué retenciones se ingresan con el modelo 115?',
+      correcta: 'Las de alquileres de inmuebles urbanos',
+      incorrectas: ['Las de nóminas', 'Las de intereses bancarios'],
+      explicacion: 'El 115 es específico de los arrendamientos de inmuebles urbanos, como el alquiler de un local.',
+    },
+    {
+      id: 'b4-q28',
+      pregunta: 'Se domicilia el pago del 111 del trimestre. ¿Qué asiento haces?',
+      correcta: '4751 al Debe; 572 al Haber',
+      incorrectas: ['640 Sueldos y salarios al Debe; 572 al Haber', '4751 al Haber; 572 al Debe'],
+      explicacion: 'Las retenciones ya están como deuda en la 4751. El pago la cancela: no es un gasto nuevo.',
+    },
+    {
+      id: 'b4-q29',
+      pregunta: '¿Con qué debe coincidir el importe del 111 del trimestre?',
+      correcta: 'Con las retenciones de nóminas y profesionales registradas en la 4751 del trimestre',
+      incorrectas: ['Con el saldo de la 476', 'Con el resultado del 303'],
+      explicacion: 'El 111 se cuadra con la subcuenta de la 4751 de trabajo y profesionales y con las hojas de nóminas y facturas del trimestre.',
+    },
+    {
+      id: 'b4-q30',
+      pregunta: '¿Por qué conviene dividir la 4751 en subcuentas?',
+      correcta: 'Para cuadrar por separado lo que va al 111 y lo que va al 115',
+      incorrectas: ['Porque el PGC lo prohíbe en una sola cuenta', 'Para pagar menos retenciones'],
+      explicacion: 'Con una subcuenta para trabajo y profesionales y otra para alquileres, cada una coincide con su modelo y los errores saltan a la vista.',
+    },
+    {
+      id: 'b4-q31',
+      pregunta: 'Tu cliente paga el alquiler del local con una retención del 19 %. ¿Qué resumen anual recoge esas retenciones?',
+      correcta: 'El modelo 180',
+      incorrectas: ['El modelo 190', 'El modelo 347'],
+      explicacion: 'El 180 es el resumen anual del 115, con el detalle por arrendador. El 190 es el resumen anual del 111.',
+    },
+
+    /* --- Informativas --- */
+    {
+      id: 'b4-q32',
+      pregunta: '¿Con qué debe cuadrar el modelo 390 de un cliente?',
+      correcta: 'Con la suma de los cuatro 303 del año',
+      incorrectas: ['Con el modelo 347', 'Con el impuesto sobre sociedades'],
+      explicacion: 'El 390 resume el IVA del año. Si no coincide con la suma de los 303, falta una complementaria o hay un error en algún trimestre.',
+    },
+    {
+      id: 'b4-q33',
+      pregunta: '¿Qué detalla el modelo 190?',
+      correcta: 'Las retenciones de trabajo y profesionales de todo el año, perceptor por perceptor',
+      incorrectas: ['Las operaciones con proveedores de más de 3.005,06 €', 'El IVA de todo el año'],
+      explicacion: 'El 190 desglosa por cada trabajador o profesional lo pagado y lo retenido. Por eso debe coincidir con los certificados de retenciones que se les entregan.',
+    },
+    {
+      id: 'b4-q34',
+      pregunta: '¿Qué operaciones se declaran en el modelo 347?',
+      correcta: 'Las realizadas con un mismo tercero que superan 3.005,06 € al año, IVA incluido',
+      incorrectas: ['Todas las facturas del año, sea cual sea su importe', 'Las que superan 3.005,06 € sin contar el IVA'],
+      explicacion: 'El umbral es de 3.005,06 € anuales por tercero e incluye el IVA. Se declaran desglosadas por trimestres.',
+    },
+    {
+      id: 'b4-q35',
+      pregunta: '¿Cuál de estas operaciones NO se incluye en el 347?',
+      correcta: 'Los honorarios de un abogado con retención, porque ya van en el 190',
+      incorrectas: ['Compras de 4.000 € a un proveedor nacional', 'Ventas de 5.000 € a un cliente nacional'],
+      explicacion: 'Se excluyen las operaciones ya declaradas en otros modelos: las que llevan retención (190 y 180) y las intracomunitarias (349).',
+    },
+    {
+      id: 'b4-q36',
+      pregunta: 'Un cliente cobra en efectivo 6.500 € de una misma persona durante el año. ¿Qué particularidad tiene en el 347?',
+      correcta: 'Además de la operación, se declaran por separado los cobros en metálico de más de 6.000 €',
+      incorrectas: ['Ninguna: el efectivo no se declara', 'Debe declararse en el 349'],
+      explicacion: 'El 347 tiene un apartado específico para los cobros en metálico superiores a 6.000 € de un mismo tercero.',
+    },
+    {
+      id: 'b4-q37',
+      pregunta: 'Un proveedor avisa de que en su 347 declara 12.400 € con tu cliente, y vosotros 11.900 €. ¿Qué haces?',
+      correcta: 'Buscar la diferencia: una factura que falta, otra de otro ejercicio o un abono',
+      incorrectas: ['Cambiar la cifra para que coincida con la suya', 'Nada: cada uno declara lo suyo'],
+      explicacion: 'Hacienda cruza los 347 de ambas partes. La diferencia debe explicarse y, si falta una factura, registrarse en el periodo correcto.',
+    },
+    {
+      id: 'b4-q38',
+      pregunta: 'Una empresa lleva sus libros de IVA por el SII (Suministro Inmediato de Información). ¿Presenta el 347?',
+      correcta: 'No: Hacienda ya tiene la información factura a factura',
+      incorrectas: ['Sí, como cualquier otra empresa', 'Sí, pero solo de las ventas'],
+      explicacion: 'Los obligados al SII están exonerados del 347 porque envían cada factura a la AEAT en pocos días.',
+    },
+
+    /* --- Normativa --- */
+    {
+      id: 'b4-q39',
+      pregunta: 'A mediados de octubre de 2026, ¿qué fecha de VeriFactu obliga legalmente a las sociedades?',
+      correcta: 'El 1 de enero de 2027, mientras no se publique en el BOE el aplazamiento anunciado',
+      incorrectas: ['Octubre de 2028, porque Hacienda lo ha anunciado', 'Ninguna: VeriFactu se ha suprimido'],
+      explicacion: 'Las fechas vigentes son las del Real Decreto-ley 15/2025: 1/1/2027 para sociedades y 1/7/2027 para el resto. El aplazamiento a octubre de 2028 está anunciado, pero aún no aprobado.',
+    },
+    {
+      id: 'b4-q40',
+      pregunta: '¿Qué norma, publicada en el BOE el 5 de octubre de 2026, inicia los plazos de la factura electrónica obligatoria entre empresas?',
+      correcta: 'La Orden HAC/1028/2026, que regula la solución pública de facturación electrónica',
+      incorrectas: ['El Real Decreto-ley 15/2025', 'La Ley 31/2022 de Presupuestos'],
+      explicacion: 'Con su entrada en vigor (6/10/2026) empiezan a contar los plazos: un año para las empresas de más de 8 millones y dos años para el resto.',
+    },
+  ],
+
+  casos: [
+    {
+      id: 'b4-nominas',
+      tipo: 'asiento',
+      cliente: { nombre: 'Mesón La Encina, S.L.', actividad: 'Restaurante' },
+      titulo: 'Asiento de las nóminas del mes',
+      enunciado: 'El departamento laboral te pasa la hoja resumen de las nóminas de octubre del restaurante. Registra el asiento resumen del mes.',
+      documento: HOJA_NOMINAS_MESON,
+      cuentasDisponibles: ['640', '642', '476', '4751', '465', '460', '572', '473'],
+      solucion: [
+        { cuenta: '640', debe: 6000 },
+        { cuenta: '642', debe: 1920 },
+        { cuenta: '476', haber: 2310 },
+        { cuenta: '4751', haber: 720 },
+        { cuenta: '465', haber: 4890 },
+      ],
+      pista: 'Usa los totales. En la 476 va toda la Seguridad Social que se ingresará: la de la empresa y la de los trabajadores.',
+      explicacion: 'Bruto a la 640 (6.000 €) y Seguridad Social de la empresa a la 642 (1.920 €). Al Haber: Seguridad Social total en la 476 (1.920 + 390 = 2.310 €), IRPF en la 4751 (720 €) y líquido a pagar en la 465 (4.890 €).',
+    },
+    {
+      id: 'b4-anticipo',
+      tipo: 'asiento',
+      cliente: { nombre: 'Moda Valentina, S.L.', actividad: 'Tienda de ropa' },
+      titulo: 'Nómina con anticipo',
+      enunciado: 'La dependienta pidió un anticipo de 300 € a mitad de mes, que ya se registró al pagárselo. Registra el asiento de su nómina de octubre.',
+      documento: {
+        tipo: 'nominas',
+        empresa: 'Moda Valentina, S.L.',
+        nif: 'B98765432',
+        periodo: 'Octubre 2026',
+        trabajadores: [
+          { nombre: 'Carla Vidal Soler', puesto: 'Dependienta', bruto: 1800, ssTrab: 117, irpf: 162, anticipo: 300, ssEmp: 576 },
+        ],
+        notas: ['El anticipo de 300 € se pagó el 15/10/2026 y se descuenta en esta nómina.'],
+      },
+      cuentasDisponibles: ['640', '642', '476', '4751', '460', '465', '572', '407'],
+      solucion: [
+        { cuenta: '640', debe: 1800 },
+        { cuenta: '642', debe: 576 },
+        { cuenta: '476', haber: 693 },
+        { cuenta: '4751', haber: 162 },
+        { cuenta: '460', haber: 300 },
+        { cuenta: '465', haber: 1221 },
+      ],
+      pista: 'Seis líneas. El anticipo ya se pagó: ahora se descuenta de la nómina cancelando el derecho que tenía la empresa.',
+      explicacion: 'Igual que una nómina normal, pero el anticipo se descuenta: se abona la 460 por 300 € y el líquido baja a 1.221 € (1.800 − 117 − 162 − 300). La 476 recoge 576 + 117 = 693 €.',
+    },
+    {
+      id: 'b4-pago-nominas',
+      tipo: 'asiento',
+      cliente: { nombre: 'Mesón La Encina, S.L.', actividad: 'Restaurante' },
+      titulo: 'Pago de las nóminas',
+      enunciado: 'El último día de octubre el restaurante ha pagado las nóminas del primer caso. Registra en un único asiento las tres transferencias resaltadas.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Mesón La Encina, S.L.',
+        iban: 'ES00 9999 0001 1100 0023 8845',
+        periodo: '30/10/2026 – 31/10/2026',
+        saldoInicial: 12406.3,
+        movimientos: [
+          { fecha: '30/10', concepto: 'LIQUIDACION TPV 29/10', detalle: 'Bruto 1.120,00 · comisión 5,60', importe: 1114.4 },
+          { fecha: '31/10', concepto: 'TRANSF. NOMINA OCTUBRE', detalle: 'Beneficiario: ANDRES MOLINA VIDAL', importe: -1908, resaltar: true },
+          { fecha: '31/10', concepto: 'TRANSF. NOMINA OCTUBRE', detalle: 'Beneficiario: LUCIA SERRANO GIL', importe: -1548.5, resaltar: true },
+          { fecha: '31/10', concepto: 'TRANSF. NOMINA OCTUBRE', detalle: 'Beneficiario: PABLO RUIZ CATALA', importe: -1433.5, resaltar: true },
+        ],
+      },
+      cuentasDisponibles: ['465', '640', '476', '4751', '460', '572', '555'],
+      solucion: [{ cuenta: '465', debe: 4890 }, { cuenta: '572', haber: 4890 }],
+      pista: 'El gasto ya está registrado. ¿Qué cuenta recogía lo que se debía a los trabajadores?',
+      explicacion: 'Se cancela la deuda con los trabajadores (465 al Debe, 4.890 €) y sale el dinero del banco. Registrar el pago en la 640 duplicaría el gasto.',
+    },
+    {
+      id: 'b4-seguros-sociales',
+      tipo: 'asiento',
+      cliente: { nombre: 'Mesón La Encina, S.L.', actividad: 'Restaurante' },
+      titulo: 'Pago de los seguros sociales',
+      enunciado: 'A final de noviembre se cargan los seguros sociales de octubre. Tienes el recibo de liquidación de cotizaciones y el extracto. Registra el pago.',
+      documentos: [
+        {
+          tipo: 'resumen',
+          titulo: 'Recibo de liquidación de cotizaciones (RLC)',
+          subtitulo: 'Periodo de liquidación: octubre 2026 · régimen general',
+          emisor: { nombre: 'Mesón La Encina, S.L.', nif: 'B98556677' },
+          columnas: ['Concepto', 'Importe'],
+          filas: [
+            ['Trabajadores en alta', '3'],
+            ['Aportación de la empresa', '1.920,00 €'],
+            ['Aportación de los trabajadores', '390,00 €'],
+            ['Total a ingresar', '2.310,00 €'],
+          ],
+          notas: ['Modalidad de pago: cargo en cuenta el 30/11/2026.'],
+        },
+        {
+          tipo: 'extracto',
+          banco: BANCO_FICTICIO,
+          titular: 'Mesón La Encina, S.L.',
+          iban: 'ES00 9999 0001 1100 0023 8845',
+          periodo: '30/11/2026',
+          saldoInicial: 9874.15,
+          movimientos: [
+            { fecha: '30/11', concepto: 'TGSS COTIZACION 10/2026', detalle: 'Recibo de liquidación de cotizaciones', importe: -2310, resaltar: true },
+          ],
+        },
+      ],
+      cuentasDisponibles: ['476', '642', '640', '4751', '465', '572', '626'],
+      solucion: [{ cuenta: '476', debe: 2310 }, { cuenta: '572', haber: 2310 }],
+      pista: 'Tanto la parte de la empresa como la de los trabajadores ya se registraron con la nómina. ¿Dónde quedó la deuda?',
+      explicacion: 'Se cancela la deuda con la Seguridad Social (476 al Debe, 2.310 €). No es un gasto nuevo: el gasto de la empresa (642) se registró en octubre con la nómina.',
+    },
+    {
+      id: 'b4-303-ingresar',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Liquidación del IVA a ingresar',
+      enunciado: 'Has preparado el borrador del 303 del tercer trimestre y cuadra con la contabilidad. Registra el asiento de liquidación del IVA.',
+      documento: {
+        tipo: 'modelo',
+        modelo: '303',
+        titulo: 'Autoliquidación del IVA · borrador',
+        nombre: 'Distribuciones Levante, S.L.',
+        nif: 'B98102030',
+        periodo: 'Ejercicio 2026 · 3T',
+        secciones: [
+          {
+            titulo: 'IVA devengado',
+            filas: [
+              { etiqueta: 'Régimen general 21 % · base 41.200,00', valor: 8652 },
+              { etiqueta: 'Recargo de equivalencia 5,2 % · base 3.200,00', valor: 166.4 },
+              { etiqueta: 'Total cuota devengada', valor: 8818.4, total: true },
+            ],
+          },
+          {
+            titulo: 'IVA deducible',
+            filas: [
+              { etiqueta: 'Operaciones interiores corrientes · base 30.000,00', valor: 6300 },
+              { etiqueta: 'Bienes de inversión · base 1.200,00', valor: 252 },
+              { etiqueta: 'Total a deducir', valor: 6552, total: true },
+            ],
+          },
+        ],
+        resultado: { etiqueta: 'Resultado: a ingresar', valor: 2266.4 },
+      },
+      cuentasDisponibles: ['477', '472', '4750', '4700', '572', '700', '600'],
+      solucion: [{ cuenta: '477', debe: 8818.4 }, { cuenta: '472', haber: 6552 }, { cuenta: '4750', haber: 2266.4 }],
+      pista: 'Las dos cuentas de IVA quedan a cero. El recargo de equivalencia cobrado también está en la 477. ¿Quién debe la diferencia?',
+      explicacion: 'Se carga la 477 por todo el IVA devengado, incluido el recargo (8.818,40 €), y se abona la 472 por el deducible (6.552 €). La diferencia, 2.266,40 €, es una deuda con Hacienda: 4750, que se cancelará al pagar.',
+    },
+    {
+      id: 'b4-303-compensar',
+      tipo: 'asiento',
+      cliente: { nombre: 'Estudio Creativo Píxel, S.L.', actividad: 'Agencia de diseño' },
+      titulo: 'Un 303 a compensar',
+      enunciado: 'En el segundo trimestre la agencia equipó su nuevo estudio. Este es el borrador de su 303. Registra la liquidación.',
+      documento: {
+        tipo: 'modelo',
+        modelo: '303',
+        titulo: 'Autoliquidación del IVA · borrador',
+        nombre: 'Estudio Creativo Píxel, S.L.',
+        nif: 'B98445566',
+        periodo: 'Ejercicio 2026 · 2T',
+        secciones: [
+          {
+            titulo: 'IVA devengado',
+            filas: [
+              { etiqueta: 'Régimen general 21 % · base 9.000,00', valor: 1890 },
+              { etiqueta: 'Adquisiciones intracomunitarias de servicios · base 2.400,00', valor: 504 },
+              { etiqueta: 'Total cuota devengada', valor: 2394, total: true },
+            ],
+          },
+          {
+            titulo: 'IVA deducible',
+            filas: [
+              { etiqueta: 'Operaciones interiores corrientes · base 3.000,00', valor: 630 },
+              { etiqueta: 'Bienes de inversión · base 12.000,00', valor: 2520 },
+              { etiqueta: 'Adquisiciones intracomunitarias · base 2.400,00', valor: 504 },
+              { etiqueta: 'Total a deducir', valor: 3654, total: true },
+            ],
+          },
+        ],
+        resultado: { etiqueta: 'Resultado: a compensar', valor: -1260 },
+      },
+      cuentasDisponibles: ['477', '472', '4750', '4700', '572', '217', '627'],
+      solucion: [{ cuenta: '477', debe: 2394 }, { cuenta: '4700', debe: 1260 }, { cuenta: '472', haber: 3654 }],
+      pista: 'Esta vez el IVA soportado es mayor que el repercutido. La diferencia no se pierde: ¿es una deuda o un derecho?',
+      explicacion: 'Se cargan la 477 (2.394 €) y la 4700 por la diferencia a favor del cliente (1.260 €), y se abona la 472 (3.654 €). La 4700 Hacienda Pública, deudora por IVA se aplicará en el siguiente 303.',
+    },
+    {
+      id: 'b4-303-aplicar',
+      tipo: 'asiento',
+      cliente: { nombre: 'Estudio Creativo Píxel, S.L.', actividad: 'Agencia de diseño' },
+      titulo: 'Aplicar la compensación en el trimestre siguiente',
+      enunciado: 'Llega el 303 del tercer trimestre de la agencia, en el que se aplica lo que quedó a compensar en el segundo. Registra la liquidación.',
+      documento: {
+        tipo: 'modelo',
+        modelo: '303',
+        titulo: 'Autoliquidación del IVA · borrador',
+        nombre: 'Estudio Creativo Píxel, S.L.',
+        nif: 'B98445566',
+        periodo: 'Ejercicio 2026 · 3T',
+        secciones: [
+          {
+            titulo: 'IVA devengado',
+            filas: [
+              { etiqueta: 'Régimen general 21 % · base 15.000,00', valor: 3150 },
+              { etiqueta: 'Adquisiciones intracomunitarias de servicios · base 1.000,00', valor: 210 },
+              { etiqueta: 'Total cuota devengada', valor: 3360, total: true },
+            ],
+          },
+          {
+            titulo: 'IVA deducible',
+            filas: [
+              { etiqueta: 'Operaciones interiores corrientes · base 4.000,00', valor: 840 },
+              { etiqueta: 'Adquisiciones intracomunitarias · base 1.000,00', valor: 210 },
+              { etiqueta: 'Total a deducir', valor: 1050, total: true },
+            ],
+          },
+          {
+            titulo: 'Liquidación',
+            filas: [
+              { etiqueta: 'Diferencia (devengado − deducible)', valor: 2310 },
+              { etiqueta: 'Cuotas a compensar de periodos anteriores aplicadas', valor: -1260 },
+            ],
+          },
+        ],
+        resultado: { etiqueta: 'Resultado: a ingresar', valor: 1050 },
+      },
+      cuentasDisponibles: ['477', '472', '4750', '4700', '572', '555', '627'],
+      solucion: [{ cuenta: '477', debe: 3360 }, { cuenta: '472', haber: 1050 }, { cuenta: '4700', haber: 1260 }, { cuenta: '4750', haber: 1050 }],
+      pista: 'Cuatro líneas. La compensación aplicada cancela el derecho que se registró en el trimestre anterior.',
+      explicacion: 'Se cancelan la 477 (3.360 €) y la 472 (1.050 €). La compensación aplicada cancela la 4700 (1.260 € al Haber) y queda a ingresar 3.360 − 1.050 − 1.260 = 1.050 € (4750).',
+    },
+    {
+      id: 'b4-111',
+      tipo: 'asiento',
+      cliente: { nombre: 'Mesón La Encina, S.L.', actividad: 'Restaurante' },
+      titulo: 'Pago del modelo 111',
+      enunciado: 'Has presentado el 111 del tercer trimestre del restaurante con domiciliación. El banco ha hecho el cargo. Registra el asiento.',
+      documentos: [
+        {
+          tipo: 'modelo',
+          modelo: '111',
+          titulo: 'Retenciones del trabajo y actividades económicas · borrador',
+          nombre: 'Mesón La Encina, S.L.',
+          nif: 'B98556677',
+          periodo: 'Ejercicio 2026 · 3T',
+          secciones: [
+            {
+              titulo: 'Rendimientos del trabajo',
+              filas: [
+                { etiqueta: 'Perceptores: 3 · percepciones 18.000,00', valor: 2160 },
+              ],
+            },
+            {
+              titulo: 'Actividades económicas (profesionales)',
+              filas: [
+                { etiqueta: 'Perceptores: 1 · percepciones 450,00', valor: 67.5 },
+              ],
+            },
+          ],
+          resultado: { etiqueta: 'Resultado: a ingresar', valor: 2227.5 },
+        },
+        {
+          tipo: 'extracto',
+          banco: BANCO_FICTICIO,
+          titular: 'Mesón La Encina, S.L.',
+          iban: 'ES00 9999 0001 1100 0023 8845',
+          periodo: '20/10/2026',
+          saldoInicial: 11780.4,
+          movimientos: [
+            { fecha: '20/10', concepto: 'AEAT MODELO 111 3T 2026', detalle: 'Domiciliación', importe: -2227.5, resaltar: true },
+            { fecha: '20/10', concepto: 'AEAT MODELO 303 3T 2026', detalle: 'Domiciliación', importe: -1843.2 },
+          ],
+        },
+      ],
+      cuentasDisponibles: ['4751', '473', '640', '476', '4750', '572', '623'],
+      solucion: [{ cuenta: '4751', debe: 2227.5 }, { cuenta: '572', haber: 2227.5 }],
+      pista: 'Las retenciones de nóminas y profesionales se fueron acumulando como deuda durante el trimestre. ¿En qué cuenta?',
+      explicacion: 'El pago cancela la deuda acumulada en la 4751 (2.160 € de nóminas + 67,50 € de profesionales). No es un gasto: el gasto (640, 623) ya se registró. El otro cargo del extracto, el del 303, cancelaría la 4750.',
+    },
+    {
+      id: 'b4-115',
+      tipo: 'asiento',
+      cliente: { nombre: 'Bicicletas Ruedas del Turia, S.L.', actividad: 'Tienda y taller de bicicletas' },
+      titulo: 'Pago del modelo 115',
+      enunciado: 'La tienda retiene cada mes el 19 % del alquiler del local (1.000 € de base). Este es el 115 del tercer trimestre, pagado por domiciliación. Registra el pago.',
+      documento: {
+        tipo: 'modelo',
+        modelo: '115',
+        titulo: 'Retenciones de arrendamientos de inmuebles urbanos · borrador',
+        nombre: 'Bicicletas Ruedas del Turia, S.L.',
+        nif: 'B98112299',
+        periodo: 'Ejercicio 2026 · 3T',
+        secciones: [
+          {
+            titulo: 'Retenciones e ingresos a cuenta',
+            filas: [
+              { etiqueta: 'Arrendadores: 1 · base de las retenciones 3.000,00', valor: 570 },
+            ],
+          },
+        ],
+        resultado: { etiqueta: 'Resultado: a ingresar (domiciliado)', valor: 570 },
+      },
+      cuentasDisponibles: ['4751', '621', '473', '410', '4750', '572', '555'],
+      solucion: [{ cuenta: '4751', debe: 570 }, { cuenta: '572', haber: 570 }],
+      pista: 'Tres meses de 190 € retenidos al arrendador. ¿Dónde se registraron?',
+      explicacion: 'Se cancela la deuda de las retenciones de alquiler (4751, normalmente en su subcuenta propia de alquileres) por 3 × 190 = 570 €. No se toca la 621: el gasto se registró con cada factura del alquiler.',
+    },
+    {
+      id: 'b4-modelos',
+      tipo: 'clasificar',
+      titulo: '¿Qué modelo presentas?',
+      enunciado: 'Preparas la agenda de presentaciones de la gestoría. Indica qué modelo corresponde a cada obligación.',
+      rejilla: 'grid-cols-4',
+      opciones: [
+        { valor: '303', etiqueta: '303' },
+        { valor: '111', etiqueta: '111' },
+        { valor: '115', etiqueta: '115' },
+        { valor: '349', etiqueta: '349' },
+        { valor: '390', etiqueta: '390' },
+        { valor: '190', etiqueta: '190' },
+        { valor: '180', etiqueta: '180' },
+        { valor: '347', etiqueta: '347' },
+      ],
+      cuentas: [
+        { id: 'iva-trim', texto: 'Liquidación del IVA del trimestre', correcta: '303', pista: 'Es la autoliquidación trimestral más habitual.', explicacion: 'Autoliquidación trimestral del IVA.' },
+        { id: 'ret-trab', texto: 'Retenciones de las nóminas y de la gestoría (persona física) del trimestre', correcta: '111', pista: 'Trabajo y actividades profesionales.', explicacion: 'Retenciones de trabajo y profesionales.' },
+        { id: 'ret-alq', texto: 'Retenciones del alquiler del local del trimestre', correcta: '115', pista: 'Arrendamientos de inmuebles urbanos.', explicacion: 'Retenciones de alquileres.' },
+        { id: 'intracom', texto: 'Compras de publicidad a una empresa irlandesa (declaración recapitulativa)', correcta: '349', pista: 'Operaciones con otros países de la UE.', explicacion: 'Operaciones intracomunitarias.' },
+        { id: 'iva-anual', texto: 'Resumen anual del IVA', correcta: '390', pista: 'Se presenta en enero y suma los cuatro trimestres del IVA.', explicacion: 'Resumen anual del IVA.' },
+        { id: 'ret-anual', texto: 'Resumen anual de retenciones de trabajadores y profesionales, por perceptor', correcta: '190', pista: 'Es el resumen anual del 111.', explicacion: 'Resumen anual del 111.' },
+        { id: 'alq-anual', texto: 'Resumen anual de retenciones de alquileres, por arrendador', correcta: '180', pista: 'Es el resumen anual del 115.', explicacion: 'Resumen anual del 115.' },
+        { id: 'terceros', texto: 'Operaciones con un proveedor nacional que superan 3.005,06 € en el año', correcta: '347', pista: 'Declaración anual de operaciones con terceros, en febrero.', explicacion: 'Operaciones con terceros.' },
+      ],
+      resumenOk: 'Esta es la agenda fiscal básica de cualquier cliente con empleados y local alquilado: cuatro modelos cada trimestre y cuatro resúmenes anuales entre enero y febrero.',
+    },
+    {
+      id: 'b4-347',
+      tipo: 'clasificar',
+      cliente: { nombre: 'Floristería Azahar, S.L.', actividad: 'Floristería' },
+      titulo: 'Prepara el 347 de la floristería',
+      enunciado: 'En febrero sacas del programa los terceros de la floristería. Indica cuáles hay que incluir en su 347 (importes anuales, IVA incluido).',
+      rejilla: 'grid-cols-2',
+      opciones: [
+        { valor: 'si', etiqueta: 'Va al 347' },
+        { valor: 'no', etiqueta: 'No va' },
+      ],
+      cuentas: [
+        { id: 'viveros', texto: 'Viveros del Turia, S.L. (proveedor de flores): compras de 14.520,00 €', correcta: 'si', pista: 'Proveedor nacional, sin retención y por encima del umbral.', explicacion: 'Supera 3.005,06 € y no va en otro modelo.' },
+        { id: 'gestor', texto: 'Javier Ortiz Lago, gestor (persona física, con retención): 3.630,00 €', correcta: 'no', pista: 'Supera el umbral, pero sus facturas llevan retención.', explicacion: 'Ya se declara en el 190.' },
+        { id: 'local', texto: 'Inmuebles Ribera, S.L. (alquiler del local, con retención): 14.520,00 €', correcta: 'no', pista: 'El alquiler lleva retención del 19 %.', explicacion: 'Ya se declara en el 180.' },
+        { id: 'embalajes', texto: 'Embalajes Levante, S.L.: compras de 2.950,00 €', correcta: 'no', pista: 'Compara el importe con el umbral.', explicacion: 'No supera 3.005,06 €.' },
+        { id: 'holanda', texto: 'Bloemen BV (proveedor de Países Bajos): compras intracomunitarias de 6.000,00 €', correcta: 'no', pista: 'Es una operación con otro país de la UE.', explicacion: 'Ya se declara en el 349.' },
+        { id: 'hotel', texto: 'Hotel Palmeras, S.A. (cliente): decoración floral por 3.630,00 €', correcta: 'si', pista: 'Las ventas también cuentan, no solo las compras.', explicacion: 'Cliente nacional por encima del umbral.' },
+        { id: 'boda', texto: 'Particular que pagó en efectivo 6.500,00 € por la decoración de su boda (factura completa a su nombre)', correcta: 'si', pista: 'Supera el umbral y hay un apartado especial para el efectivo.', explicacion: 'Se incluye y, además, se declara el cobro en metálico de más de 6.000 €.' },
+        { id: 'luz', texto: 'Compañía eléctrica: suministros por 3.400,00 €', correcta: 'si', pista: 'Proveedor nacional sin retención por encima del umbral.', explicacion: 'Supera 3.005,06 € y no va en otro modelo.' },
+      ],
+      resumenOk: 'Ahora tocaría enviar a cada tercero incluido su importe (las «cartas de 347») y resolver cualquier diferencia antes de presentar en febrero.',
+    },
+  ],
+};
+
 const BLOQUES = [
   {
     id: 0,
@@ -3507,7 +4428,7 @@ const BLOQUES = [
     distintivo: null,
     icono: ICONOS.impuestos,
     temas: ['Asiento de nómina (640 / 642 / 476 / 4751)', 'Seguros sociales', 'Modelo 303 (IVA)', 'Modelos 111 y 115', 'Modelos 349 y 347', 'Resúmenes 390 / 190 / 180'],
-    contenido: { teoria: [], test: [], casos: [] },
+    contenido: CONTENIDO_B4,
   },
   {
     id: 5,
@@ -3966,7 +4887,102 @@ function htmlDocumento(doc, { resaltar = null } = {}) {
   if (doc.tipo === 'ticket') return htmlTicket(doc);
   if (doc.tipo === 'resumen') return htmlResumen(doc);
   if (doc.tipo === 'extracto') return htmlExtracto(doc);
+  if (doc.tipo === 'nominas') return htmlNominas(doc);
+  if (doc.tipo === 'modelo') return htmlModelo(doc);
   return htmlFactura(doc, resaltar);
+}
+
+// Hoja resumen de nóminas: líquidos y totales calculados
+function calcularNominas(doc) {
+  const trabajadores = doc.trabajadores.map((t) => ({
+    ...t,
+    anticipo: t.anticipo || 0,
+    liquido: r2(t.bruto - t.ssTrab - t.irpf - (t.anticipo || 0)),
+  }));
+  const suma = (k) => r2(trabajadores.reduce((s, t) => s + t[k], 0));
+  return {
+    trabajadores,
+    totales: { bruto: suma('bruto'), ssTrab: suma('ssTrab'), irpf: suma('irpf'), anticipo: suma('anticipo'), liquido: suma('liquido'), ssEmp: suma('ssEmp') },
+  };
+}
+
+function htmlNominas(doc) {
+  const { trabajadores, totales } = calcularNominas(doc);
+  const fila = (etiqueta, valor, clase = '') => `<div class="flex justify-between gap-3 ${clase}"><span>${etiqueta}</span><span class="font-mono tabular-nums">${valor}</span></div>`;
+  const pctIrpf = (t) => (t.bruto ? ` (${pctTexto(r2(t.irpf / t.bruto * 100))} %)` : '');
+  return `
+    <figure class="mx-auto w-full max-w-xl" aria-label="Resumen de nóminas de ${escaparHTML(doc.empresa)}">
+      <div class="overflow-hidden rounded-xl bg-white text-[12.5px] leading-snug text-slate-700 shadow-[0_1px_2px_rgba(15,27,45,.08),0_10px_30px_-12px_rgba(15,27,45,.35)] ring-1 ring-slate-900/10">
+        <div class="bg-indigo-900 px-4 py-3 text-white">
+          <p class="text-[10.5px] font-semibold uppercase tracking-wider text-white/60">Departamento laboral · resumen de nóminas</p>
+          <p class="mt-0.5 text-[15px] font-bold">${escaparHTML(doc.empresa)}</p>
+          <p class="text-[12px] text-white/75">NIF ${escaparHTML(doc.nif)} · ${escaparHTML(doc.periodo)}</p>
+        </div>
+        <ul class="divide-y divide-slate-200">
+          ${trabajadores.map((t) => `
+            <li class="px-4 py-2.5">
+              <p class="font-semibold text-slate-900">${escaparHTML(t.nombre)} <span class="font-normal text-slate-500">· ${escaparHTML(t.puesto)}</span></p>
+              <div class="mt-1 space-y-0.5">
+                ${fila('Salario bruto', formatoEuros(t.bruto))}
+                ${fila('Seguridad Social trabajador', `−${formatoEuros(t.ssTrab)}`)}
+                ${fila(`Retención IRPF${pctIrpf(t)}`, `−${formatoEuros(t.irpf)}`)}
+                ${t.anticipo ? fila('Anticipo ya pagado', `−${formatoEuros(t.anticipo)}`) : ''}
+                ${fila('Líquido a percibir', formatoEuros(t.liquido), 'font-semibold text-slate-900')}
+                ${fila('Seguridad Social empresa', formatoEuros(t.ssEmp), 'text-indigo-700')}
+              </div>
+            </li>`).join('')}
+        </ul>
+        ${trabajadores.length > 1 ? `
+          <div class="space-y-0.5 border-t-2 border-indigo-900 bg-indigo-50/60 px-4 py-3">
+            <p class="mb-1 text-[10.5px] font-bold uppercase tracking-wider text-indigo-900">Totales del mes</p>
+            ${fila('Salario bruto', formatoEuros(totales.bruto), 'font-semibold')}
+            ${fila('Seguridad Social trabajadores', formatoEuros(totales.ssTrab))}
+            ${fila('Retenciones IRPF', formatoEuros(totales.irpf))}
+            ${totales.anticipo ? fila('Anticipos descontados', formatoEuros(totales.anticipo)) : ''}
+            ${fila('Líquido total a pagar', formatoEuros(totales.liquido), 'font-semibold text-slate-900')}
+            ${fila('Seguridad Social empresa', formatoEuros(totales.ssEmp), 'font-semibold text-indigo-800')}
+          </div>` : ''}
+        ${(doc.notas || []).length ? `<ul class="space-y-1 bg-amber-50 px-4 py-2.5 text-[12px] text-amber-950">${doc.notas.map((n) => `<li class="flex gap-1.5"><span aria-hidden="true">•</span><span>${escaparHTML(n)}</span></li>`).join('')}</ul>` : ''}
+        <p class="bg-slate-50 px-4 py-1.5 text-center text-[10px] uppercase tracking-wider text-slate-400">Documento ficticio · material de formación</p>
+      </div>
+    </figure>`;
+}
+
+// Borrador simplificado de un modelo tributario (303, 111, 115…)
+function htmlModelo(doc) {
+  const res = doc.resultado;
+  const aFavor = res.valor < 0;
+  return `
+    <figure class="mx-auto w-full max-w-xl" aria-label="Borrador del modelo ${escaparHTML(doc.modelo)} de ${escaparHTML(doc.nombre)}">
+      <div class="overflow-hidden rounded-xl bg-white text-[12.5px] leading-snug text-slate-700 shadow-[0_1px_2px_rgba(15,27,45,.08),0_10px_30px_-12px_rgba(15,27,45,.35)] ring-1 ring-slate-900/10">
+        <div class="flex items-stretch">
+          <div class="flex w-16 shrink-0 flex-col items-center justify-center bg-rose-800 py-3 text-white">
+            <span class="text-[9.5px] font-semibold uppercase tracking-wider text-white/70">Modelo</span>
+            <span class="font-mono text-xl font-bold leading-none">${escaparHTML(doc.modelo)}</span>
+          </div>
+          <div class="min-w-0 flex-1 border-b border-slate-200 px-3 py-2.5">
+            <p class="font-semibold leading-tight text-slate-900">${escaparHTML(doc.titulo)}</p>
+            <p class="text-[12px] text-slate-500">${escaparHTML(doc.nombre)} · NIF ${escaparHTML(doc.nif)}</p>
+            <p class="text-[12px] font-semibold text-rose-800">${escaparHTML(doc.periodo)}</p>
+          </div>
+        </div>
+        <div class="space-y-3 p-4">
+          ${doc.secciones.map((sec) => `
+            <section>
+              <p class="mb-1 border-b border-slate-300 pb-1 text-[10.5px] font-bold uppercase tracking-wider text-slate-500">${escaparHTML(sec.titulo)}</p>
+              ${sec.filas.map((f) => `
+                <div class="flex items-baseline justify-between gap-3 py-1 ${f.total ? 'border-t border-dashed border-slate-300 font-semibold text-slate-900' : ''}">
+                  <span class="min-w-0">${escaparHTML(f.etiqueta)}</span>
+                  <span class="shrink-0 rounded bg-slate-100 px-2 py-0.5 font-mono tabular-nums ${f.total ? 'bg-slate-200' : ''}">${formatoEuros(f.valor)}</span>
+                </div>`).join('')}
+            </section>`).join('')}
+          <div class="flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-[14px] font-bold ${aFavor ? 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200' : 'bg-rose-50 text-rose-900 ring-1 ring-rose-200'}">
+            <span>${escaparHTML(res.etiqueta)}</span><span class="font-mono tabular-nums">${formatoEuros(res.valor)}</span>
+          </div>
+        </div>
+        <p class="bg-slate-50 px-4 py-1.5 text-center text-[10px] uppercase tracking-wider text-slate-400">Borrador simplificado · documento ficticio de formación</p>
+      </div>
+    </figure>`;
 }
 
 // Saldos del extracto calculados a partir del saldo inicial
@@ -4190,7 +5206,7 @@ function htmlTicket(doc) {
    ===================================================================== */
 function estadoTeoria(idBloque) {
   if (!ui.teoria[idBloque]) {
-    ui.teoria[idBloque] = { grupo: 1, paso: 0, campo: 'receptor', calc: { base: '1000', iva: 21, ret: 15 }, prestamo: { capital: '20000', tipo: '5', meses: '60' } };
+    ui.teoria[idBloque] = { grupo: 1, paso: 0, campo: 'receptor', calc: { base: '1000', iva: 21, ret: 15 }, prestamo: { capital: '20000', tipo: '5', meses: '60' }, iva: { repercutido: '8000', soportado: '5000', compensar: '0' } };
   }
   return ui.teoria[idBloque];
 }
@@ -4248,6 +5264,7 @@ function renderizarPieza(pieza, bloque) {
     case 'anatomia-factura': return piezaAnatomia(pieza, bloque);
     case 'calculadora': return piezaCalculadora(bloque, pieza);
     case 'prestamo': return piezaPrestamo(bloque);
+    case 'liquidador-iva': return piezaLiquidador(bloque);
     case 'documento': return `<div class="my-5">${htmlDocumento(pieza.documento)}</div>`;
     default: return '';
   }
@@ -4699,6 +5716,72 @@ function htmlPrestamoResultado(p) {
     <p class="mt-2 text-[12.5px] text-tinta-700/70">Fíjate en cómo los intereses de cada cuota bajan y el capital sube, aunque la cuota no cambia.</p>`;
 }
 
+// Liquidación del 303: 477 contra 472, con cuotas a compensar de periodos anteriores
+function liquidarIva(repercutido, soportado, compensar) {
+  const diferencia = r2(repercutido - soportado);
+  const aplicado = diferencia > 0 ? r2(Math.min(compensar, diferencia)) : 0;
+  const resultado = r2(diferencia - aplicado);
+  const lineas = [];
+  if (repercutido) lineas.push({ cuenta: '477', debe: repercutido });
+  if (resultado < 0) lineas.push({ cuenta: '4700', debe: -resultado });
+  if (soportado) lineas.push({ cuenta: '472', haber: soportado });
+  if (aplicado) lineas.push({ cuenta: '4700', haber: aplicado });
+  if (resultado > 0) lineas.push({ cuenta: '4750', haber: resultado });
+  return { diferencia, aplicado, resultado, pendiente: r2(compensar - aplicado), lineas };
+}
+
+function htmlLiquidadorResultado(v) {
+  const rep = leerImporte(v.repercutido);
+  const sop = leerImporte(v.soportado);
+  const comp = String(v.compensar).trim() === '' ? 0 : leerImporte(v.compensar);
+  if (!(rep >= 0) || !(sop >= 0) || !(comp >= 0) || rep + sop === 0) {
+    return '<p class="rounded-lg bg-tinta-900/[0.03] p-3 text-sm text-tinta-700/70">Escribe los saldos de la 477 y la 472 (y, si hay, lo pendiente de compensar).</p>';
+  }
+  const l = liquidarIva(rep, sop, comp);
+  const signo = l.resultado > 0 ? 'A ingresar' : l.resultado < 0 ? 'A compensar' : 'Resultado cero';
+  const estilo = l.resultado > 0 ? 'bg-rose-50 text-rose-900 ring-rose-200' : 'bg-emerald-50 text-emerald-900 ring-emerald-200';
+  return `
+    <div class="space-y-1 rounded-lg bg-tinta-900/[0.03] p-3 text-sm">
+      <div class="flex justify-between"><span>IVA devengado (477) − deducible (472)</span><span class="tabular-nums">${formatoEuros(l.diferencia)}</span></div>
+      ${l.aplicado ? `<div class="flex justify-between"><span>Compensación aplicada</span><span class="tabular-nums">−${formatoEuros(l.aplicado)}</span></div>` : ''}
+    </div>
+    <div class="mt-2 flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-bold ring-1 ${estilo}">
+      <span>${signo}</span><span class="tabular-nums">${formatoEuros(Math.abs(l.resultado))}</span>
+    </div>
+    ${l.pendiente > 0 ? `<p class="mt-2 text-[12.5px] text-tinta-700/70">Quedan ${formatoEuros(l.pendiente)} a compensar en próximos periodos (siguen en la 4700).</p>` : ''}
+    <p class="mb-1.5 mt-3 text-[11px] font-semibold uppercase tracking-wider text-tinta-700/50">Asiento de liquidación</p>
+    ${htmlAsiento(l.lineas, { compacto: true })}`;
+}
+
+function piezaLiquidador(bloque) {
+  const { iva } = estadoTeoria(bloque.id);
+  const campo = (id, etiqueta) => `
+    <div>
+      <label for="liq-${id}" class="mb-1 block text-xs font-semibold text-tinta-700/70">${etiqueta}</label>
+      <div class="relative">
+        <input id="liq-${id}" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" data-entrada="liq-${id}" data-foco="liq-${id}"
+               value="${escaparHTML(iva[id])}"
+               class="h-12 w-full rounded-xl border-2 border-tinta-900/15 bg-white pl-3 pr-8 text-base font-semibold tabular-nums outline-none transition focus:border-acento-500" />
+        <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-tinta-700/50">€</span>
+      </div>
+    </div>`;
+  return `
+    <div class="my-6 overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm" data-widget="liquidador">
+      <div class="border-b border-tinta-900/10 bg-tinta-900/[0.03] px-4 py-3">
+        <p class="text-sm font-bold">Liquidador del 303</p>
+        <p class="text-xs text-tinta-700/70">Prueba con distintos saldos y mira cómo cambia el asiento: a ingresar, a compensar o aplicando una compensación anterior.</p>
+      </div>
+      <div class="space-y-4 p-4">
+        <div class="grid grid-cols-3 gap-2">
+          ${campo('repercutido', 'Saldo 477')}
+          ${campo('soportado', 'Saldo 472')}
+          ${campo('compensar', 'A compensar')}
+        </div>
+        <div id="liquidador-resultado" aria-live="polite">${htmlLiquidadorResultado(iva)}</div>
+      </div>
+    </div>`;
+}
+
 function piezaPrestamo(bloque) {
   const { prestamo } = estadoTeoria(bloque.id);
   const campo = (id, etiqueta, sufijo, modo) => `
@@ -5133,13 +6216,14 @@ function corregirContra(lineasSolucion, lineas) {
 }
 
 const documentosDe = (caso) => caso.documentos || (caso.documento ? [caso.documento] : []);
+const ETIQUETA_DOCUMENTO = { ticket: 'el ticket', resumen: 'el informe', extracto: 'el extracto', nominas: 'la hoja', modelo: 'el borrador' };
 
 function htmlBloqueDocumento(caso, st) {
   const oculto = Boolean(st.docOculto);
   const docs = documentosDe(caso);
   const etiqueta = docs.length > 1
     ? 'los documentos'
-    : ({ ticket: 'el ticket', resumen: 'el informe', extracto: 'el extracto' }[docs[0].tipo] || 'la factura');
+    : (ETIQUETA_DOCUMENTO[docs[0].tipo] || 'la factura');
   return `
     <section id="documento-${caso.id}" class="scroll-mt-40 rounded-2xl bg-gradient-to-b from-tinta-900/[0.06] to-tinta-900/[0.02] p-3 sm:p-5 lg:scroll-mt-24">
       <div class="mb-3 flex items-center justify-between gap-2">
@@ -5750,6 +6834,11 @@ function registrarEventos() {
     if (tipo === 'importe') {
       const caso = casoActual();
       if (caso) estadoCaso(caso).borrador.importe = e.target.value;
+    } else if (tipo && tipo.startsWith('liq-')) {
+      const st = estadoTeoria(estado.bloque);
+      st.iva[tipo.slice(4)] = e.target.value;
+      const destino = $('#liquidador-resultado');
+      if (destino) destino.innerHTML = htmlLiquidadorResultado(st.iva);
     } else if (tipo && tipo.startsWith('prest-')) {
       const st = estadoTeoria(estado.bloque);
       st.prestamo[tipo.slice(6)] = e.target.value;
@@ -5763,7 +6852,7 @@ function registrarEventos() {
     }
   });
   $('#contenido').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target.dataset && /^(calc-base|prest-)/.test(e.target.dataset.entrada || '')) {
+    if (e.key === 'Enter' && e.target.dataset && /^(calc-base|prest-|liq-)/.test(e.target.dataset.entrada || '')) {
       e.preventDefault();
       e.target.blur();
       return;
