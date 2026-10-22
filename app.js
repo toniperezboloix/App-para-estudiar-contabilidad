@@ -6,7 +6,8 @@
    4. Estado y rutas
    5. Renderizado general (menú, cabecera, pestañas)
    6. Teoría · 7. Test · 8. Casos prácticos
-   9. Acciones (clics y toques) · 10. Menú móvil · 11. Arranque
+   9. Acciones (clics y toques) · 10. Menú móvil · 12. Certificado final
+   11. Arranque
    ===================================================================== */
 'use strict';
 
@@ -106,7 +107,7 @@ const CUADRO_PGC = [
     subgrupos: [
       { codigo: '10', nombre: 'Capital', cuentas: [['100', 'Capital social']] },
       { codigo: '11', nombre: 'Reservas', cuentas: [['112', 'Reserva legal'], ['113', 'Reservas voluntarias']] },
-      { codigo: '12', nombre: 'Resultados pendientes de aplicación', cuentas: [['129', 'Resultado del ejercicio']] },
+      { codigo: '12', nombre: 'Resultados pendientes de aplicación', cuentas: [['121', 'Resultados negativos de ejercicios anteriores'], ['129', 'Resultado del ejercicio']] },
       { codigo: '13', nombre: 'Subvenciones, donaciones y legados', cuentas: [['130', 'Subvenciones oficiales de capital']] },
       { codigo: '17', nombre: 'Deudas a largo plazo por préstamos recibidos', cuentas: [['170', 'Deudas a largo plazo con entidades de crédito'], ['173', 'Proveedores de inmovilizado a largo plazo'], ['174', 'Acreedores por arrendamiento financiero a largo plazo']] },
     ],
@@ -152,10 +153,10 @@ const CUADRO_PGC = [
     enOficina: 'Es tu grupo principal: cada factura de compra genera una deuda con un proveedor (400) o un acreedor (410) y, casi siempre, un IVA soportado (472).',
     subgrupos: [
       { codigo: '40', nombre: 'Proveedores', clave: true, cuentas: [['400', 'Proveedores'], ['401', 'Proveedores, efectos comerciales a pagar'], ['407', 'Anticipos a proveedores']] },
-      { codigo: '41', nombre: 'Acreedores varios', clave: true, cuentas: [['410', 'Acreedores por prestaciones de servicios']] },
+      { codigo: '41', nombre: 'Acreedores varios', clave: true, cuentas: [['410', 'Acreedores por prestaciones de servicios'], ['4109', 'Acreedores por prestaciones de servicios, facturas pendientes de recibir o de formalizar']] },
       { codigo: '43', nombre: 'Clientes', clave: true, cuentas: [['430', 'Clientes'], ['431', 'Clientes, efectos comerciales a cobrar'], ['4311', 'Efectos comerciales descontados'], ['436', 'Clientes de dudoso cobro'], ['438', 'Anticipos de clientes']] },
       { codigo: '46', nombre: 'Personal', cuentas: [['460', 'Anticipos de remuneraciones'], ['465', 'Remuneraciones pendientes de pago']] },
-      { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['4700', 'Hacienda Pública, deudora por IVA'], ['472', 'Hacienda Pública, IVA soportado'], ['473', 'Hacienda Pública, retenciones y pagos a cuenta'], ['4750', 'Hacienda Pública, acreedora por IVA'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
+      { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['4700', 'Hacienda Pública, deudora por IVA'], ['472', 'Hacienda Pública, IVA soportado'], ['473', 'Hacienda Pública, retenciones y pagos a cuenta'], ['4750', 'Hacienda Pública, acreedora por IVA'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['4752', 'Hacienda Pública, acreedora por impuesto sobre sociedades'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
       { codigo: '48', nombre: 'Ajustes por periodificación', cuentas: [['480', 'Gastos anticipados'], ['485', 'Ingresos anticipados']] },
       { codigo: '49', nombre: 'Deterioro de valor de créditos comerciales y provisiones a corto plazo', cuentas: [['490', 'Deterioro de valor de créditos por operaciones comerciales']] },
     ],
@@ -170,7 +171,7 @@ const CUADRO_PGC = [
     resumen: 'El dinero disponible (caja y bancos) y las deudas y créditos a corto plazo que no son comerciales.',
     enOficina: 'La 572 es la cuenta que más vas a puntear: cada movimiento del extracto tiene su reflejo aquí. La 555 sirve para aparcar un cobro o pago que aún no sabes identificar.',
     subgrupos: [
-      { codigo: '52', nombre: 'Deudas a corto plazo por préstamos recibidos y otros conceptos', cuentas: [['520', 'Deudas a corto plazo con entidades de crédito'], ['5208', 'Deudas por efectos descontados'], ['523', 'Proveedores de inmovilizado a corto plazo'], ['524', 'Acreedores por arrendamiento financiero a corto plazo']] },
+      { codigo: '52', nombre: 'Deudas a corto plazo por préstamos recibidos y otros conceptos', cuentas: [['520', 'Deudas a corto plazo con entidades de crédito'], ['5208', 'Deudas por efectos descontados'], ['523', 'Proveedores de inmovilizado a corto plazo'], ['524', 'Acreedores por arrendamiento financiero a corto plazo'], ['526', 'Dividendo activo a pagar'], ['527', 'Intereses a corto plazo de deudas con entidades de crédito']] },
       { codigo: '55', nombre: 'Otras cuentas no bancarias', cuentas: [['551', 'Cuenta corriente con socios y administradores'], ['555', 'Partidas pendientes de aplicación']] },
       { codigo: '57', nombre: 'Tesorería', clave: true, cuentas: [['570', 'Caja, euros'], ['572', 'Bancos e instituciones de crédito c/c vista, euros']] },
     ],
@@ -186,12 +187,13 @@ const CUADRO_PGC = [
     enOficina: 'La mayoría de facturas de proveedor llevan su gasto aquí. Elegir bien la cuenta (¿suministro 628 o reparación 622?) es buena parte de tu trabajo.',
     subgrupos: [
       { codigo: '60', nombre: 'Compras', cuentas: [['600', 'Compras de mercaderías'], ['602', 'Compras de otros aprovisionamientos'], ['606', 'Descuentos sobre compras por pronto pago'], ['607', 'Trabajos realizados por otras empresas'], ['608', 'Devoluciones de compras y operaciones similares'], ['609', 'Rappels por compras']] },
+      { codigo: '61', nombre: 'Variación de existencias', cuentas: [['610', 'Variación de existencias de mercaderías']] },
       { codigo: '62', nombre: 'Servicios exteriores', clave: true, cuentas: [['621', 'Arrendamientos y cánones'], ['622', 'Reparaciones y conservación'], ['623', 'Servicios de profesionales independientes'], ['624', 'Transportes'], ['625', 'Primas de seguros'], ['626', 'Servicios bancarios y similares'], ['627', 'Publicidad, propaganda y relaciones públicas'], ['628', 'Suministros'], ['629', 'Otros servicios']] },
-      { codigo: '63', nombre: 'Tributos', cuentas: [['631', 'Otros tributos']] },
+      { codigo: '63', nombre: 'Tributos', cuentas: [['6300', 'Impuesto corriente'], ['631', 'Otros tributos']] },
       { codigo: '64', nombre: 'Gastos de personal', cuentas: [['640', 'Sueldos y salarios'], ['641', 'Indemnizaciones'], ['642', 'Seguridad Social a cargo de la empresa']] },
       { codigo: '65', nombre: 'Otros gastos de gestión', cuentas: [['650', 'Pérdidas de créditos comerciales incobrables']] },
       { codigo: '66', nombre: 'Gastos financieros', cuentas: [['662', 'Intereses de deudas'], ['665', 'Intereses por descuento de efectos y operaciones de factoring']] },
-      { codigo: '68', nombre: 'Dotaciones para amortizaciones', cuentas: [['681', 'Amortización del inmovilizado material']] },
+      { codigo: '68', nombre: 'Dotaciones para amortizaciones', cuentas: [['680', 'Amortización del inmovilizado intangible'], ['681', 'Amortización del inmovilizado material']] },
       { codigo: '69', nombre: 'Pérdidas por deterioro y otras dotaciones', cuentas: [['694', 'Pérdidas por deterioro de créditos por operaciones comerciales']] },
     ],
   },
@@ -217,8 +219,8 @@ const CUENTAS = {};
 CUADRO_PGC.forEach((g) => g.subgrupos.forEach((s) => s.cuentas.forEach(([codigo, nombre]) => { CUENTAS[codigo] = nombre; })));
 
 // Etiquetas genéricas usadas en ejemplos (no son cuentas del PGC)
-CUENTAS['6xx'] = 'Cuenta de gasto (621, 623, 627…)';
-CUENTAS['7xx'] = 'Cuenta de ingreso (700, 705…)';
+CUENTAS['6xx'] = 'Cuentas de gasto (grupo 6)';
+CUENTAS['7xx'] = 'Cuentas de ingreso (grupo 7)';
 
 const nombreCuenta = (codigo) => CUENTAS[codigo] || `Cuenta ${codigo}`;
 const grupoPGC = (numero) => CUADRO_PGC.find((g) => g.grupo === Number(numero));
@@ -4374,6 +4376,1519 @@ const CONTENIDO_B4 = {
   ],
 };
 
+/* ---------- Bloque 5: Cierre y Periodificación (gestoría) ---------- */
+
+const FICHA_INMOVILIZADO_HORNO = {
+  tipo: 'resumen',
+  titulo: 'Ficha de inmovilizado a 31/12/2026',
+  subtitulo: 'Elementos en uso · amortización lineal',
+  emisor: { nombre: 'Horno San Blas, S.L.', nif: 'B98221133' },
+  columnas: ['Elemento', 'En uso desde', 'Coef.', 'Coste'],
+  filas: [
+    ['Amasadora industrial (213)', '01/01/2024', '12 %', '6.000,00'],
+    ['Horno de convección (213)', '01/11/2026', '12 %', '4.800,00'],
+  ],
+  notas: ['Sin valor residual. El horno se compró el 12/10/2026 y se puso en funcionamiento el 01/11/2026.', 'La gestoría calcula por meses completos de uso.'],
+};
+
+const PYG_LEVANTE_2026 = {
+  tipo: 'resumen',
+  titulo: 'Cuenta de pérdidas y ganancias provisional 2026',
+  subtitulo: 'Antes del impuesto sobre sociedades',
+  emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030' },
+  columnas: ['Concepto', 'Importe'],
+  filas: [
+    ['Ventas (cifra de negocios)', '412.000,00 €'],
+    ['Total de gastos del ejercicio', '−371.000,00 €'],
+    ['Resultado contable antes de impuestos', '41.000,00 €'],
+  ],
+  notas: [
+    'Entre los gastos hay una multa de tráfico de 600,00 € (sanción no deducible fiscalmente).',
+    'Cifra de negocios de 2025: 398.500,00 € (microempresa: menos de 1 millón).',
+    'Retenciones y pagos fraccionados del ejercicio (cuenta 473): 2.500,00 €.',
+  ],
+};
+
+const CONTENIDO_B5 = {
+  teoria: [
+    {
+      id: 'checklist',
+      titulo: 'El cierre en la gestoría: la lista de comprobación',
+      resumen: 'Qué se hace, en qué orden y con qué plazos.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Al cerrar el ejercicio de un cliente se busca que la contabilidad refleje <strong>todo lo que corresponde al año y solo lo que corresponde al año</strong>. Para no olvidar nada, en la gestoría se trabaja con una lista fija, cliente por cliente:</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Revisar y cuadrar', texto: 'Bancos conciliados, 555 aplicada, 303/111/115 del 4T, nóminas y facturas del año completas (Bloque 6).' },
+            { titulo: 'Amortizar', texto: 'Dotación del año de cada elemento del inmovilizado: 681 a 281 (o 680 a 280).' },
+            { titulo: 'Periodificar', texto: 'Llevar al año siguiente lo pagado o cobrado por adelantado y reconocer lo devengado sin factura.' },
+            { titulo: 'Existencias', texto: 'Sustituir el inventario inicial por el final: cuenta 610.' },
+            { titulo: 'Deterioros y reclasificaciones', texto: 'Clientes de dudoso cobro (694/490) y deudas que vencen en el año siguiente (170 → 520).' },
+            { titulo: 'Impuesto sobre Sociedades', texto: 'Calcular la cuota y registrar el gasto por impuesto: 6300.' },
+            { titulo: 'Regularizar', texto: 'Llevar los saldos de los grupos 6 y 7 a la 129 para obtener el resultado.' },
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Plazos después del 31 de diciembre (ejercicio natural)',
+          columnas: ['Trámite', 'Plazo'],
+          filas: [
+            ['Formular las cuentas anuales (administradores)', '3 meses: hasta el 31 de marzo'],
+            ['Aprobarlas en junta y aplicar el resultado', '6 meses: hasta el 30 de junio'],
+            ['Depositarlas en el Registro Mercantil', '1 mes desde la aprobación'],
+            ['Modelo 200 (Impuesto sobre Sociedades)', '25 días naturales tras esos 6 meses: en julio'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Pide a cada cliente en diciembre lo que solo él puede darte: el <strong>inventario</strong> a 31/12, las <strong>facturas pendientes de recibir</strong>, las altas y bajas de inmovilizado y cualquier préstamo nuevo. Sin eso, el cierre se retrasa y se acumula todo en marzo.',
+        },
+      ],
+    },
+    {
+      id: 'amortizacion',
+      titulo: 'Amortización del inmovilizado',
+      resumen: 'Repartir el coste de los bienes entre los años de uso.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Un ordenador o una máquina no son gasto el día que se compran: se usan varios años, así que su coste se reparte entre ellos. La parte de cada año es la <strong>dotación a la amortización</strong>: <strong>681</strong> (material) o <strong>680</strong> (intangible) al Debe, y <strong>281</strong> o <strong>280</strong> al Haber. La amortización acumulada resta del valor del bien en el balance.</p><p>Se empieza a amortizar cuando el bien <strong>está en condiciones de funcionamiento</strong>, no cuando se paga, y el primer año solo por los meses de uso.</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Coeficientes máximos de la tabla oficial (Impuesto sobre Sociedades)',
+          columnas: ['Elemento', 'Coeficiente lineal máximo'],
+          filas: [
+            ['Edificios comerciales y de oficinas', '2 %'],
+            ['Mobiliario', '10 %'],
+            ['Maquinaria', '12 %'],
+            ['Elementos de transporte (turismos, furgonetas)', '16 %'],
+            ['Equipos para procesos de información', '25 %'],
+            ['Programas informáticos', '33 %'],
+            ['Terrenos', 'No se amortizan'],
+          ],
+        },
+        { tipo: 'amortizacion' },
+        {
+          tipo: 'consejo',
+          html: '<strong>Ventajas fiscales habituales:</strong> los elementos nuevos de hasta 300 € pueden amortizarse libremente (con un límite de 25.000 € al año), y las empresas de reducida dimensión pueden aplicar el doble del coeficiente de la tabla. Consulta el criterio del despacho antes de aplicarlas.',
+        },
+      ],
+    },
+    {
+      id: 'periodificacion',
+      titulo: 'Periodificaciones: cada gasto en su año',
+      resumen: 'Gastos e ingresos anticipados y lo devengado sin factura.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>El <strong>principio de devengo</strong> dice que los gastos e ingresos se imputan al año al que corresponden, con independencia de cuándo se pagan o se cobran. Al cierre hay que corregir tres situaciones típicas:</p>',
+        },
+        {
+          tipo: 'tabla',
+          columnas: ['Situación', 'Asiento a 31/12', 'Al año siguiente'],
+          filas: [
+            ['Gasto pagado que corresponde en parte al año siguiente (seguro, alquiler, licencias)', '480 Gastos anticipados a la cuenta de gasto', 'Se revierte el 1/1: gasto a 480'],
+            ['Ingreso cobrado que corresponde al año siguiente', 'Cuenta de ingreso a 485 Ingresos anticipados', 'Se revierte el 1/1: 485 a ingreso'],
+            ['Gasto del año cuya factura aún no ha llegado (luz de diciembre)', 'Cuenta de gasto a 4109 Facturas pendientes de recibir', 'Al llegar la factura se cancela la 4109'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Seguro anual de 1.200 € pagado el 1/10/2026: 9 meses son de 2027',
+          lineas: [{ cuenta: '480', debe: 900 }, { cuenta: '625', haber: 900 }],
+          nota: 'Queda en el gasto de 2026 solo lo que corresponde a octubre, noviembre y diciembre: 300 €. El 1/1/2027 se hace el asiento inverso (625 a 480).',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Fija un <strong>umbral de importancia</strong> con cada cliente: periodificar una suscripción de 30 € no cambia nada, pero un seguro anual de varios miles o un alquiler pagado por adelantado sí.',
+        },
+      ],
+    },
+    {
+      id: 'existencias',
+      titulo: 'Variación de existencias',
+      resumen: 'Del inventario inicial al final: la cuenta 610.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Durante el año, las compras de mercaderías van a la 600 y la cuenta 300 se queda con el inventario del cierre anterior. Al cierre, se sustituye el inventario inicial por el final. La diferencia pasa por la <strong>610 Variación de existencias de mercaderías</strong>, que corrige el coste de las compras: lo que queda en el almacén no es gasto del año.</p>',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Existencias iniciales 8.500 € y finales 11.200 €',
+          subtitulo: 'Forma completa: se da de baja el inicial y se registra el final.',
+          lineas: [
+            { cuenta: '610', debe: 8500 },
+            { cuenta: '300', haber: 8500 },
+            { cuenta: '300', debe: 11200 },
+            { cuenta: '610', haber: 11200 },
+          ],
+          nota: 'En neto: 300 al Debe y 610 al Haber por 2.700 €. Si las existencias aumentan, el resultado mejora; si disminuyen, empeora.',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'El inventario lo hace y lo firma el cliente, <strong>valorado a precio de coste</strong> (no al de venta). Si un comercio te da un inventario «a ojo» o a precio de venta, el resultado del año sale inflado.',
+        },
+      ],
+    },
+    {
+      id: 'reclasificacion',
+      titulo: 'Deterioros y reclasificaciones',
+      resumen: 'Clientes dudosos y deudas que vencen el año que viene.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p><strong>Deterioro de clientes.</strong> Las deudas de dudoso cobro (436) se deterioran al cierre: 694 a 490 (lo viste en el Bloque 2). Fiscalmente, en general, deben haber pasado 6 meses desde el vencimiento.</p><p><strong>Reclasificación.</strong> El balance separa lo que vence en los 12 meses siguientes (corto plazo) de lo que vence después (largo plazo). Al cierre, la parte de las deudas a largo plazo que vence el año siguiente se traspasa a corto:</p>',
+        },
+        {
+          tipo: 'tabla',
+          columnas: ['Deuda', 'Largo plazo', 'Corto plazo'],
+          filas: [
+            ['Préstamo bancario', '170', '520'],
+            ['Proveedor de inmovilizado', '173', '523'],
+            ['Leasing', '174', '524'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Préstamo: 5.140,43 € de capital vencen en 2027',
+          lineas: [{ cuenta: '170', debe: 5140.43 }, { cuenta: '520', haber: 5140.43 }],
+          nota: 'El importe sale del cuadro de amortización: la suma del capital de las cuotas del año siguiente.',
+        },
+      ],
+    },
+    {
+      id: 'sociedades',
+      titulo: 'El Impuesto sobre Sociedades',
+      resumen: 'Del resultado contable a la cuota a pagar.',
+      piezas: [
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Resultado contable antes de impuestos', texto: 'Ingresos − gastos del año, una vez hechos todos los ajustes de cierre.' },
+            { titulo: 'Ajustes fiscales', texto: 'Se suman los gastos no deducibles: multas y sanciones, recargos, donativos, el propio gasto por impuesto. Hay otros ajustes, pero estos son los más habituales.' },
+            { titulo: 'Base imponible', texto: 'Si hay bases negativas de años anteriores, se pueden compensar.' },
+            { titulo: 'Cuota íntegra', texto: 'Base imponible × tipo de gravamen. Menos deducciones y bonificaciones, si las hay.' },
+            { titulo: 'Cuota diferencial', texto: 'Se restan las retenciones y los pagos fraccionados (modelo 202) del año: es lo que queda por pagar (o por devolver).' },
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Tipos de gravamen para periodos iniciados en 2026',
+          columnas: ['Entidad', 'Tipo'],
+          filas: [
+            ['Tipo general', '25 %'],
+            ['Microempresa (cifra de negocios del año anterior inferior a 1 millón)', '19 % los primeros 50.000 € de base; 21 % el resto'],
+            ['Empresa de reducida dimensión (inferior a 10 millones)', '23 %'],
+            ['Entidad de nueva creación (dos primeros años con base positiva)', '15 %'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Cuota de 7.904 €, con 2.500 € de retenciones y pagos fraccionados',
+          lineas: [{ cuenta: '6300', debe: 7904 }, { cuenta: '473', haber: 2500 }, { cuenta: '4752', haber: 5404 }],
+          nota: '6300 Impuesto corriente es el gasto del año. Se cancelan los pagos a cuenta (473) y lo que queda es la deuda con Hacienda (4752), que se paga con el modelo 200 en julio.',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Las sociedades patrimoniales (más de la mitad del activo sin afectar a una actividad) <strong>no aplican los tipos reducidos</strong> de micro y pequeña empresa. Comprueba cada año la cifra de negocios y la actividad real del cliente antes de elegir el tipo.',
+        },
+      ],
+    },
+    {
+      id: 'regularizacion',
+      titulo: 'Regularización y aplicación del resultado',
+      resumen: 'De los grupos 6 y 7 a la 129, y de la 129 a reservas o dividendos.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p><strong>Regularización.</strong> Ya registrado el impuesto, se cancelan todas las cuentas de gastos (grupo 6) e ingresos (grupo 7) contra la <strong>129 Resultado del ejercicio</strong>. Su saldo acreedor es el beneficio; el deudor, la pérdida. Los programas contables lo hacen con un botón, pero tienes que saber leerlo.</p>',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Regularización con 412.000 € de ingresos y 378.904 € de gastos',
+          lineas: [{ cuenta: '7xx', debe: 412000 }, { cuenta: '6xx', haber: 378904 }, { cuenta: '129', haber: 33096 }],
+          nota: 'En la práctica hay una línea por cada cuenta de gasto e ingreso. El beneficio, 33.096 €, queda en la 129.',
+        },
+        {
+          tipo: 'html',
+          html: '<p><strong>Aplicación del resultado.</strong> Al año siguiente, la junta decide el destino del beneficio. Antes de repartir dividendos, la sociedad debe dotar la <strong>reserva legal</strong> con el 10 % del beneficio hasta que alcance el 20 % del capital. Las pérdidas se llevan a la 121 Resultados negativos de ejercicios anteriores.</p>',
+        },
+        {
+          tipo: 'tabla',
+          columnas: ['Destino', 'Cuenta (al Haber)'],
+          filas: [
+            ['Reserva legal', '112 Reserva legal'],
+            ['Reservas voluntarias', '113 Reservas voluntarias'],
+            ['Dividendos acordados pendientes de pago', '526 Dividendo activo a pagar'],
+            ['Pérdidas (se cargan, no se abonan)', '121 Resultados negativos de ejercicios anteriores'],
+          ],
+        },
+      ],
+    },
+  ],
+
+  configTest: { preguntasPorIntento: 10, aprobado: 8 },
+
+  test: [
+    /* --- Plazos --- */
+    {
+      id: 'b5-q01',
+      pregunta: 'En una sociedad con ejercicio natural, ¿hasta cuándo tienen los administradores para formular las cuentas anuales?',
+      correcta: 'Hasta el 31 de marzo: 3 meses desde el cierre',
+      incorrectas: ['Hasta el 30 de junio', 'Hasta el 25 de julio'],
+      explicacion: 'Los administradores formulan las cuentas en los 3 meses siguientes al cierre. La junta las aprueba en los 6 meses siguientes.',
+    },
+    {
+      id: 'b5-q02',
+      pregunta: '¿Hasta cuándo debe la junta aprobar las cuentas del ejercicio 2026?',
+      correcta: 'Hasta el 30 de junio de 2027',
+      incorrectas: ['Hasta el 31 de enero de 2027', 'No hay plazo'],
+      explicacion: 'La junta ordinaria se celebra en los 6 primeros meses del ejercicio siguiente para aprobar las cuentas y la aplicación del resultado.',
+    },
+    {
+      id: 'b5-q03',
+      pregunta: 'Una vez aprobadas, ¿en qué plazo se depositan las cuentas en el Registro Mercantil?',
+      correcta: 'En el mes siguiente a su aprobación',
+      incorrectas: ['En el mismo día de la junta', 'En los 6 meses siguientes a la aprobación'],
+      explicacion: 'El depósito se hace en el mes siguiente a la aprobación. No depositarlas puede suponer el cierre registral y sanciones.',
+    },
+    {
+      id: 'b5-q04',
+      pregunta: '¿Cuándo se presenta el modelo 200 de una sociedad con ejercicio natural?',
+      correcta: 'En julio: en los 25 días naturales siguientes a los 6 meses posteriores al cierre',
+      incorrectas: ['En enero, con los resúmenes anuales', 'En abril, con el primer pago fraccionado'],
+      explicacion: 'Para un ejercicio que acaba el 31 de diciembre, el plazo va del 1 al 25 de julio (o el siguiente día hábil).',
+    },
+
+    /* --- Amortización --- */
+    {
+      id: 'b5-q05',
+      pregunta: '¿Qué asiento registra la amortización anual de una máquina?',
+      correcta: '681 Amortización del inmovilizado material al Debe; 281 al Haber',
+      incorrectas: ['213 Maquinaria al Debe; 681 al Haber', '681 al Debe; 213 Maquinaria al Haber'],
+      explicacion: 'La dotación es un gasto (681) y se acumula en la 281, que resta del valor del bien en el balance. La cuenta 213 no se toca: sigue reflejando el coste.',
+    },
+    {
+      id: 'b5-q06',
+      pregunta: 'Un ordenador de 1.200 € se usa todo el año y se amortiza al 25 %. ¿Cuál es la dotación anual?',
+      correcta: '300 €',
+      incorrectas: ['120 €', '1.200 €'],
+      explicacion: '1.200 × 25 % = 300 € al año. Tardará 4 años en quedar totalmente amortizado.',
+    },
+    {
+      id: 'b5-q07',
+      pregunta: 'Una furgoneta de 24.000 €, amortizada al 16 %, empieza a usarse el 1 de abril. ¿Cuánto se amortiza ese primer año?',
+      correcta: '2.880 €',
+      incorrectas: ['3.840 €', '960 €'],
+      explicacion: 'El primer año solo cuentan los meses de uso: 24.000 × 16 % × 9/12 = 2.880 €.',
+    },
+    {
+      id: 'b5-q08',
+      pregunta: '¿Cuál es el coeficiente máximo de la tabla oficial para los equipos informáticos?',
+      correcta: '25 %',
+      incorrectas: ['10 %', '50 %'],
+      explicacion: 'Los equipos para procesos de información tienen un coeficiente máximo del 25 % (periodo máximo de 8 años). Los programas informáticos, el 33 %.',
+    },
+    {
+      id: 'b5-q09',
+      pregunta: '¿Cuál es el coeficiente máximo de la tabla oficial para el mobiliario de oficina?',
+      correcta: '10 %',
+      incorrectas: ['25 %', '2 %'],
+      explicacion: 'El mobiliario se amortiza como máximo al 10 % anual. El 2 % es el de los edificios comerciales.',
+    },
+    {
+      id: 'b5-q10',
+      pregunta: '¿Qué saldo tiene la cuenta 281 y cómo aparece en el balance?',
+      correcta: 'Acreedor, restando del inmovilizado material en el activo',
+      incorrectas: ['Deudor, sumando al inmovilizado', 'Acreedor, como una deuda en el pasivo'],
+      explicacion: 'La amortización acumulada es una corrección de valor del activo: el balance muestra el coste menos lo ya amortizado.',
+    },
+    {
+      id: 'b5-q11',
+      pregunta: 'Una máquina se compra en octubre y empieza a funcionar en noviembre. ¿Desde cuándo se amortiza?',
+      correcta: 'Desde noviembre, cuando está en condiciones de funcionamiento',
+      incorrectas: ['Desde octubre, cuando se compra', 'Desde el año siguiente'],
+      explicacion: 'La amortización empieza cuando el bien está listo para usarse, no cuando se compra ni cuando se paga.',
+    },
+    {
+      id: 'b5-q12',
+      pregunta: 'Un cliente compra un local con su terreno. ¿Qué parte no se amortiza?',
+      correcta: 'El valor del terreno',
+      incorrectas: ['El valor de la construcción', 'Ninguna: se amortiza todo'],
+      explicacion: 'Los terrenos no se deprecian por el uso, así que no se amortizan. Hay que separar en la escritura (o con el valor catastral) qué parte es suelo y qué parte es construcción.',
+    },
+    {
+      id: 'b5-q13',
+      pregunta: '¿Qué permite la ley con los elementos nuevos del inmovilizado de hasta 300 €?',
+      correcta: 'Amortizarlos libremente, con un límite de 25.000 € al año',
+      incorrectas: ['Llevarlos siempre a existencias', 'Nada especial: se amortizan como los demás'],
+      explicacion: 'Los elementos nuevos de escaso valor (hasta 300 € por unidad) pueden amortizarse en el mismo año, hasta 25.000 € anuales.',
+    },
+
+    /* --- Periodificaciones --- */
+    {
+      id: 'b5-q14',
+      pregunta: 'El 1 de octubre se paga un seguro anual de 1.200 €. ¿Cuánto hay que periodificar a 31 de diciembre?',
+      correcta: '900 €, los 9 meses del año siguiente',
+      incorrectas: ['300 €, los 3 meses del año actual', 'Nada: el seguro ya está pagado'],
+      explicacion: 'De octubre a diciembre corresponden 300 € a este año. Los 900 € restantes son gasto del año siguiente.',
+    },
+    {
+      id: 'b5-q15',
+      pregunta: '¿Qué asiento haces a 31/12 para periodificar esos 900 € de seguro?',
+      correcta: '480 Gastos anticipados al Debe; 625 Primas de seguros al Haber',
+      incorrectas: ['625 al Debe; 480 al Haber', '485 Ingresos anticipados al Debe; 625 al Haber'],
+      explicacion: 'Se quita del gasto del año la parte que no le corresponde (625, Haber) y queda como activo en la 480 hasta el año siguiente.',
+    },
+    {
+      id: 'b5-q16',
+      pregunta: '¿Qué pasa con esa periodificación el 1 de enero siguiente?',
+      correcta: 'Se revierte: 625 al Debe y 480 al Haber',
+      incorrectas: ['Se deja en la 480 hasta que venza la póliza', 'Se lleva a la 129'],
+      explicacion: 'El 1 de enero esos 900 € pasan a ser gasto del nuevo año, que es al que corresponden.',
+    },
+    {
+      id: 'b5-q17',
+      pregunta: 'Un cliente cobró en diciembre el alquiler de enero de un local que tiene arrendado. ¿Qué haces al cierre?',
+      correcta: 'Llevar ese ingreso a la 485 Ingresos anticipados',
+      incorrectas: ['Dejarlo como ingreso del año', 'Llevarlo a la 480 Gastos anticipados'],
+      explicacion: 'El ingreso corresponde a enero: se quita del año (752, Debe) y queda como 485 hasta el 1 de enero.',
+    },
+    {
+      id: 'b5-q18',
+      pregunta: 'A 31/12 aún no ha llegado la factura de la luz de diciembre, estimada en 350 €. ¿Qué haces?',
+      correcta: 'Registrar el gasto: 628 al Debe y 4109 Facturas pendientes de recibir al Haber',
+      incorrectas: ['Nada: se registrará cuando llegue la factura', 'Registrarlo con IVA en la 472'],
+      explicacion: 'El gasto es de diciembre aunque la factura llegue en enero. El IVA no se registra hasta tener la factura.',
+    },
+    {
+      id: 'b5-q19',
+      pregunta: 'Al cierre, hay intereses de un préstamo devengados en diciembre que se pagarán con la cuota de enero. ¿Qué cuenta recoge esa deuda?',
+      correcta: '527 Intereses a corto plazo de deudas con entidades de crédito',
+      incorrectas: ['170 Deudas a largo plazo con entidades de crédito', '480 Gastos anticipados'],
+      explicacion: 'Se registra el gasto (662) contra la 527. Así diciembre soporta sus intereses aunque se paguen en enero.',
+    },
+    {
+      id: 'b5-q20',
+      pregunta: '¿Qué dice el principio de devengo?',
+      correcta: 'Que gastos e ingresos se imputan al año al que corresponden, se paguen o cobren cuando sea',
+      incorrectas: ['Que solo se registran los gastos ya pagados', 'Que los gastos se registran cuando llega la factura'],
+      explicacion: 'Es la base de todas las periodificaciones: lo que importa es cuándo se produce el gasto o el ingreso, no cuándo se mueve el dinero.',
+    },
+
+    /* --- Existencias --- */
+    {
+      id: 'b5-q21',
+      pregunta: '¿Qué cuenta recoge la diferencia entre el inventario inicial y el final de mercaderías?',
+      correcta: '610 Variación de existencias de mercaderías',
+      incorrectas: ['600 Compras de mercaderías', '708 Devoluciones de ventas'],
+      explicacion: 'La 610 corrige el coste de las compras del año según cómo haya cambiado el almacén.',
+    },
+    {
+      id: 'b5-q22',
+      pregunta: 'Existencias iniciales 8.500 € y finales 11.200 €. ¿Qué asiento neto haces?',
+      correcta: '300 Mercaderías al Debe y 610 al Haber por 2.700 €',
+      incorrectas: ['610 al Debe y 300 al Haber por 2.700 €', '300 al Debe y 600 al Haber por 11.200 €'],
+      explicacion: 'Las existencias aumentan 2.700 €: sube la 300 y la 610 queda con saldo acreedor, reduciendo el coste de las ventas del año.',
+    },
+    {
+      id: 'b5-q23',
+      pregunta: 'Si las existencias finales son mayores que las iniciales, ¿qué efecto tiene en el resultado del año?',
+      correcta: 'Lo mejora: parte de lo comprado sigue en el almacén y no es gasto',
+      incorrectas: ['Lo empeora', 'No le afecta'],
+      explicacion: 'Lo que queda en el almacén se traslada al año siguiente. Por eso un inventario inflado infla el beneficio.',
+    },
+    {
+      id: 'b5-q24',
+      pregunta: '¿Cómo se valora el inventario final de un comercio?',
+      correcta: 'A precio de coste (de compra), no de venta',
+      incorrectas: ['A precio de venta al público', 'A lo que el cliente estime'],
+      explicacion: 'Las existencias se valoran a coste. Valorarlas a precio de venta adelantaría un beneficio que aún no se ha producido.',
+    },
+
+    /* --- Deterioros y reclasificaciones --- */
+    {
+      id: 'b5-q25',
+      pregunta: 'Del préstamo a largo plazo de un cliente vencen 5.140,43 € de capital el año que viene. ¿Qué asiento haces al cierre?',
+      correcta: '170 al Debe; 520 al Haber por 5.140,43 €',
+      incorrectas: ['520 al Debe; 170 al Haber', '662 al Debe; 520 al Haber'],
+      explicacion: 'La parte que vence en los 12 meses siguientes pasa de largo plazo (170) a corto plazo (520).',
+    },
+    {
+      id: 'b5-q26',
+      pregunta: 'Una deuda con un proveedor de inmovilizado que estaba a largo plazo vencerá el año próximo. ¿Qué asiento haces?',
+      correcta: '173 al Debe; 523 al Haber',
+      incorrectas: ['523 al Debe; 173 al Haber', '400 al Debe; 173 al Haber'],
+      explicacion: 'Igual que con los préstamos: la deuda pasa de la 173 (largo plazo) a la 523 (corto plazo).',
+    },
+    {
+      id: 'b5-q27',
+      pregunta: 'En general, ¿cuánto tiempo debe haber pasado desde el vencimiento para que el deterioro de un cliente sea deducible?',
+      correcta: '6 meses',
+      incorrectas: ['1 mes', '3 años'],
+      explicacion: 'La ley del Impuesto sobre Sociedades exige, entre otras causas, que hayan pasado 6 meses desde el vencimiento de la deuda.',
+    },
+    {
+      id: 'b5-q28',
+      pregunta: 'Las cuotas de leasing que vencen el año próximo, ¿cómo se reclasifican?',
+      correcta: 'De la 174 a la 524',
+      incorrectas: ['De la 524 a la 174', 'De la 621 a la 524'],
+      explicacion: 'La 174 recoge la deuda del leasing a largo plazo y la 524 la de corto plazo.',
+    },
+
+    /* --- Impuesto sobre Sociedades --- */
+    {
+      id: 'b5-q29',
+      pregunta: '¿Cuál es el tipo general del Impuesto sobre Sociedades en 2026?',
+      correcta: '25 %',
+      incorrectas: ['21 %', '30 %'],
+      explicacion: 'El tipo general es el 25 %. Las micro, pequeñas y nuevas empresas pueden tener tipos reducidos.',
+    },
+    {
+      id: 'b5-q30',
+      pregunta: 'Una microempresa (cifra de negocios del año anterior inferior a 1 millón), ¿qué tipos aplica en 2026?',
+      correcta: '19 % los primeros 50.000 € de base y 21 % el resto',
+      incorrectas: ['15 % sobre toda la base', '25 % sobre toda la base'],
+      explicacion: 'La reforma de la Ley 7/2024 establece para 2026 una escala del 19 % y el 21 % para las microempresas, que seguirá bajando en los años siguientes.',
+    },
+    {
+      id: 'b5-q31',
+      pregunta: '¿Qué tipo aplica en 2026 una empresa de reducida dimensión con 4 millones de cifra de negocios?',
+      correcta: '23 %',
+      incorrectas: ['25 %', '19 %'],
+      explicacion: 'Las empresas de reducida dimensión (menos de 10 millones) que no son microempresas tributan al 23 % en 2026.',
+    },
+    {
+      id: 'b5-q32',
+      pregunta: 'Entre los gastos del año hay una multa de tráfico de 600 €. ¿Qué haces al calcular el impuesto?',
+      correcta: 'Sumarla al resultado contable: no es un gasto deducible',
+      incorrectas: ['Restarla del resultado contable', 'Nada: ya está en los gastos'],
+      explicacion: 'Las multas y sanciones no son deducibles. Se registran como gasto en contabilidad, pero se suman al calcular la base imponible.',
+    },
+    {
+      id: 'b5-q33',
+      pregunta: '¿Qué es la cuota diferencial del Impuesto sobre Sociedades?',
+      correcta: 'La cuota menos las retenciones y los pagos fraccionados del año',
+      incorrectas: ['La base imponible menos el resultado contable', 'La diferencia entre el tipo general y el reducido'],
+      explicacion: 'Es lo que queda por pagar (o por devolver) en el modelo 200 después de descontar lo adelantado durante el año.',
+    },
+    {
+      id: 'b5-q34',
+      pregunta: 'Cuota de 7.904 € y 2.500 € de retenciones y pagos fraccionados. ¿Qué asiento haces?',
+      correcta: '6300 por 7.904 al Debe; 473 por 2.500 y 4752 por 5.404 al Haber',
+      incorrectas: ['6300 por 5.404 al Debe; 4752 por 5.404 al Haber', '4752 por 7.904 al Debe; 6300 por 7.904 al Haber'],
+      explicacion: 'El gasto por impuesto es la cuota completa (6300). Se cancelan los pagos a cuenta (473) y la diferencia es la deuda con Hacienda (4752).',
+    },
+    {
+      id: 'b5-q35',
+      pregunta: '¿Con qué modelo se hacen los pagos fraccionados del Impuesto sobre Sociedades y cuándo?',
+      correcta: 'Con el modelo 202, en abril, octubre y diciembre',
+      incorrectas: ['Con el modelo 200, cada trimestre', 'Con el modelo 303, junto al IVA'],
+      explicacion: 'Los pagos fraccionados (modelo 202) se presentan del 1 al 20 de abril, octubre y diciembre, y se descuentan en el modelo 200.',
+    },
+    {
+      id: 'b5-q36',
+      pregunta: 'Una sociedad recién creada obtiene beneficio por primera vez. ¿Qué tipo puede aplicar?',
+      correcta: '15 % en el primer año con base positiva y en el siguiente',
+      incorrectas: ['25 % desde el primer año', '0 % los dos primeros años'],
+      explicacion: 'Las entidades de nueva creación que realizan una actividad económica tributan al 15 % en el primer periodo con base imponible positiva y en el siguiente.',
+    },
+
+    /* --- Regularización y aplicación del resultado --- */
+    {
+      id: 'b5-q37',
+      pregunta: '¿Qué hace el asiento de regularización?',
+      correcta: 'Cancela los grupos 6 y 7 contra la 129 para obtener el resultado',
+      incorrectas: ['Cancela todas las cuentas del balance', 'Reparte el beneficio entre los socios'],
+      explicacion: 'Tras la regularización, la 129 muestra el beneficio (saldo acreedor) o la pérdida (saldo deudor) del año.',
+    },
+    {
+      id: 'b5-q38',
+      pregunta: '¿Cuánto debe destinar una sociedad a reserva legal?',
+      correcta: 'El 10 % del beneficio, hasta que la reserva alcance el 20 % del capital',
+      incorrectas: ['El 20 % del beneficio, siempre', 'Lo que decida la junta, sin mínimo'],
+      explicacion: 'Mientras la reserva legal no llegue al 20 % del capital social, hay que destinarle al menos el 10 % del beneficio.',
+    },
+    {
+      id: 'b5-q39',
+      pregunta: 'La junta acuerda repartir 15.000 € de dividendos que se pagarán más adelante. ¿Qué cuenta se abona?',
+      correcta: '526 Dividendo activo a pagar',
+      incorrectas: ['113 Reservas voluntarias', '551 Cuenta corriente con socios y administradores'],
+      explicacion: 'El dividendo acordado es una deuda con los socios hasta que se paga. Además, al pagarlo hay que practicar la retención correspondiente.',
+    },
+    {
+      id: 'b5-q40',
+      pregunta: 'El ejercicio se cierra con pérdidas. ¿Adónde se llevan al aplicar el resultado?',
+      correcta: '121 Resultados negativos de ejercicios anteriores',
+      incorrectas: ['113 Reservas voluntarias, como un abono', '650 Pérdidas de créditos comerciales incobrables'],
+      explicacion: 'Las pérdidas se cargan a la 121 y se compensarán con beneficios futuros. Fiscalmente, son bases imponibles negativas que podrán compensarse.',
+    },
+  ],
+
+  casos: [
+    {
+      id: 'b5-amort-calculo',
+      tipo: 'calculo',
+      cliente: { nombre: 'Horno San Blas, S.L.', actividad: 'Panadería y bollería' },
+      titulo: 'Calcula la amortización del año',
+      enunciado: 'Prepara la dotación a la amortización de 2026 a partir de la ficha de inmovilizado de la panadería.',
+      documento: FICHA_INMOVILIZADO_HORNO,
+      preguntas: [
+        { id: 'amasadora', texto: 'Amortización de 2026 de la amasadora', respuesta: 720, unidad: '€', pista: 'Lleva todo el año en uso: coste × coeficiente.', explicacion: '6.000 × 12 % = 720 €.' },
+        { id: 'horno', texto: 'Amortización de 2026 del horno', respuesta: 96, unidad: '€', pista: 'Solo cuentan los meses en uso desde noviembre.', explicacion: '4.800 × 12 % × 2/12 = 96 €.' },
+        { id: 'total', texto: 'Dotación total del ejercicio', respuesta: 816, unidad: '€', pista: 'Suma las dos.', explicacion: '720 + 96 = 816 €.' },
+      ],
+      resumenOk: 'Con la dotación calculada, el siguiente paso es registrarla. El horno solo se amortiza desde que funciona, aunque se comprara en octubre.',
+    },
+    {
+      id: 'b5-amort-asiento',
+      tipo: 'asiento',
+      cliente: { nombre: 'Horno San Blas, S.L.', actividad: 'Panadería y bollería' },
+      titulo: 'Registra la amortización',
+      enunciado: 'Registra la dotación a la amortización de 2026 que calculaste en el caso anterior.',
+      documento: FICHA_INMOVILIZADO_HORNO,
+      cuentasDisponibles: ['681', '680', '281', '280', '213', '622', '129'],
+      solucion: [{ cuenta: '681', debe: 816 }, { cuenta: '281', haber: 816 }],
+      pista: 'Las máquinas son inmovilizado material. La cuenta 213 no se toca.',
+      explicacion: 'Gasto por amortización del inmovilizado material (681, 816 €) contra la amortización acumulada (281). La 213 sigue mostrando el coste; el balance restará la 281.',
+    },
+    {
+      id: 'b5-seguro',
+      tipo: 'asiento',
+      cliente: { nombre: 'Moda Valentina, S.L.', actividad: 'Tienda de ropa' },
+      titulo: 'Periodificar el seguro',
+      enunciado: 'El 1 de octubre la tienda pagó el seguro anual y se registró entero en la 625. Haz el ajuste de periodificación a 31/12/2026.',
+      documento: {
+        tipo: 'factura',
+        titulo: 'RECIBO DE PRIMA',
+        color: '#0e7490',
+        exento: true,
+        emisor: { nombre: 'Seguros Mediterráneo Mutua', nif: 'V46000111', direccion: ['Av. de Francia, 10 · 46023 Valencia'] },
+        receptor: { nombre: 'Moda Valentina, S.L.', nif: 'B98765432', direccion: ['Av. del Puerto, 112 · 46023 Valencia'] },
+        numero: 'P-778812/26',
+        fecha: '01/10/2026',
+        formaPago: 'Domiciliado el 01/10/2026',
+        menciones: ['Póliza multirriesgo comercio. Periodo de cobertura: 01/10/2026 a 30/09/2027.', 'Operación exenta de IVA.'],
+        lineas: [
+          { concepto: 'Prima anual (impuestos sobre primas incluidos)', cantidad: 1, precio: 1200, iva: 0 },
+        ],
+      },
+      cuentasDisponibles: ['480', '485', '625', '572', '129', '4109'],
+      solucion: [{ cuenta: '480', debe: 900 }, { cuenta: '625', haber: 900 }],
+      pista: 'Cuenta cuántos meses de cobertura caen en 2027 y quita esa parte del gasto de 2026.',
+      explicacion: 'De la cobertura, 9 meses (enero a septiembre) son de 2027: 1.200 × 9/12 = 900 €. Se quitan del gasto (625 al Haber) y quedan como gasto anticipado (480). El 1/1/2027 se revierte.',
+    },
+    {
+      id: 'b5-existencias',
+      tipo: 'asiento',
+      cliente: { nombre: 'Moda Valentina, S.L.', actividad: 'Tienda de ropa' },
+      titulo: 'Variación de existencias',
+      enunciado: 'La clienta te ha enviado el inventario firmado a 31/12/2026. Registra la variación de existencias (puedes hacerlo en forma completa o neta).',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Recuento de existencias a 31/12/2026',
+        subtitulo: 'Valorado a precio de coste · firmado por la administradora',
+        emisor: { nombre: 'Moda Valentina, S.L.', nif: 'B98765432' },
+        columnas: ['Familia', 'Uds.', 'Coste', 'Importe'],
+        filas: [
+          ['Pantalones', '120', '35,00', '4.200,00'],
+          ['Camisetas', '200', '12,00', '2.400,00'],
+          ['Abrigos', '40', '70,00', '2.800,00'],
+          ['Complementos (varios)', '—', '—', '1.800,00'],
+          ['Total final', '', '', '11.200,00'],
+        ],
+        notas: ['Existencias iniciales según el balance de 31/12/2025 (cuenta 300): 8.500,00 €.'],
+      },
+      cuentasDisponibles: ['300', '600', '610', '700', '129', '572'],
+      solucion: [{ cuenta: '300', debe: 2700 }, { cuenta: '610', haber: 2700 }],
+      alternativas: [[{ cuenta: '610', debe: 8500 }, { cuenta: '300', haber: 8500 }, { cuenta: '300', debe: 11200 }, { cuenta: '610', haber: 11200 }]],
+      pista: 'Sustituye el inventario inicial (8.500 €) por el final. ¿Aumentan o disminuyen las existencias?',
+      explicacion: 'Las existencias aumentan de 8.500 € a 11.200 €: la 300 sube 2.700 € (Debe) y la 610 queda con saldo acreedor, reduciendo el coste de las compras. En forma completa: 610 a 300 por 8.500 € y 300 a 610 por 11.200 €.',
+    },
+    {
+      id: 'b5-reclasificacion',
+      tipo: 'asiento',
+      cliente: { nombre: 'Horno San Blas, S.L.', actividad: 'Panadería y bollería' },
+      titulo: 'Reclasificar el préstamo',
+      enunciado: 'El préstamo del horno (el del Bloque 3) está todo en la 170 salvo las cuotas de 2026, ya pagadas. Con el resumen del cuadro de amortización, haz la reclasificación a 31/12/2026.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Préstamo 0099-123456 · situación a 31/12/2026',
+        subtitulo: 'Según el cuadro de amortización del banco · cuota mensual de 500 €',
+        emisor: { nombre: 'Horno San Blas, S.L.', nif: 'B98221133' },
+        columnas: ['Concepto', 'Importe'],
+        filas: [
+          ['Capital inicial (60 cuotas)', '25.797,58 €'],
+          ['Capital pendiente a 31/12/2026', '16.409,83 €'],
+          ['Capital de las cuotas de 2027 (25 a 36)', '5.140,43 €'],
+          ['Capital de las cuotas posteriores a 2027', '11.269,40 €'],
+          ['Saldo actual de la cuenta 520', '0,00 €'],
+        ],
+      },
+      cuentasDisponibles: ['170', '520', '662', '572', '524', '174'],
+      solucion: [{ cuenta: '170', debe: 5140.43 }, { cuenta: '520', haber: 5140.43 }],
+      pista: 'Solo se reclasifica lo que vence en los 12 meses siguientes. Los intereses futuros no son deuda todavía.',
+      explicacion: 'Se pasa a corto plazo el capital que vence en 2027: 170 al Debe y 520 al Haber por 5.140,43 €. En la 170 quedan 11.269,40 €, lo que vence después. Los intereses de 2027 se registrarán cuando se devenguen.',
+    },
+    {
+      id: 'b5-is-calculo',
+      tipo: 'calculo',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Calcula el Impuesto sobre Sociedades',
+      enunciado: 'Con todos los ajustes de cierre hechos, calcula el impuesto de 2026 del distribuidor. Es una microempresa y no tiene bases negativas pendientes.',
+      documento: PYG_LEVANTE_2026,
+      preguntas: [
+        { id: 'base', texto: 'Base imponible', respuesta: 41600, unidad: '€', pista: 'Al resultado contable hay que sumarle los gastos que no son deducibles.', explicacion: '41.000 + 600 de la multa = 41.600 €.' },
+        { id: 'cuota', texto: 'Cuota íntegra', respuesta: 7904, unidad: '€', pista: 'Microempresa: la base no supera 50.000 €, así que toda va al primer tramo.', explicacion: '41.600 × 19 % = 7.904 €.' },
+        { id: 'pagar', texto: 'Cuota diferencial (a pagar en el modelo 200)', respuesta: 5404, unidad: '€', pista: 'Descuenta lo que ya se adelantó durante el año.', explicacion: '7.904 − 2.500 = 5.404 €.' },
+      ],
+      resumenOk: 'Fíjate en el orden: resultado contable, ajustes, base, tipo y pagos a cuenta. En el siguiente caso registras el asiento.',
+    },
+    {
+      id: 'b5-is-asiento',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Registra el impuesto',
+      enunciado: 'Registra el gasto por Impuesto sobre Sociedades de 2026 que calculaste en el caso anterior.',
+      documento: PYG_LEVANTE_2026,
+      cuentasDisponibles: ['6300', '473', '4752', '4751', '129', '572', '4750'],
+      solucion: [{ cuenta: '6300', debe: 7904 }, { cuenta: '473', haber: 2500 }, { cuenta: '4752', haber: 5404 }],
+      pista: 'El gasto es la cuota completa. Lo adelantado durante el año se cancela y el resto es una deuda con Hacienda.',
+      explicacion: 'Gasto por impuesto corriente (6300) por la cuota de 7.904 €. Se cancelan las retenciones y pagos fraccionados (473, 2.500 €) y queda una deuda de 5.404 € con Hacienda (4752), que se pagará en julio con el modelo 200.',
+    },
+    {
+      id: 'b5-regularizacion',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Regulariza el ejercicio',
+      enunciado: 'Ya registrado el impuesto, haz el asiento de regularización de 2026 de forma resumida: una línea para el total de ingresos (7xx), otra para el total de gastos (6xx) y el resultado.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Saldos de los grupos 6 y 7 a 31/12/2026',
+        subtitulo: 'Después del asiento del impuesto',
+        emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030' },
+        columnas: ['Concepto', 'Importe'],
+        filas: [
+          ['Total ingresos (grupo 7) · saldo acreedor', '412.000,00 €'],
+          ['Gastos de explotación y financieros · saldo deudor', '371.000,00 €'],
+          ['Impuesto corriente (6300) · saldo deudor', '7.904,00 €'],
+        ],
+      },
+      cuentasDisponibles: ['7xx', '6xx', '129', '112', '113', '121'],
+      solucion: [{ cuenta: '7xx', debe: 412000 }, { cuenta: '6xx', haber: 378904 }, { cuenta: '129', haber: 33096 }],
+      pista: 'Para dejar a cero los ingresos (saldo acreedor) se cargan; los gastos (saldo deudor) se abonan. La diferencia va a la 129.',
+      explicacion: 'Se cargan los ingresos (412.000 €) y se abonan todos los gastos, impuesto incluido (371.000 + 7.904 = 378.904 €). La diferencia, 33.096 €, es el beneficio: queda con saldo acreedor en la 129.',
+    },
+    {
+      id: 'b5-aplicacion',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Aplica el resultado',
+      enunciado: 'En junio de 2027, la junta aprueba las cuentas y el destino del beneficio de 2026. Registra la aplicación del resultado.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Acuerdo de la junta general · aplicación del resultado de 2026',
+        subtitulo: 'Junta ordinaria de 15/06/2027',
+        emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030' },
+        columnas: ['Dato', 'Importe'],
+        filas: [
+          ['Beneficio del ejercicio 2026 (cuenta 129)', '33.096,00 €'],
+          ['Capital social', '6.000,00 €'],
+          ['Reserva legal dotada hasta ahora', '800,00 €'],
+        ],
+        notas: [
+          'Acuerdo 1: dotar a reserva legal el importe necesario según la ley (10 % del beneficio, sin superar el 20 % del capital).',
+          'Acuerdo 2: repartir un dividendo de 15.000,00 €, que se pagará en julio.',
+          'Acuerdo 3: destinar el resto a reservas voluntarias.',
+        ],
+      },
+      cuentasDisponibles: ['129', '112', '113', '121', '526', '572', '551'],
+      solucion: [{ cuenta: '129', debe: 33096 }, { cuenta: '112', haber: 400 }, { cuenta: '526', haber: 15000 }, { cuenta: '113', haber: 17696 }],
+      pista: 'El 10 % del beneficio sería 3.309,60 €, pero la reserva legal solo tiene que llegar al 20 % del capital. ¿Cuánto le falta?',
+      explicacion: 'El 20 % del capital son 1.200 € y ya hay 800 €: a reserva legal solo van 400 €. Dividendo pendiente de pago, 15.000 € (526). El resto, 33.096 − 400 − 15.000 = 17.696 €, a reservas voluntarias (113). La 129 queda a cero.',
+    },
+    {
+      id: 'b5-ajustes',
+      tipo: 'clasificar',
+      titulo: '¿Qué ajuste de cierre corresponde?',
+      enunciado: 'Repasas la lista de cierre de varios clientes. Indica qué tipo de ajuste necesita cada situación.',
+      rejilla: 'grid-cols-2 sm:grid-cols-3',
+      opciones: [
+        { valor: 'amortizar', etiqueta: 'Amortizar' },
+        { valor: 'periodificar', etiqueta: 'Periodificar' },
+        { valor: 'existencias', etiqueta: 'Existencias' },
+        { valor: 'reclasificar', etiqueta: 'Reclasificar' },
+        { valor: 'deterioro', etiqueta: 'Deterioro', ancho: true },
+      ],
+      cuentas: [
+        { id: 'ordenador', texto: 'Un ordenador comprado en marzo que se usa desde entonces', correcta: 'amortizar', pista: 'Bien de inversión en uso.', explicacion: 'Dotación por los meses de uso (681/281).' },
+        { id: 'seguro', texto: 'Una póliza anual pagada en noviembre', correcta: 'periodificar', pista: 'Una parte del gasto es del año siguiente.', explicacion: 'Gasto anticipado (480).' },
+        { id: 'alquiler', texto: 'El alquiler de enero de un local arrendado a un tercero, cobrado en diciembre', correcta: 'periodificar', pista: 'Es un ingreso del año siguiente.', explicacion: 'Ingreso anticipado (485).' },
+        { id: 'luz', texto: 'La factura de la luz de diciembre, que llegará en enero', correcta: 'periodificar', pista: 'Gasto de este año sin factura todavía.', explicacion: 'Gasto devengado pendiente de factura (4109).' },
+        { id: 'inventario', texto: 'El inventario a 31/12 de una tienda', correcta: 'existencias', pista: 'Sustituye el inventario inicial.', explicacion: 'Variación de existencias (610).' },
+        { id: 'prestamo', texto: 'Las cuotas del préstamo que se pagarán el año que viene', correcta: 'reclasificar', pista: 'Deuda que pasa a vencer en menos de un año.', explicacion: 'De la 170 a la 520.' },
+        { id: 'moroso', texto: 'Una factura de un cliente vencida hace 8 meses y sin cobrar', correcta: 'deterioro', pista: 'Riesgo serio de no cobrar.', explicacion: 'Deterioro de créditos (694/490).' },
+      ],
+      resumenOk: 'Esta es la lista de comprobación del cierre de cualquier cliente. Repasarla siempre en el mismo orden evita olvidos.',
+    },
+  ],
+};
+
+/* ---------- Bloque 6: Revisión, Cuadres y Análisis (gestoría) ---------- */
+
+const SUMAS_SALDOS_FLORISTERIA = {
+  tipo: 'resumen',
+  titulo: 'Balance de sumas y saldos (extracto) a 30/09/2026',
+  subtitulo: 'Tras liquidar el 303 del 3T · revisión antes de cerrar el trimestre',
+  emisor: { nombre: 'Floristería Azahar, S.L.', nif: 'B98334411' },
+  columnas: ['Cuenta', 'Saldo'],
+  filas: [
+    ['100 Capital social', '6.000,00 A'],
+    ['281 Amort. acum. inmovilizado material', '320,00 D'],
+    ['40000012 Viveros del Turia, S.L. (proveedor)', '1.210,00 D'],
+    ['43000007 Hotel Palmeras, S.A. (cliente)', '300,00 A'],
+    ['472 IVA soportado', '1.845,60 D'],
+    ['4751 Retenciones practicadas', '712,50 A'],
+    ['476 Seguridad Social acreedora', '1.540,00 A'],
+    ['555 Partidas pendientes de aplicación', '605,00 A'],
+    ['570 Caja, euros', '85,00 A'],
+    ['572 Bancos', '12.430,25 D'],
+  ],
+  notas: ['D = saldo deudor · A = saldo acreedor.', 'El 303 del 3T ya se ha liquidado: la 477 está a cero.', 'Las retenciones y los seguros sociales de septiembre se pagan en octubre.'],
+};
+
+const BALANCE_LEVANTE_2026 = {
+  tipo: 'resumen',
+  titulo: 'Balance de situación resumido a 31/12/2026',
+  subtitulo: 'Después de la regularización',
+  emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030' },
+  columnas: ['Masa patrimonial', 'Importe'],
+  filas: [
+    ['Activo no corriente', '45.000,00 €'],
+    ['Existencias', '25.000,00 €'],
+    ['Clientes y otros deudores', '35.000,00 €'],
+    ['Tesorería', '20.000,00 €'],
+    ['TOTAL ACTIVO', '125.000,00 €'],
+    ['Patrimonio neto', '52.000,00 €'],
+    ['Pasivo no corriente', '28.000,00 €'],
+    ['Pasivo corriente', '45.000,00 €'],
+    ['TOTAL PATRIMONIO NETO Y PASIVO', '125.000,00 €'],
+  ],
+};
+
+const PYG_LEVANTE_ANALISIS = {
+  tipo: 'resumen',
+  titulo: 'Cuenta de pérdidas y ganancias 2026',
+  subtitulo: 'Formato resumido para el cliente',
+  emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030' },
+  columnas: ['Concepto', 'Importe'],
+  filas: [
+    ['Importe neto de la cifra de negocios', '412.000,00 €'],
+    ['Aprovisionamientos', '−280.000,00 €'],
+    ['Gastos de personal', '−52.000,00 €'],
+    ['Otros gastos de explotación', '−26.500,00 €'],
+    ['Amortización del inmovilizado', '−9.000,00 €'],
+    ['Gastos financieros', '−3.500,00 €'],
+    ['Impuesto sobre beneficios', '−7.904,00 €'],
+  ],
+};
+
+const CONTENIDO_B6 = {
+  teoria: [
+    {
+      id: 'autorrevision',
+      titulo: 'Revisar tu trabajo antes que nadie',
+      resumen: 'La rutina que te hace fiable.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>En una gestoría, el junior que más rápido crece no es el que nunca se equivoca, sino el que <strong>encuentra sus errores antes que su responsable o que Hacienda</strong>. Para eso no hace falta repasar asiento por asiento: basta con mirar los <strong>saldos</strong> con ojo crítico y cuadrarlos con los documentos externos.</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Sumas y saldos', texto: 'Recorre el balance de sumas y saldos buscando saldos imposibles o extraños.' },
+            { titulo: 'Cuadres', texto: 'Comprueba cada cuenta clave contra su documento: banco, Seguridad Social, modelos, inventario.' },
+            { titulo: 'Corregir', texto: 'Los errores se corrigen con asientos de rectificación, nunca borrando lo que ya se declaró.' },
+            { titulo: 'Leer los números', texto: 'Antes de entregar, mira el balance y la cuenta de resultados como lo haría el cliente: ¿tiene sentido?' },
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Dedica <strong>diez minutos por cliente</strong> a esta revisión antes de presentar cada trimestre. Es el hábito que más errores evita y el que más confianza genera en tu responsable.',
+        },
+      ],
+    },
+    {
+      id: 'sumas-saldos',
+      titulo: 'El balance de sumas y saldos',
+      resumen: 'Saldos que delatan un error.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>El balance de sumas y saldos lista todas las cuentas con lo acumulado en el Debe y el Haber y su saldo. Que <strong>cuadre</strong> (total Debe = total Haber) solo prueba que cada asiento está equilibrado: un gasto en la cuenta equivocada o una factura duplicada también cuadran. Lo que delata los errores es el <strong>sentido de los saldos</strong>.</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Saldos que siempre hay que revisar',
+          columnas: ['Saldo', 'Causa probable'],
+          filas: [
+            ['570 Caja con saldo acreedor', 'Imposible: pagos en efectivo registrados sin entrada de caja o cobros sin registrar'],
+            ['572 Bancos con saldo acreedor', 'Error o descubierto: compáralo con el extracto (salvo póliza de crédito)'],
+            ['Proveedor o acreedor (400/410) con saldo deudor', 'Pago duplicado, factura sin registrar o anticipo sin aplicar'],
+            ['Cliente (430) con saldo acreedor', 'Cobro duplicado, abono sin aplicar o anticipo mal registrado'],
+            ['281 Amortización acumulada con saldo deudor', 'Error: debe ser acreedor'],
+            ['555 Partidas pendientes con saldo', 'Movimientos sin aplicar: aclarar antes del cierre del trimestre'],
+            ['472 / 477 con saldo después de liquidar el 303', 'Liquidación sin registrar o factura fuera de su trimestre'],
+          ],
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Saldos normales que asustan:</strong> la 4751 y la 476 tienen saldo acreedor a fin de mes porque se pagan el mes siguiente. Lo raro sería que tuvieran saldo deudor, o que el saldo no coincidiera con el siguiente 111 o con el RLC.',
+        },
+      ],
+    },
+    {
+      id: 'cuadres',
+      titulo: 'Cuadres: cada cuenta con su documento',
+      resumen: 'La contabilidad contrastada con el exterior.',
+      piezas: [
+        {
+          tipo: 'tabla',
+          columnas: ['Cuenta', 'Se cuadra con', 'Cuándo'],
+          filas: [
+            ['572 Bancos', 'El extracto bancario (conciliación)', 'Cada mes'],
+            ['476 Seguridad Social', 'El recibo de liquidación de cotizaciones (RLC)', 'Cada mes'],
+            ['465 Remuneraciones pendientes', 'Las transferencias de nóminas', 'Cada mes'],
+            ['4751 Retenciones', 'Los modelos 111 y 115', 'Cada trimestre'],
+            ['477 y 472', 'El modelo 303 y los libros registro', 'Cada trimestre'],
+            ['430 y 400/410', 'Confirmaciones de saldos y modelo 347', 'Al cierre y en febrero'],
+            ['281 y 21x', 'La ficha o cuadro de inmovilizado', 'Al cierre'],
+            ['300 Mercaderías', 'El inventario firmado por el cliente', 'Al cierre'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Guarda en la carpeta de cada cliente el <strong>justificante de cada cuadre</strong> (la conciliación, el RLC, el borrador del 303 con los saldos). Si un año después alguien pregunta, tendrás la respuesta en dos minutos.',
+        },
+      ],
+    },
+    {
+      id: 'correcciones',
+      titulo: 'Asientos de corrección',
+      resumen: 'Corregir sin borrar.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Si el error está en un periodo <strong>ya declarado o cerrado</strong>, no se borra ni se modifica el asiento original: se hace un <strong>asiento de rectificación</strong> que lleva el importe a la cuenta correcta. Así queda rastro de qué pasó y cuándo. Si el error afectó al IVA o a las retenciones ya declarados, además hay que rectificar la autoliquidación del periodo.</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Errores típicos y su corrección',
+          columnas: ['Error', 'Asiento de corrección'],
+          filas: [
+            ['Reparación registrada como inmovilizado (213)', '622 al Debe; 213 al Haber'],
+            ['IVA no deducible registrado en la 472', 'Cuenta de gasto al Debe; 472 al Haber'],
+            ['Factura registrada dos veces', 'Asiento inverso de la duplicada (contraasiento)'],
+            ['Pago a un proveedor registrado contra la 430', '400 al Debe; 430 al Haber'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Reparación de 450 € registrada por error en la 213',
+          lineas: [{ cuenta: '622', debe: 450 }, { cuenta: '213', haber: 450 }],
+          nota: 'Si además se había amortizado ese importe, también habría que deshacer esa amortización.',
+        },
+      ],
+    },
+    {
+      id: 'balance',
+      titulo: 'Leer el balance',
+      resumen: 'Qué tiene la empresa y cómo lo financia.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>El balance es una <strong>foto a una fecha</strong>: a la izquierda, lo que la empresa tiene (activo); a la derecha, cómo lo financia (patrimonio neto y pasivo). La primera pregunta de un cliente suele ser: <em>«¿voy bien de dinero?»</em>. Para contestarla, se compara el activo corriente (lo que se convertirá en dinero en menos de un año) con el pasivo corriente (lo que hay que pagar en menos de un año).</p>',
+        },
+        { tipo: 'documento', documento: BALANCE_LEVANTE_2026 },
+        {
+          tipo: 'tabla',
+          titulo: 'Indicadores básicos',
+          columnas: ['Indicador', 'Cálculo', 'Lectura orientativa'],
+          filas: [
+            ['Fondo de maniobra', 'Activo corriente − pasivo corriente', 'Positivo: margen para pagar a corto plazo'],
+            ['Liquidez', 'Activo corriente / pasivo corriente', 'Por encima de 1, cómodo; por debajo, tensión'],
+            ['Tesorería inmediata', 'Tesorería / pasivo corriente', 'Capacidad de pagar ya, sin cobrar a nadie'],
+            ['Endeudamiento', 'Pasivo total / (patrimonio neto + pasivo)', 'Cuanto más alto, más depende de terceros'],
+          ],
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Cada sector es distinto.</strong> Un supermercado o un bar cobran al contado y pagan a 60 días: pueden funcionar bien con fondo de maniobra negativo. Una distribuidora que cobra a 90 días, no. Compara siempre con la propia empresa en años anteriores.',
+        },
+      ],
+    },
+    {
+      id: 'pyg',
+      titulo: 'Leer la cuenta de pérdidas y ganancias',
+      resumen: 'De las ventas al beneficio, por escalones.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>La cuenta de pérdidas y ganancias es una <strong>película del año</strong>: ingresos y gastos ordenados en escalones. Cada escalón responde a una pregunta del cliente:</p>',
+        },
+        {
+          tipo: 'tabla',
+          columnas: ['Escalón', 'Qué responde'],
+          filas: [
+            ['Resultado de explotación', '¿Gana dinero el negocio en sí, antes de intereses e impuestos?'],
+            ['Resultado financiero', '¿Cuánto le cuesta la financiación (intereses)?'],
+            ['Resultado antes de impuestos', '¿Cuánto gana antes de pagar el Impuesto sobre Sociedades?'],
+            ['Resultado del ejercicio', '¿Cuánto gana de verdad, después de todo?'],
+          ],
+        },
+        { tipo: 'documento', documento: PYG_LEVANTE_ANALISIS },
+        {
+          tipo: 'tabla',
+          titulo: 'Márgenes útiles',
+          columnas: ['Indicador', 'Cálculo'],
+          filas: [
+            ['Margen bruto', '(Ventas − aprovisionamientos) / ventas'],
+            ['EBITDA', 'Resultado de explotación + amortizaciones'],
+            ['Margen neto', 'Resultado del ejercicio / ventas'],
+            ['Periodo medio de cobro', 'Clientes / ventas × 365 días'],
+          ],
+        },
+      ],
+    },
+    {
+      id: 'explicar',
+      titulo: 'Explicar los números a un cliente',
+      resumen: 'Tres frases y una advertencia.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Un cliente no quiere oír «el ratio de liquidez es 1,78». Quiere saber si va bien, qué le preocupa y qué puede hacer. Prueba con esta estructura:</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Una frase sobre el resultado', texto: '«Este año has ganado 33.000 €, un 8 % de lo que has vendido».' },
+            { titulo: 'Una frase sobre el dinero', texto: '«Lo que tienes y vas a cobrar este año cubre casi dos veces lo que debes pagar en ese plazo».' },
+            { titulo: 'Una frase sobre lo que vigilar', texto: '«Tus clientes tardan más de un mes en pagarte: si eso crece, te faltará caja aunque ganes dinero».' },
+          ],
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Beneficio no es tesorería.</strong> Una empresa puede ganar dinero y no tener liquidez: ventas sin cobrar, existencias que se acumulan, inversiones pagadas o cuotas de préstamo (que no son gasto). Es una de las cosas que más cuesta entender a los clientes.',
+        },
+        {
+          tipo: 'gestoria',
+          html: '<strong>Alerta legal:</strong> si las pérdidas dejan el patrimonio neto por debajo de la mitad del capital social, la sociedad está en causa de disolución (salvo que se aumente o reduzca el capital, o se solicite el concurso). Si lo ves al revisar un balance, avisa a tu responsable de inmediato.',
+        },
+      ],
+    },
+  ],
+
+  configTest: { preguntasPorIntento: 10, aprobado: 8 },
+
+  test: [
+    /* --- Sumas y saldos --- */
+    {
+      id: 'b6-q01',
+      pregunta: '¿Qué garantiza que un balance de sumas y saldos cuadre (total Debe igual a total Haber)?',
+      correcta: 'Solo que cada asiento está equilibrado; puede haber errores de cuenta o importes duplicados',
+      incorrectas: ['Que la contabilidad no tiene ningún error', 'Que el saldo de bancos coincide con el extracto'],
+      explicacion: 'Por la partida doble, el balance siempre cuadra aunque un gasto esté en la cuenta equivocada o una factura esté duplicada. Hay que revisar el sentido y la lógica de los saldos.',
+    },
+    {
+      id: 'b6-q02',
+      pregunta: 'En el balance de sumas y saldos, la cuenta 570 Caja tiene saldo acreedor. ¿Qué significa?',
+      correcta: 'Que hay un error: no puede salir más efectivo del que ha entrado',
+      incorrectas: ['Que la caja tiene mucho dinero', 'Que la empresa tiene un descubierto en la caja'],
+      explicacion: 'Una caja física no puede tener saldo negativo. Suele deberse a pagos en efectivo registrados sin la entrada correspondiente o a cobros en efectivo sin registrar.',
+    },
+    {
+      id: 'b6-q03',
+      pregunta: 'Un proveedor (400) aparece con saldo deudor. ¿Qué compruebas?',
+      correcta: 'Si hay un pago duplicado, una factura sin registrar o un anticipo sin aplicar',
+      incorrectas: ['Nada: es lo normal en un proveedor', 'Si hay que darle de baja como proveedor'],
+      explicacion: 'Lo normal es que los proveedores tengan saldo acreedor (se les debe). Un saldo deudor indica que se ha pagado más de lo registrado.',
+    },
+    {
+      id: 'b6-q04',
+      pregunta: 'Un cliente (430) aparece con saldo acreedor. ¿Cuál es la causa más probable?',
+      correcta: 'Un cobro duplicado, un abono sin aplicar o un anticipo mal registrado',
+      incorrectas: ['Que el cliente debe mucho dinero', 'Que la factura está exenta de IVA'],
+      explicacion: 'Un cliente debería tener saldo deudor (nos debe). Si es acreedor, se ha registrado más cobrado que facturado.',
+    },
+    {
+      id: 'b6-q05',
+      pregunta: 'La 572 tiene saldo acreedor y el cliente no tiene póliza de crédito. ¿Qué haces?',
+      correcta: 'Compararla con el extracto: puede ser un error de registro o un descubierto real',
+      incorrectas: ['Nada: es normal a final de mes', 'Pasar el saldo a la 555'],
+      explicacion: 'Una cuenta corriente normal no debería quedar en negativo. La conciliación dirá si es un error contable o si el banco realmente está en descubierto.',
+    },
+    {
+      id: 'b6-q06',
+      pregunta: 'La cuenta 281 Amortización acumulada aparece con saldo deudor. ¿Qué significa?',
+      correcta: 'Que hay un error: la amortización acumulada siempre tiene saldo acreedor',
+      incorrectas: ['Que el inmovilizado está totalmente amortizado', 'Nada: depende del año'],
+      explicacion: 'La 281 solo crece por el Haber con cada dotación. Un saldo deudor indica un asiento con el lado invertido o una baja mal registrada.',
+    },
+    {
+      id: 'b6-q07',
+      pregunta: 'Después de liquidar el 303 del trimestre, la 472 sigue teniendo saldo. ¿Qué puede pasar?',
+      correcta: 'Que falta el asiento de liquidación o hay una factura registrada fuera de su trimestre',
+      incorrectas: ['Nada: la 472 siempre tiene saldo', 'Que hay que pagar más IVA'],
+      explicacion: 'Tras la liquidación, la 472 y la 477 quedan a cero. Cualquier saldo es IVA de una factura que no entró en ese 303 o una liquidación pendiente.',
+    },
+    {
+      id: 'b6-q08',
+      pregunta: 'Al revisar el trimestre, la 555 tiene un saldo de 605 €. ¿Qué haces antes de presentar?',
+      correcta: 'Aclarar con el cliente esa partida y aplicarla a su cuenta definitiva',
+      incorrectas: ['Dejarla para el cierre del ejercicio', 'Llevarla a un ingreso para que desaparezca'],
+      explicacion: 'Un cobro sin aplicar puede ser una venta sin facturar (IVA sin declarar). Se aclara antes de presentar el trimestre.',
+    },
+    {
+      id: 'b6-q09',
+      pregunta: 'La 4751 tiene saldo acreedor de 712,50 € a 30 de septiembre. ¿Es normal?',
+      correcta: 'Sí, si coincide con las retenciones del trimestre que se ingresan en octubre',
+      incorrectas: ['No: la 4751 siempre debe estar a cero', 'No: debería tener saldo deudor'],
+      explicacion: 'Las retenciones se acumulan durante el trimestre y se pagan con el 111 y el 115 en el mes siguiente. El saldo debe coincidir con esos modelos.',
+    },
+    {
+      id: 'b6-q10',
+      pregunta: 'Antes de regularizar, ¿con qué debe coincidir el resultado que sale de los grupos 6 y 7 del balance de sumas y saldos?',
+      correcta: 'Con el resultado de la cuenta de pérdidas y ganancias',
+      incorrectas: ['Con el saldo de bancos', 'Con el resultado del 303'],
+      explicacion: 'La cuenta de pérdidas y ganancias se construye con esos mismos saldos. Si no coinciden, falta algún ajuste o una cuenta está mal clasificada.',
+    },
+
+    /* --- Cuadres --- */
+    {
+      id: 'b6-q11',
+      pregunta: '¿Con qué documento se cuadra la cuenta 572?',
+      correcta: 'Con el extracto bancario, mediante la conciliación',
+      incorrectas: ['Con el modelo 303', 'Con el inventario'],
+      explicacion: 'El saldo de cada subcuenta de bancos debe coincidir con su extracto o explicarse con partidas en tránsito.',
+    },
+    {
+      id: 'b6-q12',
+      pregunta: '¿Con qué documento se cuadra la cuenta 476?',
+      correcta: 'Con el recibo de liquidación de cotizaciones (RLC)',
+      incorrectas: ['Con el modelo 111', 'Con las nóminas pagadas'],
+      explicacion: 'El saldo de la 476 a fin de mes debe ser exactamente lo que se cargará como seguros sociales el mes siguiente.',
+    },
+    {
+      id: 'b6-q13',
+      pregunta: '¿Con qué se cuadra la cuenta 4751 al final del trimestre?',
+      correcta: 'Con la suma de los modelos 111 y 115 del trimestre',
+      incorrectas: ['Con el modelo 303', 'Con el modelo 347'],
+      explicacion: 'La 4751 recoge las retenciones de trabajo y profesionales (111) y de alquileres (115). Con subcuentas separadas, cada una cuadra con su modelo.',
+    },
+    {
+      id: 'b6-q14',
+      pregunta: '¿Con qué se cuadran las cuentas 477 y 472 cada trimestre?',
+      correcta: 'Con el modelo 303 y los libros registro de IVA',
+      incorrectas: ['Con el modelo 390 del año anterior', 'Con el extracto bancario'],
+      explicacion: 'Las cuotas del 303 deben coincidir con los saldos de 477 y 472 antes de liquidar, y con los libros de facturas expedidas y recibidas.',
+    },
+    {
+      id: 'b6-q15',
+      pregunta: '¿Cómo compruebas que la 465 está bien a final de mes?',
+      correcta: 'Viendo que las transferencias de nóminas la dejan a cero',
+      incorrectas: ['Comparándola con el modelo 190', 'Comparándola con el RLC'],
+      explicacion: 'La 465 recoge el líquido de las nóminas. Si a fin de mes tiene saldo, hay una nómina sin pagar o un pago sin registrar.',
+    },
+    {
+      id: 'b6-q16',
+      pregunta: '¿Con qué se cuadra la amortización acumulada (281) al cierre?',
+      correcta: 'Con la ficha o el cuadro de inmovilizado',
+      incorrectas: ['Con el extracto bancario', 'Con el modelo 200 del año anterior'],
+      explicacion: 'La ficha de inmovilizado detalla el coste y la amortización de cada elemento. Su total debe coincidir con las cuentas 21x y 281.',
+    },
+    {
+      id: 'b6-q17',
+      pregunta: '¿Cómo se comprueban los saldos de clientes y proveedores al cierre?',
+      correcta: 'Con confirmaciones de saldos y cruzándolos con el 347',
+      incorrectas: ['Con el modelo 111', 'No se pueden comprobar'],
+      explicacion: 'Pedir a terceros que confirmen su saldo (o comparar con su 347) detecta facturas que faltan o duplicadas.',
+    },
+    {
+      id: 'b6-q18',
+      pregunta: '¿Con qué se cuadra la cuenta 300 Mercaderías al cierre?',
+      correcta: 'Con el inventario valorado y firmado por el cliente',
+      incorrectas: ['Con las compras del año', 'Con las ventas del año'],
+      explicacion: 'Tras el asiento de variación de existencias, la 300 debe coincidir exactamente con el inventario final.',
+    },
+
+    /* --- Correcciones --- */
+    {
+      id: 'b6-q19',
+      pregunta: 'Encuentras un error en un trimestre ya declarado. ¿Cómo lo corriges?',
+      correcta: 'Con un asiento de rectificación, y rectificando la declaración si afecta a lo declarado',
+      incorrectas: ['Borrando el asiento original y rehaciéndolo', 'No se corrige: el trimestre ya está presentado'],
+      explicacion: 'No se borra lo declarado: se registra la corrección (para que quede rastro) y, si cambia el IVA o las retenciones, se rectifica la autoliquidación.',
+    },
+    {
+      id: 'b6-q20',
+      pregunta: 'Una reparación de 450 € se registró por error en la 213 Maquinaria. ¿Qué asiento de corrección haces?',
+      correcta: '622 Reparaciones al Debe; 213 al Haber',
+      incorrectas: ['213 al Debe; 622 al Haber', '681 al Debe; 281 al Haber'],
+      explicacion: 'Se saca el importe del inmovilizado y se lleva al gasto correcto. Si se hubiera amortizado, habría que deshacer también esa amortización.',
+    },
+    {
+      id: 'b6-q21',
+      pregunta: 'El IVA de una comida con clientes se registró en la 472. ¿Cómo lo corriges?',
+      correcta: '627 al Debe; 472 al Haber por el IVA',
+      incorrectas: ['472 al Debe; 627 al Haber', 'No hace falta: el IVA es el mismo'],
+      explicacion: 'Ese IVA no es deducible: se saca de la 472 y se suma al gasto. Si ya se había deducido en un 303 presentado, hay que regularizarlo.',
+    },
+    {
+      id: 'b6-q22',
+      pregunta: 'Una factura de compra se registró dos veces. ¿Qué haces?',
+      correcta: 'Un asiento inverso de la duplicada, que deja una sola',
+      incorrectas: ['Registrarla una tercera vez en negativo en la 700', 'Nada: el proveedor lo arreglará'],
+      explicacion: 'El contraasiento (los mismos importes en los lados contrarios) anula la factura duplicada: gasto, IVA y deuda.',
+    },
+    {
+      id: 'b6-q23',
+      pregunta: 'Un pago a un proveedor se registró por error como 430 al Debe y 572 al Haber. ¿Qué asiento lo corrige?',
+      correcta: '400 al Debe; 430 al Haber',
+      incorrectas: ['430 al Debe; 400 al Haber', '572 al Debe; 430 al Haber'],
+      explicacion: 'El banco está bien. Lo que hay que corregir es la cuenta del tercero: se cancela lo cargado al cliente y se carga al proveedor.',
+    },
+    {
+      id: 'b6-q24',
+      pregunta: '¿Por qué no se borran los asientos de periodos ya cerrados?',
+      correcta: 'Para que quede rastro de qué se corrigió y cuándo, y no alterar lo ya declarado',
+      incorrectas: ['Porque el programa no deja hacerlo nunca', 'Porque los asientos no se pueden corregir'],
+      explicacion: 'La trazabilidad es clave en una revisión o inspección: el asiento original y su corrección explican la historia completa.',
+    },
+
+    /* --- Balance --- */
+    {
+      id: 'b6-q25',
+      pregunta: '¿Cómo se calcula el fondo de maniobra?',
+      correcta: 'Activo corriente − pasivo corriente',
+      incorrectas: ['Activo total − pasivo total', 'Patrimonio neto − activo no corriente − pasivo'],
+      explicacion: 'Mide el margen entre lo que se convertirá en dinero en menos de un año y lo que hay que pagar en ese plazo.',
+    },
+    {
+      id: 'b6-q26',
+      pregunta: 'Una distribuidora que cobra a 90 días tiene fondo de maniobra negativo. ¿Qué le dices?',
+      correcta: 'Que puede tener tensiones de tesorería para pagar sus deudas a corto plazo',
+      incorrectas: ['Que es una situación ideal', 'Que no tiene ningún significado'],
+      explicacion: 'Si lo que debe pagar pronto supera lo que va a cobrar pronto, necesitará financiación o renegociar plazos. En negocios que cobran al contado puede ser normal, pero no en una distribuidora.',
+    },
+    {
+      id: 'b6-q27',
+      pregunta: '¿Cómo se calcula el ratio de liquidez?',
+      correcta: 'Activo corriente / pasivo corriente',
+      incorrectas: ['Tesorería / activo total', 'Pasivo corriente / activo corriente'],
+      explicacion: 'Un valor por encima de 1 indica que el activo corriente cubre las deudas a corto plazo.',
+    },
+    {
+      id: 'b6-q28',
+      pregunta: '¿Cómo se calcula el ratio de endeudamiento más habitual?',
+      correcta: 'Pasivo total / (patrimonio neto + pasivo)',
+      incorrectas: ['Patrimonio neto / activo no corriente', 'Ventas / pasivo total'],
+      explicacion: 'Indica qué parte de la financiación procede de terceros. Cuanto más alto, más depende la empresa de bancos y proveedores.',
+    },
+    {
+      id: 'b6-q29',
+      pregunta: 'Las pérdidas han dejado el patrimonio neto de una S.L. por debajo de la mitad de su capital. ¿Qué implica?',
+      correcta: 'Que está en causa de disolución, salvo que se restablezca el equilibrio patrimonial',
+      incorrectas: ['Nada, mientras pague sus deudas', 'Que debe cambiar de forma jurídica'],
+      explicacion: 'La Ley de Sociedades de Capital obliga a actuar (aumentar o reducir capital, o disolver) cuando el patrimonio neto cae por debajo de la mitad del capital. Hay que avisar de inmediato.',
+    },
+    {
+      id: 'b6-q30',
+      pregunta: 'En una empresa equilibrada, ¿con qué se debería financiar el activo no corriente?',
+      correcta: 'Con financiación a largo plazo: patrimonio neto y pasivo no corriente',
+      incorrectas: ['Con deudas a corto plazo con proveedores', 'Con el saldo de clientes'],
+      explicacion: 'Lo que se usa durante muchos años debe financiarse con recursos que no haya que devolver pronto. Si no, aparecen tensiones de liquidez.',
+    },
+    {
+      id: 'b6-q31',
+      pregunta: '¿Qué mide el ratio de tesorería inmediata?',
+      correcta: 'La capacidad de pagar el pasivo corriente solo con el dinero disponible',
+      incorrectas: ['El beneficio sobre las ventas', 'La parte del activo financiada con deuda'],
+      explicacion: 'Se calcula como tesorería / pasivo corriente. No cuenta con cobrar a clientes ni con vender existencias.',
+    },
+    {
+      id: 'b6-q32',
+      pregunta: '¿Cuál es la diferencia básica entre el balance y la cuenta de pérdidas y ganancias?',
+      correcta: 'El balance es una foto a una fecha; la cuenta de resultados resume todo el año',
+      incorrectas: ['El balance solo recoge gastos', 'Son el mismo documento con otro nombre'],
+      explicacion: 'El balance muestra saldos a un día concreto. La cuenta de pérdidas y ganancias acumula ingresos y gastos de todo el periodo.',
+    },
+    {
+      id: 'b6-q33',
+      pregunta: 'Clientes 35.000 € y ventas anuales 412.000 €. ¿Cuál es aproximadamente el periodo medio de cobro?',
+      correcta: 'Unos 31 días',
+      incorrectas: ['Unos 12 días', 'Unos 85 días'],
+      explicacion: '35.000 / 412.000 × 365 ≈ 31 días. Es lo que tardan de media los clientes en pagar.',
+    },
+    {
+      id: 'b6-q34',
+      pregunta: '¿Qué diferencia hay entre el resultado antes de impuestos y el resultado del ejercicio?',
+      correcta: 'El gasto por Impuesto sobre Sociedades',
+      incorrectas: ['Las amortizaciones', 'El IVA del año'],
+      explicacion: 'Al resultado antes de impuestos se le resta el impuesto sobre beneficios para llegar al resultado del ejercicio. El IVA no es gasto ni ingreso.',
+    },
+
+    /* --- Cuenta de resultados --- */
+    {
+      id: 'b6-q35',
+      pregunta: '¿Qué mide el resultado de explotación?',
+      correcta: 'Lo que gana el negocio con su actividad, antes de intereses e impuestos',
+      incorrectas: ['Lo que queda tras pagar impuestos', 'El dinero que hay en el banco'],
+      explicacion: 'Recoge ingresos y gastos de la actividad (ventas, compras, personal, amortizaciones…), sin los financieros ni el impuesto.',
+    },
+    {
+      id: 'b6-q36',
+      pregunta: '¿Cómo se calcula el margen neto?',
+      correcta: 'Resultado del ejercicio / ventas',
+      incorrectas: ['Ventas / resultado del ejercicio', 'Resultado de explotación / activo total'],
+      explicacion: 'Indica cuántos euros de beneficio final quedan de cada 100 € vendidos.',
+    },
+    {
+      id: 'b6-q37',
+      pregunta: '¿Qué es el EBITDA, en términos sencillos?',
+      correcta: 'El resultado de explotación antes de amortizaciones',
+      incorrectas: ['El beneficio después de impuestos', 'La suma de las ventas y el IVA'],
+      explicacion: 'Se suele calcular como resultado de explotación + amortizaciones. Aproxima lo que genera la actividad antes de intereses, impuestos y amortizaciones.',
+    },
+    {
+      id: 'b6-q38',
+      pregunta: 'Un cliente ha tenido beneficio, pero no tiene dinero en el banco. ¿Cómo se lo explicas?',
+      correcta: 'Beneficio no es tesorería: puede haber ventas sin cobrar, existencias, inversiones o cuotas de préstamo',
+      incorrectas: ['Es imposible: si hay beneficio, hay dinero', 'Seguro que hay un error en la contabilidad'],
+      explicacion: 'El resultado sigue el devengo; la tesorería, los cobros y pagos. Las cuotas de capital de un préstamo o la compra de una máquina sacan dinero sin ser gasto del año.',
+    },
+    {
+      id: 'b6-q39',
+      pregunta: 'El resultado financiero de un cliente es muy negativo. ¿Qué indica?',
+      correcta: 'Que los intereses de su deuda pesan mucho en el resultado',
+      incorrectas: ['Que vende con pérdidas', 'Que ha cobrado intereses de sus inversiones'],
+      explicacion: 'El resultado financiero compara ingresos y gastos financieros. Si es muy negativo, la financiación es cara o excesiva.',
+    },
+    {
+      id: 'b6-q40',
+      pregunta: 'Las ventas de un cliente suben un 15 %, pero su margen neto baja. ¿Qué le explicas?',
+      correcta: 'Que sus costes han crecido más que sus ventas',
+      incorrectas: ['Que está vendiendo menos', 'Que el IVA ha subido'],
+      explicacion: 'Vender más no garantiza ganar más: si compras, personal u otros gastos crecen más deprisa, el margen se estrecha.',
+    },
+  ],
+
+  casos: [
+    {
+      id: 'b6-sumas-saldos',
+      tipo: 'clasificar',
+      cliente: { nombre: 'Floristería Azahar, S.L.', actividad: 'Floristería' },
+      titulo: 'Revisa el balance de sumas y saldos',
+      enunciado: 'Antes de cerrar el tercer trimestre, revisa estos saldos de la floristería. Indica cuáles son normales y cuáles delatan un error que hay que revisar.',
+      documento: SUMAS_SALDOS_FLORISTERIA,
+      rejilla: 'grid-cols-2',
+      opciones: [
+        { valor: 'ok', etiqueta: 'Normal' },
+        { valor: 'revisar', etiqueta: 'Revisar' },
+      ],
+      cuentas: [
+        { id: 'capital', texto: '100 Capital social · acreedor 6.000,00', correcta: 'ok', pista: 'El capital es patrimonio neto.', explicacion: 'Saldo acreedor: correcto.' },
+        { id: 'amort', texto: '281 Amortización acumulada · deudor 320,00', correcta: 'revisar', pista: '¿Por qué lado crece la amortización acumulada?', explicacion: 'Debe ser acreedor: hay un asiento invertido.' },
+        { id: 'viveros', texto: 'Proveedor Viveros del Turia · deudor 1.210,00', correcta: 'revisar', pista: 'A un proveedor normalmente se le debe dinero.', explicacion: 'Pago duplicado o factura sin registrar.' },
+        { id: 'hotel', texto: 'Cliente Hotel Palmeras · acreedor 300,00', correcta: 'revisar', pista: 'Un cliente normalmente nos debe dinero.', explicacion: 'Cobro duplicado o abono sin aplicar.' },
+        { id: 'iva', texto: '472 IVA soportado · deudor 1.845,60 (con el 303 ya liquidado)', correcta: 'revisar', pista: 'Tras liquidar el 303, ¿qué saldo deberían tener 472 y 477?', explicacion: 'Facturas fuera del trimestre o liquidación incompleta.' },
+        { id: 'ret', texto: '4751 Retenciones practicadas · acreedor 712,50', correcta: 'ok', pista: 'Las retenciones del trimestre se pagan en el mes siguiente.', explicacion: 'Pendiente del 111 y 115 de octubre: normal si cuadra con ellos.' },
+        { id: 'ss', texto: '476 Seguridad Social · acreedor 1.540,00', correcta: 'ok', pista: 'Los seguros sociales de septiembre se pagan en octubre.', explicacion: 'Normal si coincide con el RLC.' },
+        { id: 'pendiente', texto: '555 Partidas pendientes · acreedor 605,00', correcta: 'revisar', pista: 'Esta cuenta no debería quedar con saldo al cerrar el trimestre.', explicacion: 'Ingreso sin aplicar: aclararlo antes del 303.' },
+        { id: 'caja', texto: '570 Caja · acreedor 85,00', correcta: 'revisar', pista: '¿Puede una caja física tener dinero negativo?', explicacion: 'Imposible: falta registrar una entrada de efectivo.' },
+        { id: 'banco', texto: '572 Bancos · deudor 12.430,25', correcta: 'ok', pista: 'El dinero en el banco es un activo.', explicacion: 'Normal (y conciliado con el extracto).' },
+      ],
+      resumenOk: 'Seis saldos para revisar en diez minutos de lectura: esta revisión, hecha cada trimestre, evita la mayoría de los errores que llegan a una declaración.',
+    },
+    {
+      id: 'b6-reparacion',
+      tipo: 'asiento',
+      cliente: { nombre: 'Horno San Blas, S.L.', actividad: 'Panadería y bollería' },
+      titulo: 'Una reparación activada por error',
+      enunciado: 'Al cuadrar la cuenta 213 con la ficha de inmovilizado, el mayor tiene 450 € de más: una factura de un servicio técnico que no es una máquina nueva. Registra el asiento de corrección.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Mayor de la cuenta 213 Maquinaria · 2026',
+        subtitulo: '21300000 · Maquinaria',
+        emisor: { nombre: 'Horno San Blas, S.L.', nif: 'B98221133' },
+        columnas: ['Fecha', 'Concepto', 'Debe', 'Saldo'],
+        filas: [
+          ['01/01', 'Saldo inicial (amasadora)', '6.000,00', '6.000,00'],
+          ['12/10', 'Horno de convección · Maquinaria Hostelera', '4.800,00', '10.800,00'],
+          ['18/11', 'Servicio Técnico Turia · reparación de la cámara de frío', '450,00', '11.250,00'],
+        ],
+        notas: ['La ficha de inmovilizado suma 10.800,00 €: el mayor no cuadra con ella.', 'La factura de Servicio Técnico Turia es una reparación: sustituye una pieza averiada y no amplía la vida ni la capacidad de la cámara.'],
+      },
+      cuentasDisponibles: ['622', '213', '681', '281', '472', '410', '629'],
+      solucion: [{ cuenta: '622', debe: 450 }, { cuenta: '213', haber: 450 }],
+      pista: 'Saca el importe de la cuenta de inmovilizado y llévalo al gasto que le corresponde. El IVA y la deuda con el proveedor estaban bien.',
+      explicacion: 'Una reparación que conserva el bien es gasto del año: 622 al Debe. Se saca de la 213 (Haber). El IVA (472) y el acreedor (410) ya eran correctos, así que no se tocan.',
+    },
+    {
+      id: 'b6-iva-no-deducible',
+      tipo: 'asiento',
+      cliente: { nombre: 'Reformas Integrales Turia, S.L.', actividad: 'Empresa de reformas' },
+      titulo: 'IVA no deducible en la 472',
+      enunciado: 'Al preparar el 303, ves que esta factura de restaurante se registró como 627 por 180 €, 472 por 18 € y 410 por 198 €. Era una comida con un cliente. Registra la corrección antes de presentar.',
+      documento: {
+        tipo: 'factura',
+        color: '#9a3412',
+        emisor: { nombre: 'Restaurante El Racó del Port, S.L.', nif: 'B98551177', direccion: ['C/ de la Reina, 70 · 46011 Valencia'] },
+        receptor: { nombre: 'Reformas Integrales Turia, S.L.', nif: 'B98443322', direccion: ['C/ Músico Ginés, 31 · 46022 Valencia'] },
+        numero: 'RP-2026/3381',
+        fecha: '24/09/2026',
+        formaPago: 'Tarjeta',
+        menciones: ['Comida de trabajo con un cliente (4 comensales).'],
+        lineas: [
+          { concepto: 'Menú degustación', cantidad: 4, precio: 45, iva: 10 },
+        ],
+      },
+      cuentasDisponibles: ['627', '472', '477', '410', '629', '6xx'],
+      solucion: [{ cuenta: '627', debe: 18 }, { cuenta: '472', haber: 18 }],
+      pista: 'El IVA de las atenciones a clientes no se deduce. ¿Dónde tiene que acabar esa cuota?',
+      explicacion: 'Se saca el IVA de la 472 (Haber, 18 €) y se suma al gasto de relaciones públicas (627, Debe). Así no se deduce en el 303. La deuda con el restaurante (198 €) estaba bien.',
+    },
+    {
+      id: 'b6-duplicada',
+      tipo: 'asiento',
+      cliente: { nombre: 'Moda Valentina, S.L.', actividad: 'Tienda de ropa' },
+      titulo: 'Una factura registrada dos veces',
+      enunciado: 'El proveedor reclama un saldo menor del que tenéis en contabilidad. Revisas su mayor y encuentras el problema. Anula la factura duplicada.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Mayor de la cuenta 400 · Textiles Albufera, S.L.',
+        subtitulo: '40000003 · octubre 2026',
+        emisor: { nombre: 'Moda Valentina, S.L.', nif: 'B98765432' },
+        columnas: ['Fecha', 'Concepto', 'Haber', 'Saldo'],
+        filas: [
+          ['06/10', 'Fra. FV-2026/1184 (600: 1.250,00 + 472: 262,50)', '1.512,50', '1.512,50'],
+          ['09/10', 'Fra. FV-2026/1184 (600: 1.250,00 + 472: 262,50)', '1.512,50', '3.025,00'],
+        ],
+        notas: ['Es la factura del Bloque 1: el cliente la reenvió y se registró otra vez.'],
+      },
+      cuentasDisponibles: ['400', '600', '472', '477', '608', '572'],
+      solucion: [{ cuenta: '400', debe: 1512.5 }, { cuenta: '600', haber: 1250 }, { cuenta: '472', haber: 262.5 }],
+      pista: 'Haz el asiento inverso de la factura duplicada: las mismas cuentas e importes, en los lados contrarios.',
+      explicacion: 'El contraasiento anula la factura repetida: baja la deuda con el proveedor (400 al Debe, 1.512,50 €), la compra (600 al Haber, 1.250 €) y el IVA (472 al Haber, 262,50 €). No se usa la 608: no hay ninguna devolución de mercancía, solo un error de registro.',
+    },
+    {
+      id: 'b6-pago-mal',
+      tipo: 'asiento',
+      cliente: { nombre: 'Floristería Azahar, S.L.', actividad: 'Floristería' },
+      titulo: 'Un pago contra la cuenta equivocada',
+      enunciado: 'Un cliente que ya pagó todo aparece con 300 € pendientes de cobro, y un proveedor os reclama una factura que ya se transfirió. Revisa el mayor del cliente y corrige el asiento.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Mayor de la cuenta 430 · Restaurante La Bahía, S.L.',
+        subtitulo: '43000011 · septiembre 2026',
+        emisor: { nombre: 'Floristería Azahar, S.L.', nif: 'B98334411' },
+        columnas: ['Fecha', 'Concepto', 'Debe', 'Haber'],
+        filas: [
+          ['05/09', 'Fra. 2026/091 · centros de mesa', '726,00', ''],
+          ['22/09', 'Transferencia a Embalajes Levante, S.L. (fra. EL-552)', '300,00', ''],
+          ['30/09', 'Cobro fra. 2026/091', '', '726,00'],
+        ],
+        notas: ['Embalajes Levante, S.L. es un proveedor (cuenta 400). En su mayor, la factura EL-552 de 300,00 € sigue pendiente aunque el banco ya la pagó.'],
+      },
+      cuentasDisponibles: ['400', '430', '572', '555', '600', '700'],
+      solucion: [{ cuenta: '400', debe: 300 }, { cuenta: '430', haber: 300 }],
+      pista: 'La salida del banco estaba bien. Solo hay que llevar el cargo del cliente a la cuenta del proveedor al que se pagó.',
+      explicacion: 'Se cancela el cargo indebido en el cliente (430 al Haber, 300 €) y se carga al proveedor pagado (400 al Debe), que queda saldado. El banco (572) no se toca: el dinero sí salió.',
+    },
+    {
+      id: 'b6-cuadres',
+      tipo: 'clasificar',
+      titulo: '¿Con qué se cuadra cada cuenta?',
+      enunciado: 'Preparas la carpeta de cierre del trimestre. Asigna a cada cuenta el documento con el que se cuadra.',
+      rejilla: 'grid-cols-2 sm:grid-cols-3',
+      opciones: [
+        { valor: 'extracto', etiqueta: 'Extracto' },
+        { valor: 'rlc', etiqueta: 'RLC' },
+        { valor: 'retenciones', etiqueta: '111 y 115' },
+        { valor: 'iva', etiqueta: '303' },
+        { valor: 'inmovilizado', etiqueta: 'Ficha inmov.' },
+        { valor: 'inventario', etiqueta: 'Inventario' },
+      ],
+      cuentas: [
+        { codigo: '572', correcta: 'extracto', pista: 'Es el dinero de la cuenta corriente.', explicacion: 'Conciliación bancaria.' },
+        { codigo: '476', correcta: 'rlc', pista: 'Deuda con la Seguridad Social.', explicacion: 'Recibo de liquidación de cotizaciones.' },
+        { codigo: '4751', correcta: 'retenciones', pista: 'Retenciones practicadas.', explicacion: 'Modelos 111 y 115.' },
+        { codigo: '477', correcta: 'iva', pista: 'IVA repercutido.', explicacion: 'Modelo 303 y libro de facturas expedidas.' },
+        { codigo: '472', correcta: 'iva', pista: 'IVA soportado.', explicacion: 'Modelo 303 y libro de facturas recibidas.' },
+        { codigo: '281', correcta: 'inmovilizado', pista: 'Amortización acumulada.', explicacion: 'Ficha o cuadro de inmovilizado.' },
+        { codigo: '300', correcta: 'inventario', pista: 'Mercancía en el almacén.', explicacion: 'Inventario firmado y valorado a coste.' },
+      ],
+      resumenOk: 'Con estos siete cuadres documentados, cualquier revisión del trimestre se resuelve en minutos.',
+    },
+    {
+      id: 'b6-balance',
+      tipo: 'calculo',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Analiza el balance',
+      enunciado: 'El administrador quiere saber si la empresa va bien de dinero. Calcula los indicadores básicos con el balance de 2026.',
+      documento: BALANCE_LEVANTE_2026,
+      preguntas: [
+        { id: 'fm', texto: 'Fondo de maniobra', respuesta: 35000, unidad: '€', pista: 'Activo corriente (existencias + clientes + tesorería) − pasivo corriente.', explicacion: '(25.000 + 35.000 + 20.000) − 45.000 = 35.000 €.' },
+        { id: 'liquidez', texto: 'Ratio de liquidez (dos decimales)', respuesta: 1.78, unidad: '', tolerancia: 0.01, pista: 'Activo corriente / pasivo corriente.', explicacion: '80.000 / 45.000 = 1,78.' },
+        { id: 'endeudamiento', texto: 'Endeudamiento (porcentaje, un decimal)', respuesta: 58.4, unidad: '%', tolerancia: 0.1, pista: 'Pasivo total (no corriente + corriente) / total patrimonio neto y pasivo.', explicacion: '(28.000 + 45.000) / 125.000 = 58,4 %.' },
+      ],
+      resumenOk: 'Lectura para el cliente: «Lo que vas a cobrar y lo que tienes en el banco cubre casi dos veces lo que debes pagar este año. Algo más de la mitad de tu empresa se financia con deuda: es razonable, pero no conviene que suba».',
+    },
+    {
+      id: 'b6-pyg',
+      tipo: 'calculo',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Analiza la cuenta de resultados',
+      enunciado: 'Con la cuenta de pérdidas y ganancias de 2026 (la misma del cierre del Bloque 5), calcula los escalones y el margen para explicárselos al cliente.',
+      documento: PYG_LEVANTE_ANALISIS,
+      preguntas: [
+        { id: 'explotacion', texto: 'Resultado de explotación', respuesta: 44500, unidad: '€', pista: 'Ventas menos los gastos de la actividad, sin los financieros ni el impuesto.', explicacion: '412.000 − 280.000 − 52.000 − 26.500 − 9.000 = 44.500 €.' },
+        { id: 'ejercicio', texto: 'Resultado del ejercicio', respuesta: 33096, unidad: '€', pista: 'Al resultado de explotación réstale los gastos financieros y el impuesto.', explicacion: '44.500 − 3.500 − 7.904 = 33.096 €, el mismo beneficio que regularizaste en el Bloque 5.' },
+        { id: 'margen', texto: 'Margen neto (porcentaje, un decimal)', respuesta: 8, unidad: '%', tolerancia: 0.1, pista: 'Resultado del ejercicio / ventas × 100.', explicacion: '33.096 / 412.000 = 8,0 %.' },
+      ],
+      resumenOk: 'Lectura para el cliente: «El negocio gana 44.500 € con su actividad; tras pagar intereses e impuestos te quedan 33.096 €, unos 8 € de cada 100 que vendes».',
+    },
+    {
+      id: 'b6-explicar',
+      tipo: 'clasificar',
+      titulo: '¿Buena señal o alerta?',
+      enunciado: 'Repasas los números de varios clientes antes de reunirte con ellos. Indica qué situaciones son una buena señal y cuáles una alerta que debes comentarles.',
+      rejilla: 'grid-cols-2',
+      opciones: [
+        { valor: 'bien', etiqueta: 'Buena señal' },
+        { valor: 'alerta', etiqueta: 'Alerta' },
+      ],
+      cuentas: [
+        { id: 'fm-neg', texto: 'Una distribuidora que cobra a 90 días tiene fondo de maniobra negativo', correcta: 'alerta', pista: '¿Podrá pagar lo que vence pronto?', explicacion: 'Riesgo de tensiones de tesorería.' },
+        { id: 'liquidez', texto: 'Ratio de liquidez de 1,8', correcta: 'bien', pista: 'Compáralo con 1.', explicacion: 'El activo corriente cubre holgadamente las deudas a corto plazo.' },
+        { id: 'pn', texto: 'Las pérdidas dejan el patrimonio neto por debajo de la mitad del capital', correcta: 'alerta', pista: 'Recuerda lo que dice la Ley de Sociedades de Capital.', explicacion: 'Causa de disolución: hay que actuar.' },
+        { id: 'margen', texto: 'Las ventas suben un 10 % y el margen neto también mejora', correcta: 'bien', pista: '¿Crecen los costes más que las ventas?', explicacion: 'Crece y es más rentable.' },
+        { id: 'pmc', texto: 'El periodo medio de cobro pasa de 30 a 95 días', correcta: 'alerta', pista: '¿Qué pasa con la caja si los clientes tardan más en pagar?', explicacion: 'Los clientes financian menos y la empresa necesita más caja.' },
+        { id: 'financiero', texto: 'El resultado de explotación es positivo, pero los intereses se llevan casi todo el beneficio', correcta: 'alerta', pista: 'Fíjate en el resultado financiero.', explicacion: 'Financiación cara o excesiva.' },
+        { id: 'endeud', texto: 'El endeudamiento baja del 70 % al 55 % tras dos años de beneficios', correcta: 'bien', pista: '¿Depende más o menos de terceros?', explicacion: 'Más financiación propia y menos riesgo.' },
+      ],
+      resumenOk: 'Explicar los números es la parte más valorada del trabajo con clientes: ellos no ven asientos, ven si su empresa va bien o no.',
+    },
+  ],
+};
+
 const BLOQUES = [
   {
     id: 0,
@@ -4435,11 +5950,11 @@ const BLOQUES = [
     codigo: 'B5',
     titulo: 'Cierre y Periodificación',
     tituloLargo: 'Operaciones de Cierre y Periodificación',
-    descripcion: 'El soporte al cierre: amortizar, imputar cada gasto e ingreso a su ejercicio, reconocer el riesgo de morosos, provisionar el Impuesto sobre Sociedades y regularizar el resultado.',
+    descripcion: 'El soporte al cierre del ejercicio: amortizar, imputar cada gasto a su año, ajustar las existencias, pasar a corto plazo lo que vence, calcular el Impuesto sobre Sociedades y regularizar el resultado.',
     distintivo: null,
     icono: ICONOS.cierre,
-    temas: ['Amortizaciones (681 / 281)', 'Periodificaciones (480 / 485)', 'Variación de existencias', 'Deterioro de clientes', 'Largo a corto plazo', 'Impuesto sobre Sociedades'],
-    contenido: { teoria: [], test: [], casos: [] },
+    temas: ['Amortizaciones (681 / 281)', 'Periodificaciones (480 / 485)', 'Variación de existencias (610)', 'Largo a corto plazo (170 → 520)', 'Impuesto sobre Sociedades (6300)', 'Regularización (129)'],
+    contenido: CONTENIDO_B5,
   },
   {
     id: 6,
@@ -4449,8 +5964,8 @@ const BLOQUES = [
     descripcion: 'La visión senior: revisar tu propio trabajo antes de que lo haga otro, cuadrar la contabilidad con los impuestos y leer lo que cuentan el balance y la cuenta de resultados.',
     distintivo: null,
     icono: ICONOS.analisis,
-    temas: ['Balance de sumas y saldos', 'Saldos anómalos', 'Cuadre de IVA y retenciones', 'Balance y PyG', 'Ratios básicos'],
-    contenido: { teoria: [], test: [], casos: [] },
+    temas: ['Balance de sumas y saldos', 'Saldos anómalos', 'Cuadres con documentos', 'Asientos de corrección', 'Leer el balance y la PyG', 'Explicar los números al cliente'],
+    contenido: CONTENIDO_B6,
   },
 ];
 
@@ -4479,6 +5994,9 @@ const IDS_PESTANAS = PESTANAS.map((p) => p.id);
 const LETRAS = ['A', 'B', 'C', 'D'];
 const CLAVE_RUTA = 'repasoPGC.ruta';
 const CLAVE_PROGRESO = 'repasoPGC.progreso';
+const CLAVE_NOMBRE = 'repasoPGC.nombre';
+const CLAVE_CERTIFICADO = 'repasoPGC.certificado';
+const RUTA_CERTIFICADO = '#/certificado';
 const PORCENTAJE_APROBADO = 0.8; // por defecto, si el bloque no define configTest
 
 // Nº de preguntas por intento y aciertos necesarios para aprobar
@@ -4494,7 +6012,8 @@ function configTest(bloque) {
    4. ESTADO Y RUTAS
    ===================================================================== */
 const estado = {
-  bloque: 0,          // id del bloque activo (0–5)
+  vista: 'bloque',    // 'bloque' | 'certificado'
+  bloque: 0,          // id del bloque activo (0–6)
   pestana: 'teoria',  // 'teoria' | 'test' | 'casos'
   menuAbierto: false, // solo relevante en móvil
 };
@@ -4505,6 +6024,7 @@ const ui = {
   test: {},     // por bloque: { indice, respuestas: [], terminado }
   casos: {},    // por bloque: { activo }  ·  y por caso: ui.caso[id]
   caso: {},
+  celebrar: false,    // lanza el confeti al abrir el certificado recién desbloqueado
   animar: false,      // anima el feedback recién generado
   sacudir: null,      // clave del elemento que debe «temblar» tras un error
 };
@@ -4518,6 +6038,7 @@ function crearRuta(bloque, pestana) {
 }
 
 function leerRuta(hash) {
+  if (hash === RUTA_CERTIFICADO) return { certificado: true };
   const m = /^#\/bloque-(\d+)\/([a-z]+)$/.exec(hash || '');
   if (!m) return null;
   const bloque = Number(m[1]);
@@ -4532,8 +6053,17 @@ function navegar(bloque, pestana) {
   else location.hash = ruta; // dispara 'hashchange' → aplicarRuta
 }
 
-function aplicarRuta({ bloque, pestana }) {
-  const cambiaBloque = bloque !== estado.bloque;
+function aplicarRuta(ruta) {
+  if (ruta.certificado) {
+    const cambia = estado.vista !== 'certificado';
+    estado.vista = 'certificado';
+    renderizar();
+    if (cambia) window.scrollTo(0, 0);
+    return;
+  }
+  const { bloque, pestana } = ruta;
+  const cambiaBloque = bloque !== estado.bloque || estado.vista !== 'bloque';
+  estado.vista = 'bloque';
   estado.bloque = bloque;
   estado.pestana = pestana;
   guardarJSON(CLAVE_RUTA, { bloque, pestana });
@@ -4562,7 +6092,17 @@ function evaluarProgreso(bloque, { avisar = true } = {}) {
   if (!avisar) return;
   actualizarMenu();
   actualizarProgresoBloque(bloque);
-  if (!antes && p.completado) mostrarAviso(`¡${bloque.codigo} completado! Test aprobado y los ${nCasos} casos resueltos.`);
+  if (!antes && p.completado) {
+    if (certificadoDesbloqueado()) {
+      registrarFechaCertificado();
+      mostrarAviso('¡Has completado los 7 bloques! Abriendo tu certificado…');
+      vibrar([30, 50, 30, 50, 80]);
+      ui.celebrar = true;
+      setTimeout(() => { location.hash = RUTA_CERTIFICADO; }, 1800);
+    } else {
+      mostrarAviso(`¡${bloque.codigo} completado! Test aprobado y los ${nCasos} casos resueltos.`);
+    }
+  }
 }
 
 /* =====================================================================
@@ -4598,7 +6138,7 @@ function construirMenu() {
 function actualizarMenu() {
   $$('#menu-bloques a').forEach((enlace) => {
     const id = Number(enlace.dataset.bloque);
-    const activo = id === estado.bloque;
+    const activo = estado.vista === 'bloque' && id === estado.bloque;
     const icono = $('[data-icono]', enlace);
 
     if (activo) enlace.setAttribute('aria-current', 'page');
@@ -4619,6 +6159,25 @@ function actualizarMenu() {
   const hechos = BLOQUES.filter((b) => progreso[b.id] && progreso[b.id].completado).length;
   $('#progreso-texto').textContent = `${hechos} / ${total}`;
   $('#progreso-barra').style.width = `${(hechos / total) * 100}%`;
+  actualizarEnlaceCertificado(hechos, total);
+}
+
+function actualizarEnlaceCertificado(hechos, total) {
+  const enlace = $('#enlace-certificado');
+  if (!enlace) return;
+  const activo = estado.vista === 'certificado';
+  const abierto = hechos === total;
+  if (activo) enlace.setAttribute('aria-current', 'page');
+  else enlace.removeAttribute('aria-current');
+  enlace.classList.remove(...CLASES_ENLACE_ACTIVO, ...CLASES_ENLACE_INACTIVO);
+  enlace.classList.add(...(activo ? CLASES_ENLACE_ACTIVO : CLASES_ENLACE_INACTIVO));
+  const icono = $('[data-icono]', enlace);
+  icono.className = `flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition ${abierto ? 'bg-amber-400 text-tinta-950' : (activo ? 'bg-white/15 text-white' : 'bg-white/5 text-white/60')}`;
+  icono.innerHTML = svgIcono(abierto ? ICONO_MEDALLA : ICONO_CANDADO);
+  const marca = $('[data-estado]', enlace);
+  marca.textContent = abierto ? '¡Listo!' : `${hechos}/${total}`;
+  marca.className = `shrink-0 rounded-md px-1.5 py-0.5 font-mono text-[11px] font-semibold ${abierto ? 'bg-amber-400/20 text-amber-200' : 'bg-white/5 text-white/50'}`;
+  enlace.setAttribute('aria-label', abierto ? 'Certificado final: desbloqueado' : `Certificado final: bloqueado, ${hechos} de ${total} bloques completados`);
 }
 
 function actualizarCabecera(bloque) {
@@ -4704,12 +6263,21 @@ function actualizarNavegacionInferior() {
   const btnAnt = $('#btn-anterior');
   const btnSig = $('#btn-siguiente');
   btnAnt.disabled = !anterior;
-  btnSig.disabled = !siguiente;
+  btnSig.disabled = false;
   $('[data-nombre]', btnAnt).textContent = anterior ? `${anterior.codigo} · ${anterior.titulo}` : '—';
-  $('[data-nombre]', btnSig).textContent = siguiente ? `${siguiente.codigo} · ${siguiente.titulo}` : '—';
+  $('[data-nombre]', btnSig).textContent = siguiente ? `${siguiente.codigo} · ${siguiente.titulo}` : 'Certificado final';
 }
 
 function renderizar() {
+  const enCertificado = estado.vista === 'certificado';
+  $('#vista-bloque').classList.toggle('hidden', enCertificado);
+  $('#vista-certificado').classList.toggle('hidden', !enCertificado);
+  if (enCertificado) {
+    actualizarMenu();
+    renderizarCertificado();
+    return;
+  }
+  $('#vista-certificado').innerHTML = '';
   const bloque = bloqueActivo();
   const pestana = PESTANAS.find((p) => p.id === estado.pestana);
   actualizarMenu();
@@ -5064,7 +6632,7 @@ function htmlResumen(doc) {
             <tbody>
               ${doc.filas.map((fila) => `
                 <tr class="border-b border-slate-200 align-top">
-                  ${fila.map((v, i) => `<td class="py-2 ${numerica(i) ? 'whitespace-nowrap text-right font-mono text-[12px] tabular-nums' : ''} ${i === 0 && doc.columnas.length > 2 ? 'whitespace-nowrap' : ''} ${i > 0 ? 'pl-2' : ''} ${i === fila.length - 1 && (doc.columnas.length === 2 || /saldo/i.test(doc.columnas[i])) ? 'font-semibold text-slate-900' : ''}">${escaparHTML(v)}</td>`).join('')}
+                  ${fila.map((v, i) => `<td class="py-2 ${numerica(i) ? 'whitespace-nowrap text-right font-mono text-[12px] tabular-nums' : ''} ${i === 0 && doc.columnas.length > 2 && String(v).length <= 10 ? 'whitespace-nowrap' : ''} ${i > 0 ? 'pl-2' : ''} ${i === fila.length - 1 && (doc.columnas.length === 2 || /saldo/i.test(doc.columnas[i])) ? 'font-semibold text-slate-900' : ''}">${escaparHTML(v)}</td>`).join('')}
                 </tr>`).join('')}
             </tbody>
           </table>
@@ -5106,12 +6674,13 @@ function htmlFactura(doc, resaltar) {
 
   const totales = `
     <div class="mt-3 ml-auto w-full max-w-[17rem] space-y-0.5 text-[12.5px]">
+      ${doc.exento ? filaTotal(doc.idioma === 'en' ? 'VAT exempt' : 'Exento de IVA', f(c.total)) : `
       <div ${campoDoc('base', resaltar)}>
         ${c.desglose.map((d) => filaTotal(`${t.base}${c.desglose.length > 1 ? ` (${d.pct} %)` : ''}`, f(d.base))).join('')}
       </div>
       <div ${campoDoc('iva', resaltar)}>
         ${c.desglose.map((d) => filaTotal(`${t.iva} ${d.pct} %`, f(d.cuota))).join('')}
-      </div>
+      </div>`}
       ${c.recargo ? c.desglose.filter((d) => d.re).map((d) => filaTotal(`Recargo equiv. ${pctTexto(d.re)} %`, f(d.cuotaRe))).join('') : ''}
       ${c.retencion ? filaTotal(`${t.retencion} ${doc.retencion} %`, `−${f(c.retencion)}`) : ''}
       ${c.suplidos ? filaTotal(t.suplidos, f(c.suplidos)) : ''}
@@ -5206,7 +6775,7 @@ function htmlTicket(doc) {
    ===================================================================== */
 function estadoTeoria(idBloque) {
   if (!ui.teoria[idBloque]) {
-    ui.teoria[idBloque] = { grupo: 1, paso: 0, campo: 'receptor', calc: { base: '1000', iva: 21, ret: 15 }, prestamo: { capital: '20000', tipo: '5', meses: '60' }, iva: { repercutido: '8000', soportado: '5000', compensar: '0' } };
+    ui.teoria[idBloque] = { grupo: 1, paso: 0, campo: 'receptor', calc: { base: '1000', iva: 21, ret: 15 }, amort: { valor: '4800', coef: 12, meses: '2' }, prestamo: { capital: '20000', tipo: '5', meses: '60' }, iva: { repercutido: '8000', soportado: '5000', compensar: '0' } };
   }
   return ui.teoria[idBloque];
 }
@@ -5265,6 +6834,7 @@ function renderizarPieza(pieza, bloque) {
     case 'calculadora': return piezaCalculadora(bloque, pieza);
     case 'prestamo': return piezaPrestamo(bloque);
     case 'liquidador-iva': return piezaLiquidador(bloque);
+    case 'amortizacion': return piezaAmortizacion(bloque);
     case 'documento': return `<div class="my-5">${htmlDocumento(pieza.documento)}</div>`;
     default: return '';
   }
@@ -5850,6 +7420,81 @@ function piezaCalculadora(bloque, pieza = {}) {
     </div>`;
 }
 
+// Calculadora de amortización lineal (coeficientes de la tabla oficial)
+const COEFICIENTES_AMORT = [
+  { coef: 2, ejemplo: 'Edificios' },
+  { coef: 10, ejemplo: 'Mobiliario' },
+  { coef: 12, ejemplo: 'Maquinaria' },
+  { coef: 16, ejemplo: 'Vehículos' },
+  { coef: 25, ejemplo: 'Ordenadores' },
+  { coef: 33, ejemplo: 'Software' },
+];
+
+function htmlAmortResultado(a) {
+  const aviso = (t) => `<p class="rounded-lg bg-tinta-900/[0.03] p-3 text-sm text-tinta-700/70">${t}</p>`;
+  const valor = leerImporte(a.valor);
+  const meses = Number(String(a.meses).trim());
+  if (!(valor > 0)) return aviso('Escribe el precio de adquisición del bien para ver el cálculo.');
+  if (!Number.isInteger(meses) || meses < 1 || meses > 12) return aviso('Los meses en uso dentro del año deben ser un número entre 1 y 12.');
+  const anual = r2(valor * a.coef / 100);
+  const dotacion = r2(anual * meses / 12);
+  const intangible = a.coef === 33;
+  const anios = Math.round((100 / a.coef) * 10) / 10;
+  const lineas = [{ cuenta: intangible ? '680' : '681', debe: dotacion }, { cuenta: intangible ? '280' : '281', haber: dotacion }];
+  const fila = (x, y, fuerte = false) => `<div class="flex justify-between gap-3 ${fuerte ? 'border-t border-tinta-900/10 pt-1.5 text-[15px] font-bold' : ''}"><span>${x}</span><span class="tabular-nums">${y}</span></div>`;
+  return `
+    <div class="space-y-1 rounded-lg bg-tinta-900/[0.03] p-3 text-sm">
+      ${fila(`Amortización de un año completo (${a.coef} %)`, formatoEuros(anual))}
+      ${fila('Meses en uso este año', `${meses} de 12`)}
+      ${fila('Dotación del ejercicio', formatoEuros(dotacion), true)}
+      ${fila('Valor neto al cierre del primer año', formatoEuros(r2(valor - dotacion)))}
+      ${fila('Vida útil mínima con este coeficiente', `${String(anios).replace('.', ',')} años`)}
+    </div>
+    <p class="mb-1.5 mt-3 text-[11px] font-semibold uppercase tracking-wider text-tinta-700/50">Asiento a 31 de diciembre${intangible ? ' · inmovilizado intangible' : ''}</p>
+    ${htmlAsiento(lineas, { compacto: true })}`;
+}
+
+function piezaAmortizacion(bloque) {
+  const { amort } = estadoTeoria(bloque.id);
+  const chips = COEFICIENTES_AMORT.map(({ coef, ejemplo }) => {
+    const sel = coef === amort.coef;
+    return `
+      <button type="button" data-accion="amort-coef" data-valor="${coef}" data-foco="amort-coef-${coef}" aria-pressed="${sel}"
+              class="flex min-h-[52px] flex-col items-center justify-center rounded-lg border-2 px-1 transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${sel ? 'border-tinta-900 bg-tinta-900 text-white' : 'border-tinta-900/10 bg-white hover:border-tinta-900/25'}">
+        <span class="text-sm font-bold">${coef} %</span>
+        <span class="text-[10.5px] font-medium ${sel ? 'text-white/70' : 'text-tinta-700/60'}">${ejemplo}</span>
+      </button>`;
+  }).join('');
+  const campo = (id, etiqueta, sufijo, modo, valor) => `
+    <div>
+      <label for="amort-${id}" class="mb-1.5 block text-xs font-semibold text-tinta-700/70">${etiqueta}</label>
+      <div class="relative">
+        <input id="amort-${id}" type="text" inputmode="${modo}" enterkeyhint="done" autocomplete="off" data-entrada="amort-${id}" data-foco="amort-${id}"
+               value="${escaparHTML(valor)}" placeholder="0"
+               class="h-[52px] w-full rounded-xl border-2 border-tinta-900/15 bg-white pl-4 pr-12 text-lg font-semibold tabular-nums outline-none transition focus:border-acento-500" />
+        <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-tinta-700/50">${sufijo}</span>
+      </div>
+    </div>`;
+  return `
+    <div class="my-6 overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm" data-widget="amortizacion">
+      <div class="border-b border-tinta-900/10 bg-tinta-900/[0.03] px-4 py-3">
+        <p class="text-sm font-bold">Calculadora de amortización</p>
+        <p class="text-xs text-tinta-700/70">Elige el tipo de bien y los meses que ha estado en uso este año.</p>
+      </div>
+      <div class="space-y-4 p-4">
+        <div class="grid grid-cols-2 gap-3">
+          ${campo('valor', 'Precio de adquisición', '€', 'decimal', amort.valor)}
+          ${campo('meses', 'Meses en uso este año', 'meses', 'numeric', amort.meses)}
+        </div>
+        <div>
+          <p class="mb-1.5 text-xs font-semibold text-tinta-700/70">Coeficiente máximo de la tabla</p>
+          <div class="grid grid-cols-3 gap-1.5 sm:grid-cols-6">${chips}</div>
+        </div>
+        <div id="amort-resultado" aria-live="polite">${htmlAmortResultado(amort)}</div>
+      </div>
+    </div>`;
+}
+
 function piezaCodificacion() {
   const niveles = [
     ['4', 'Grupo', 'Acreedores y deudores por operaciones comerciales', 1],
@@ -6070,9 +7715,9 @@ function estadoCasos(idBloque) {
 
 function estadoCaso(caso) {
   if (!ui.caso[caso.id]) {
-    ui.caso[caso.id] = caso.tipo === 'asiento'
-      ? { lineas: [], borrador: { cuenta: null, lado: null, importe: '' }, error: '', resultado: null, intentos: 0, verSolucion: false }
-      : { respuestas: {}, fallos: {}, errores: 0 };
+    if (caso.tipo === 'asiento') ui.caso[caso.id] = { lineas: [], borrador: { cuenta: null, lado: null, importe: '' }, error: '', resultado: null, intentos: 0, verSolucion: false };
+    else if (caso.tipo === 'calculo') ui.caso[caso.id] = { valores: {}, estados: {}, intentos: 0, verSolucion: false };
+    else ui.caso[caso.id] = { respuestas: {}, fallos: {}, errores: 0 };
   }
   return ui.caso[caso.id];
 }
@@ -6118,7 +7763,8 @@ function renderizarCasos(bloque) {
       </div>
     </nav>`;
 
-  const cuerpo = caso.tipo === 'asiento' ? htmlCasoAsiento(caso, bloque) : htmlCasoClasificar(caso, bloque);
+  const cuerpo = { asiento: htmlCasoAsiento, calculo: htmlCasoCalculo }[caso.tipo] || htmlCasoClasificar;
+  const html = cuerpo(caso, bloque);
   const anterior = casos[sc.activo - 1];
   const siguiente = casos[sc.activo + 1];
   const resuelto = resueltos.includes(caso.id);
@@ -6135,7 +7781,7 @@ function renderizarCasos(bloque) {
 
   return `
     ${circuito}
-    <div id="tarjeta-caso" class="scroll-mt-40 lg:scroll-mt-24">${cuerpo}</div>
+    <div id="tarjeta-caso" class="scroll-mt-40 lg:scroll-mt-24">${html}</div>
     ${navegacion}`;
 }
 
@@ -6147,7 +7793,7 @@ function cabeceraCaso(caso, numero, total) {
           <span class="shrink-0 text-indigo-600">${svgIcono(ICONO_MALETIN, 'h-4 w-4')}</span>
           <span class="min-w-0"><span class="font-semibold">Cliente: ${escaparHTML(caso.cliente.nombre)}</span> <span class="text-indigo-800/70">· ${escaparHTML(caso.cliente.actividad)}</span></span>
         </p>` : ''}
-      <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-acento-700">Caso ${numero} de ${total} · ${caso.tipo === 'asiento' ? 'Registra el asiento' : 'Clasifica'}</p>
+      <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-acento-700">Caso ${numero} de ${total} · ${{ asiento: 'Registra el asiento', calculo: 'Calcula' }[caso.tipo] || 'Clasifica'}</p>
       <h2 class="mt-0.5 text-lg font-bold leading-snug">${escaparHTML(caso.titulo)}</h2>
       <p class="mt-2 text-[15px] leading-relaxed text-tinta-900/85">${caso.enunciado}</p>
     </header>`;
@@ -6475,6 +8121,115 @@ function htmlCasoClasificar(caso, bloque) {
     </article>`;
 }
 
+/* ---------- Caso tipo «calculo» (escribir el resultado) ---------- */
+
+// Acepta "35000", "35.000", "1,78", "58,4 %" → número (o NaN)
+function leerNumero(texto) {
+  let t = String(texto).replace(/[\s€%]/g, '').replace('−', '-');
+  if (!t) return NaN;
+  if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.');
+  else if (/^-?\d{1,3}(\.\d{3})+$/.test(t)) t = t.replace(/\./g, '');
+  if (!/^-?\d+(\.\d+)?$/.test(t)) return NaN;
+  return parseFloat(t);
+}
+
+const toleranciaDe = (p) => (p.tolerancia !== undefined ? p.tolerancia : 0.005);
+
+function evaluarRespuesta(p, texto) {
+  const v = leerNumero(texto || '');
+  if (Number.isNaN(v)) return 'vacio';
+  return Math.abs(v - p.respuesta) <= toleranciaDe(p) + 1e-9 ? 'ok' : 'mal';
+}
+
+function formatoRespuesta(p) {
+  if (p.unidad === '€') return formatoEuros(p.respuesta);
+  const decimales = String(p.respuesta).includes('.') ? String(p.respuesta).split('.')[1].length : (p.unidad === '%' ? 1 : 0);
+  return `${p.respuesta.toFixed(decimales).replace('.', ',')}${p.unidad ? ` ${p.unidad}` : ''}`;
+}
+
+function htmlCasoCalculo(caso, bloque) {
+  const st = estadoCaso(caso);
+  const numero = bloque.contenido.casos.indexOf(caso) + 1;
+  const total = caso.preguntas.length;
+  const aciertos = caso.preguntas.filter((p) => st.estados[p.id] === 'ok').length;
+  const resuelto = aciertos === total;
+
+  const campos = caso.preguntas.map((p, i) => {
+    const e = st.estados[p.id];
+    const borde = e === 'ok' ? 'border-acento-500 bg-acento-50' : (e === 'mal' || e === 'vacio') ? 'border-rose-300 bg-rose-50' : 'border-tinta-900/15 bg-white';
+    const ultima = i === total - 1;
+    let nota = '';
+    if (e === 'ok') nota = `<p class="mt-2 flex gap-1.5 text-[13px] leading-snug text-acento-800"><span class="mt-px shrink-0">${svgIcono(ICONO_OK, 'h-4 w-4', 3)}</span><span><strong>Correcto.</strong> ${escaparHTML(p.explicacion)}</span></p>`;
+    if (e === 'mal') nota = `<p class="mt-2 flex gap-1.5 text-[13px] leading-snug text-rose-700"><span class="mt-px shrink-0">${svgIcono(ICONO_BOMBILLA, 'h-4 w-4')}</span><span><strong>Revisa este dato.</strong> ${escaparHTML(p.pista)}</span></p>`;
+    if (e === 'vacio') nota = `<p class="mt-2 text-[13px] font-medium text-rose-700">Escribe un número, por ejemplo 1.234,56.</p>`;
+    return `
+      <li class="${e === 'ok' && ui.animar ? 'animate-aparecer' : ''} rounded-xl border border-tinta-900/10 bg-white p-3.5">
+        <label for="calc-${caso.id}-${p.id}" class="flex items-start gap-2 text-sm font-semibold leading-snug">
+          <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${e === 'ok' ? 'bg-acento-500 text-white' : 'bg-tinta-900/[0.06]'} font-mono text-xs font-bold">${e === 'ok' ? svgIcono(ICONO_OK, 'h-3.5 w-3.5', 3) : i + 1}</span>
+          <span class="pt-0.5">${escaparHTML(p.texto)}</span>
+        </label>
+        <div class="relative mt-2.5">
+          <input id="calc-${caso.id}-${p.id}" type="text" inputmode="decimal" enterkeyhint="${ultima ? 'done' : 'next'}" autocomplete="off"
+                 data-entrada="calc-resp" data-pregunta="${p.id}" data-foco="calc-${p.id}"
+                 value="${escaparHTML(st.valores[p.id] || '')}" placeholder="${p.unidad === '€' ? '0,00' : '0'}" ${resuelto ? 'readonly' : ''}
+                 aria-invalid="${e === 'mal' || e === 'vacio'}"
+                 class="${ui.sacudir === 'calc' && (e === 'mal' || e === 'vacio') ? 'animate-sacudir' : ''} h-[52px] w-full rounded-xl border-2 ${borde} pl-4 pr-12 text-lg font-semibold tabular-nums outline-none transition placeholder:font-normal placeholder:text-tinta-700/30 focus:border-acento-500" />
+          ${p.unidad ? `<span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 font-semibold text-tinta-700/50">${p.unidad}</span>` : ''}
+        </div>
+        ${nota}
+      </li>`;
+  }).join('');
+
+  let correccion = '';
+  if (resuelto) {
+    correccion = htmlFeedback(true, '¡Todos los cálculos son correctos!', escaparHTML(caso.resumenOk || ''));
+  } else if (st.intentos > 0) {
+    correccion = htmlFeedback(false, `${aciertos} de ${total} ${total === 1 ? 'dato correcto' : 'datos correctos'}`,
+      'Corrige los datos marcados en rojo (cada uno tiene su pista) y vuelve a comprobar.');
+  }
+
+  const solucion = st.verSolucion && !resuelto ? `
+    <div class="${ui.animar ? 'animate-aparecer' : ''} rounded-xl border border-tinta-900/10 bg-white p-4">
+      <p class="mb-2 text-sm font-bold">Solución</p>
+      <dl class="divide-y divide-tinta-900/5 text-sm">
+        ${caso.preguntas.map((p) => `
+          <div class="py-2">
+            <div class="flex justify-between gap-3"><dt class="font-medium">${escaparHTML(p.texto)}</dt><dd class="shrink-0 font-bold tabular-nums">${formatoRespuesta(p)}</dd></div>
+            <p class="mt-0.5 text-[13px] text-tinta-700/80">${escaparHTML(p.explicacion)}</p>
+          </div>`).join('')}
+      </dl>
+      <p class="mt-2 text-xs text-tinta-700/60">Escribe tú los resultados para marcar el caso como resuelto.</p>
+    </div>` : '';
+
+  const hayDatos = caso.preguntas.some((p) => String(st.valores[p.id] || '').trim());
+  const acciones = resuelto
+    ? `<button type="button" data-accion="asiento-reiniciar" class="${claseBoton.secundario} w-full sm:w-auto">Repetir el caso</button>`
+    : `
+      <div class="grid gap-2 sm:flex">
+        <button type="button" data-accion="calc-comprobar" data-foco="comprobar" class="${claseBoton.primario} sm:flex-1">
+          ${svgIcono(ICONO_OK, 'h-4 w-4', 2.5)} Comprobar resultados
+        </button>
+        <div class="grid grid-cols-2 gap-2 sm:flex">
+          ${st.intentos > 0 && !st.verSolucion ? `<button type="button" data-accion="calc-solucion" class="${claseBoton.secundario}">Ver solución</button>` : ''}
+          <button type="button" data-accion="asiento-reiniciar" class="${claseBoton.secundario} ${st.intentos > 0 && !st.verSolucion ? '' : 'col-span-2'}" ${hayDatos || st.intentos ? '' : 'disabled'}>Empezar de nuevo</button>
+        </div>
+      </div>`;
+
+  return `
+    <article class="overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm">
+      ${cabeceraCaso(caso, numero, bloque.contenido.casos.length)}
+      <div class="space-y-4 p-4 sm:p-5">
+        ${documentosDe(caso).length ? htmlBloqueDocumento(caso, st) : ''}
+        <div>
+          <p class="mb-2 text-sm font-bold">Tus cálculos</p>
+          <ol class="space-y-2.5">${campos}</ol>
+        </div>
+        <div id="correccion-${caso.id}" class="space-y-4" aria-live="polite">${correccion}${solucion}</div>
+        ${acciones}
+      </div>
+    </article>`;
+}
+
 const RENDERIZADORES = {
   teoria: renderizarTeoria,
   test: renderizarTest,
@@ -6518,6 +8273,7 @@ const ACCIONES = {
   },
   'calc-iva': (el) => { estadoTeoria(estado.bloque).calc.iva = Number(el.dataset.valor); },
   'calc-ret': (el) => { estadoTeoria(estado.bloque).calc.ret = Number(el.dataset.valor); },
+  'amort-coef': (el) => { estadoTeoria(estado.bloque).amort.coef = Number(el.dataset.valor); },
 
   /* --- Test --- */
   'test-responder': (el) => {
@@ -6653,6 +8409,30 @@ const ACCIONES = {
     const nuevo = estadoCaso(caso);
     nuevo.docOculto = anterior.docOculto;
     return () => asegurarVisible($('#tarjeta-caso'));
+  },
+
+  /* --- Casos: cálculo --- */
+  'calc-comprobar': () => {
+    const caso = casoActual();
+    const st = estadoCaso(caso);
+    st.intentos += 1;
+    caso.preguntas.forEach((p) => { st.estados[p.id] = evaluarRespuesta(p, st.valores[p.id]); });
+    ui.animar = true;
+    if (caso.preguntas.every((p) => st.estados[p.id] === 'ok')) {
+      vibrar(30);
+      st.verSolucion = false;
+      marcarCasoResuelto(caso);
+    } else {
+      ui.sacudir = 'calc';
+      vibrar([40, 60, 40]);
+    }
+    return () => asegurarVisible(document.getElementById(`correccion-${caso.id}`), 'abajo');
+  },
+  'calc-solucion': () => {
+    const caso = casoActual();
+    estadoCaso(caso).verSolucion = true;
+    ui.animar = true;
+    return () => asegurarVisible(document.getElementById(`correccion-${caso.id}`), 'abajo');
   },
 
   /* --- Casos: clasificar --- */
@@ -6844,6 +8624,14 @@ function registrarEventos() {
       st.prestamo[tipo.slice(6)] = e.target.value;
       const destino = $('#prestamo-resultado');
       if (destino) destino.innerHTML = htmlPrestamoResultado(st.prestamo);
+    } else if (tipo === 'calc-resp') {
+      const caso = casoActual();
+      if (caso) estadoCaso(caso).valores[e.target.dataset.pregunta] = e.target.value;
+    } else if (tipo && tipo.startsWith('amort-')) {
+      const st = estadoTeoria(estado.bloque);
+      st.amort[tipo.slice(6)] = e.target.value;
+      const destino = $('#amort-resultado');
+      if (destino) destino.innerHTML = htmlAmortResultado(st.amort);
     } else if (tipo === 'calc-base') {
       const st = estadoTeoria(estado.bloque);
       st.calc.base = e.target.value;
@@ -6852,7 +8640,15 @@ function registrarEventos() {
     }
   });
   $('#contenido').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target.dataset && /^(calc-base|prest-|liq-)/.test(e.target.dataset.entrada || '')) {
+    if (e.key === 'Enter' && e.target.dataset && e.target.dataset.entrada === 'calc-resp') {
+      e.preventDefault();
+      const campos = $$('[data-entrada="calc-resp"]');
+      const siguiente = campos[campos.indexOf(e.target) + 1];
+      if (siguiente) siguiente.focus();
+      else { const boton = $('[data-accion="calc-comprobar"]'); if (boton) boton.click(); }
+      return;
+    }
+    if (e.key === 'Enter' && e.target.dataset && /^(calc-base|prest-|liq-|amort-)/.test(e.target.dataset.entrada || '')) {
       e.preventDefault();
       e.target.blur();
       return;
@@ -6870,6 +8666,28 @@ function registrarEventos() {
   });
   $('#btn-siguiente').addEventListener('click', () => {
     if (estado.bloque < BLOQUES.length - 1) navegar(estado.bloque + 1, 'teoria');
+    else location.hash = RUTA_CERTIFICADO;
+  });
+
+  // Enlace al certificado (menú lateral)
+  $('#enlace-certificado').addEventListener('click', (e) => {
+    if (estado.vista === 'certificado') e.preventDefault();
+    cerrarMenu({ devolverFoco: false });
+    $('#contenido').focus({ preventScroll: true });
+  });
+
+  // Certificado: nombre, impresión y confeti (fuera del sistema de paneles)
+  $('#vista-certificado').addEventListener('input', (e) => {
+    if (e.target.dataset.cert === 'nombre') guardarJSON(CLAVE_NOMBRE, e.target.value.slice(0, 60));
+  });
+  $('#vista-certificado').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.dataset.cert === 'nombre') { e.preventDefault(); e.target.blur(); }
+  });
+  $('#vista-certificado').addEventListener('click', (e) => {
+    const el = e.target.closest('[data-cert]');
+    if (!el) return;
+    if (el.dataset.cert === 'imprimir') { e.preventDefault(); window.print(); }
+    if (el.dataset.cert === 'confeti') { e.preventDefault(); lanzarConfeti(); }
   });
 
   // Menú móvil
@@ -6896,6 +8714,200 @@ function registrarEventos() {
 }
 
 /* =====================================================================
+   12. CERTIFICADO FINAL
+   Se desbloquea con los 7 bloques completados (test aprobado + casos).
+   ===================================================================== */
+const ICONO_CANDADO = 'M7 11V8a5 5 0 0110 0v3M6 11h12a1 1 0 011 1v8a1 1 0 01-1 1H6a1 1 0 01-1-1v-8a1 1 0 011-1zM12 15v2';
+const ICONO_MEDALLA = 'M8 3h8l-2 6h-4zM12 9a6 6 0 110 12 6 6 0 010-12zM12 12.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1-2 1 .4-2.2-1.6-1.5 2.2-.3z';
+
+const bloquesCompletados = () => BLOQUES.filter((b) => progreso[b.id] && progreso[b.id].completado);
+const certificadoDesbloqueado = () => bloquesCompletados().length === BLOQUES.length;
+
+function registrarFechaCertificado() {
+  const guardado = cargarJSON(CLAVE_CERTIFICADO, null);
+  if (!guardado || !guardado.fecha) guardarJSON(CLAVE_CERTIFICADO, { fecha: new Date().toISOString() });
+}
+
+function fechaCertificado() {
+  const guardado = cargarJSON(CLAVE_CERTIFICADO, null);
+  const fecha = guardado && guardado.fecha ? new Date(guardado.fecha) : new Date();
+  return (Number.isNaN(fecha.getTime()) ? new Date() : fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function renderizarCertificado() {
+  const hechos = bloquesCompletados().length;
+  const abierto = hechos === BLOQUES.length;
+  if (abierto) registrarFechaCertificado();
+  $('#barra-titulo').textContent = 'Certificado final';
+  $('#barra-codigo').textContent = abierto ? '★' : `${hechos}/${BLOQUES.length}`;
+  document.title = 'Certificado — Repaso Contable PGC';
+  $('#vista-certificado').innerHTML = abierto ? htmlCertificado() : htmlCertificadoBloqueado(hechos);
+  if (abierto && ui.celebrar) {
+    ui.celebrar = false;
+    requestAnimationFrame(lanzarConfeti);
+  }
+}
+
+function htmlCertificadoBloqueado(hechos) {
+  const total = BLOQUES.length;
+  const filas = BLOQUES.map((b) => {
+    const p = progresoDe(b.id);
+    const cfg = configTest(b);
+    const testOk = p.mejorTest >= cfg.aprobado;
+    const nCasos = b.contenido.casos.length;
+    const resueltos = b.contenido.casos.filter((c) => p.casosResueltos.includes(c.id)).length;
+    const destino = p.completado ? 'teoria' : (testOk ? 'casos' : 'test');
+    const chip = (ok, texto) => `<span class="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold ${ok ? 'bg-acento-50 text-acento-700' : 'bg-tinta-900/5 text-tinta-700/70'}">${ok ? svgIcono(ICONO_OK, 'h-3 w-3', 3) : ''}${texto}</span>`;
+    return `
+      <li>
+        <a href="${crearRuta(b.id, destino)}"
+           class="flex min-h-[64px] items-center gap-3 rounded-xl border-2 ${p.completado ? 'border-acento-500/40 bg-acento-50/60' : 'border-tinta-900/10 bg-white hover:border-tinta-900/25'} px-3 py-2.5 transition active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${p.completado ? 'bg-acento-500 text-white' : 'bg-tinta-900/[0.06] text-tinta-700'}">
+            ${p.completado ? svgIcono(ICONO_OK, 'h-5 w-5', 3) : svgIcono(b.icono)}
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="block font-mono text-[10px] font-bold uppercase tracking-wider text-tinta-700/50">Bloque ${b.id}</span>
+            <span class="block truncate text-sm font-semibold">${escaparHTML(b.titulo)}</span>
+            <span class="mt-1 flex flex-wrap gap-1">${chip(testOk, `Test ${p.mejorTest}/${cfg.porIntento}`)}${chip(resueltos === nCasos, `Casos ${resueltos}/${nCasos}`)}</span>
+          </span>
+          <span class="shrink-0 text-tinta-700/40">${svgIcono('M9 6l6 6-6 6', 'h-4 w-4', 2.5)}</span>
+        </a>
+      </li>`;
+  }).join('');
+  return `
+    <section class="space-y-6">
+      <header>
+        <p class="mb-2 font-mono text-xs font-semibold uppercase tracking-wider text-acento-700">Meta final del itinerario</p>
+        <h1 class="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">Certificado Contable Junior de Gestoría</h1>
+        <p class="mt-3 max-w-2xl text-[15px] leading-relaxed text-tinta-700/80">Se desbloquea cuando completas los ${total} bloques: test aprobado (8 de 10) y todos los casos prácticos resueltos. Toca un bloque pendiente para seguir justo donde lo dejaste.</p>
+      </header>
+      <div class="flex items-center gap-4 rounded-2xl border border-dashed border-tinta-900/20 bg-white/70 p-4 sm:p-5">
+        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-tinta-900 text-amber-300">${svgIcono(ICONO_CANDADO, 'h-7 w-7')}</span>
+        <div class="min-w-0 flex-1">
+          <p class="flex items-baseline justify-between gap-2 text-sm font-bold"><span>Certificado bloqueado</span><span class="font-mono text-acento-700">${hechos} / ${total}</span></p>
+          <div class="mt-2 h-2 overflow-hidden rounded-full bg-tinta-900/10"><div class="h-full rounded-full bg-acento-500 transition-all duration-500" style="width:${(hechos / total) * 100}%"></div></div>
+          <p class="mt-1.5 text-xs text-tinta-700/70">${hechos === total - 1 ? '¡Solo te queda un bloque!' : `Te faltan ${total - hechos} bloques.`}</p>
+        </div>
+      </div>
+      <ol class="grid gap-2 sm:grid-cols-2" aria-label="Estado de los bloques">${filas}</ol>
+    </section>`;
+}
+
+function htmlCertificado() {
+  const nombre = cargarJSON(CLAVE_NOMBRE, '');
+  const totalPreguntas = BLOQUES.reduce((s, b) => s + b.contenido.test.length, 0);
+  const totalCasos = BLOQUES.reduce((s, b) => s + b.contenido.casos.length, 0);
+  const notas = BLOQUES.map((b) => progresoDe(b.id).mejorTest);
+  const media = notas.reduce((s, n) => s + n, 0) / notas.length;
+  const bloques = BLOQUES.map((b) => {
+    const cfg = configTest(b);
+    return `
+      <li class="flex items-center gap-2.5 rounded-lg bg-white/80 px-2.5 py-2 text-left ring-1 ring-tinta-900/5">
+        <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-acento-500 text-white">${svgIcono(ICONO_OK, 'h-3.5 w-3.5', 3)}</span>
+        <span class="min-w-0 flex-1 truncate text-[13px] font-semibold"><span class="font-mono text-[11px] text-tinta-700/50">${b.codigo}</span> ${escaparHTML(b.titulo)}</span>
+        <span class="shrink-0 font-mono text-[11px] font-semibold text-acento-700">${progresoDe(b.id).mejorTest}/${cfg.porIntento}</span>
+      </li>`;
+  }).join('');
+  const sello = `
+    <svg viewBox="0 0 120 120" class="h-full w-full" aria-hidden="true">
+      <circle cx="60" cy="60" r="56" fill="#10a37f"/>
+      <circle cx="60" cy="60" r="49" fill="none" stroke="#d1faec" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <circle cx="60" cy="60" r="38" fill="#0b6f57"/>
+      <path d="M44 61l11 11 22-24" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+  const siguientes = [
+    { bloque: 6, pestana: 'teoria', titulo: 'Antes de cada trimestre', texto: 'La revisión de sumas y saldos y los cuadres del Bloque 6.' },
+    { bloque: 4, pestana: 'teoria', titulo: 'Calendario fiscal', texto: 'Modelos 303, 111, 115 y resúmenes anuales del Bloque 4.' },
+    { bloque: 5, pestana: 'teoria', titulo: 'Cierre del ejercicio', texto: 'La lista de comprobación del cierre del Bloque 5.' },
+  ].map((x) => `
+    <a href="${crearRuta(x.bloque, x.pestana)}" class="block rounded-xl border border-tinta-900/10 bg-white p-3.5 transition hover:border-acento-500/50 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">
+      <span class="block text-sm font-bold">${x.titulo}</span>
+      <span class="mt-0.5 block text-[13px] leading-snug text-tinta-700/75">${x.texto}</span>
+    </a>`).join('');
+
+  return `
+    <section class="space-y-6">
+      <header class="no-imprimir animate-aparecer text-center sm:text-left">
+        <p class="mb-2 font-mono text-xs font-semibold uppercase tracking-wider text-acento-700">Itinerario completado · 7 / 7</p>
+        <h1 class="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">¡Lo has conseguido!</h1>
+        <p class="mt-2 max-w-2xl text-[15px] leading-relaxed text-tinta-700/80">Has repasado de principio a fin el trabajo contable de una gestoría. Escribe tu nombre en el certificado y guárdalo o imprímelo.</p>
+      </header>
+
+      <article id="certificado-tarjeta" aria-label="Certificado Contable Junior de Gestoría"
+               class="animate-aparecer relative overflow-hidden rounded-2xl bg-white p-1.5 shadow-[0_2px_4px_rgba(15,27,45,.06),0_24px_48px_-20px_rgba(15,27,45,.45)] ring-1 ring-tinta-900/10 sm:p-2.5">
+        <div class="rounded-xl border-2 border-acento-600/70 p-1 sm:p-1.5">
+          <div class="relative overflow-hidden rounded-lg border border-acento-600/30 px-4 pb-6 pt-8 text-center sm:px-10 sm:pb-8 sm:pt-10"
+               style="background: radial-gradient(120% 80% at 50% 0%, #ecfdf7 0%, #ffffff 55%), #fff;">
+            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-200/30"></div>
+            <div class="pointer-events-none absolute -bottom-12 -left-12 h-44 w-44 rounded-full bg-acento-100/50"></div>
+            <div class="relative">
+              <p class="font-mono text-[10.5px] font-bold uppercase tracking-[0.28em] text-acento-700">Repaso Contable · PGC</p>
+              <h2 class="mt-3 text-[30px] font-bold leading-none tracking-tight text-tinta-900 sm:text-[44px]">Enhorabuena</h2>
+              <p class="mx-auto mt-2 max-w-md text-[15px] font-semibold uppercase tracking-[0.12em] text-tinta-700 sm:text-base">Certificado Contable Junior de Gestoría</p>
+              <div class="mx-auto mt-5 flex max-w-[12rem] items-center gap-2 text-acento-600/60" aria-hidden="true"><span class="h-px flex-1 bg-current"></span><span class="h-1.5 w-1.5 rotate-45 bg-current"></span><span class="h-px flex-1 bg-current"></span></div>
+              <p class="mt-5 text-sm text-tinta-700/70">Se otorga a</p>
+              <label for="cert-nombre" class="sr-only">Tu nombre para el certificado</label>
+              <input id="cert-nombre" data-cert="nombre" type="text" maxlength="60" autocomplete="name" enterkeyhint="done"
+                     value="${escaparHTML(nombre)}" placeholder="Toca aquí y escribe tu nombre"
+                     class="mx-auto mt-1 block w-full max-w-md rounded-none border-0 border-b-2 border-dashed border-tinta-900/25 bg-transparent px-2 pb-1.5 pt-1 text-center text-[22px] font-bold text-tinta-900 outline-none transition placeholder:text-[16px] placeholder:font-medium placeholder:text-tinta-700/35 focus:border-acento-500 sm:text-[28px]" />
+              <p class="mx-auto mt-5 max-w-xl text-[14.5px] leading-relaxed text-tinta-900/85">por completar el itinerario práctico de contabilidad financiera española según el Plan General de Contabilidad, aplicado al día a día de una gestoría: los <strong>${BLOQUES.length} bloques</strong>, con su test aprobado y los <strong>${totalCasos} casos prácticos</strong> resueltos sobre documentos de clientes.</p>
+              <ol class="mx-auto mt-6 grid max-w-2xl gap-1.5 sm:grid-cols-2">${bloques}</ol>
+              <div class="mx-auto mt-7 flex max-w-2xl items-end justify-between gap-4 text-left">
+                <div class="min-w-0">
+                  <p class="text-[11px] font-semibold uppercase tracking-wider text-tinta-700/50">Fecha</p>
+                  <p class="border-t border-tinta-900/20 pt-1 text-sm font-semibold">${fechaCertificado()}</p>
+                </div>
+                <div class="h-20 w-20 shrink-0 sm:h-24 sm:w-24">${sello}</div>
+                <div class="min-w-0 text-right">
+                  <p class="text-[11px] font-semibold uppercase tracking-wider text-tinta-700/50">Nota media del test</p>
+                  <p class="border-t border-tinta-900/20 pt-1 text-sm font-semibold">${String(Math.round(media * 10) / 10).replace('.', ',')} / 10</p>
+                </div>
+              </div>
+              <p class="mx-auto mt-6 max-w-lg text-[11px] leading-snug text-tinta-700/55">Certificado de autoformación sin validez académica ni profesional oficial. Banco de ${totalPreguntas} preguntas y ${totalCasos} casos con documentos ficticios.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <div class="no-imprimir grid gap-2 sm:flex">
+        <button type="button" data-cert="imprimir" class="${claseBoton.primario} sm:flex-1">
+          ${svgIcono('M7 8V3h10v5M7 17H5a2 2 0 01-2-2v-5a2 2 0 012-2h14a2 2 0 012 2v5a2 2 0 01-2 2h-2M7 14h10v7H7z', 'h-4 w-4', 2)} Imprimir o guardar en PDF
+        </button>
+        <button type="button" data-cert="confeti" class="${claseBoton.secundario}">¡Celebrarlo otra vez!</button>
+      </div>
+
+      <section class="no-imprimir" aria-labelledby="cert-siguientes">
+        <h2 id="cert-siguientes" class="mb-2 text-sm font-bold">Para tener a mano en tu puesto</h2>
+        <div class="grid gap-2 sm:grid-cols-3">${siguientes}</div>
+      </section>
+    </section>`;
+}
+
+// Lluvia de confeti (sin librerías; se omite si el usuario prefiere menos movimiento)
+function lanzarConfeti() {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const capa = document.createElement('div');
+  capa.className = 'no-imprimir pointer-events-none fixed inset-0 z-[70] overflow-hidden';
+  capa.setAttribute('aria-hidden', 'true');
+  capa.dataset.confeti = '';
+  const colores = ['#10a37f', '#0f1b2d', '#f59e0b', '#6366f1', '#ec4899', '#38bdf8', '#d1faec'];
+  for (let i = 0; i < 90; i += 1) {
+    const pieza = document.createElement('span');
+    const ancho = 6 + Math.random() * 6;
+    pieza.style.cssText = [
+      'position:absolute', 'top:-24px', `left:${Math.random() * 100}%`,
+      `width:${ancho}px`, `height:${ancho * (Math.random() < 0.3 ? 1 : 0.45)}px`,
+      `background:${colores[i % colores.length]}`, `border-radius:${Math.random() < 0.3 ? '50%' : '1px'}`,
+      `--deriva:${Math.round((Math.random() - 0.5) * 240)}px`, `--giro:${Math.round(Math.random() * 1080 - 540)}deg`,
+      `animation:confeti ${(2.4 + Math.random() * 1.8).toFixed(2)}s cubic-bezier(.2,.6,.4,1) ${(Math.random() * 0.7).toFixed(2)}s forwards`,
+    ].join(';');
+    capa.appendChild(pieza);
+  }
+  document.body.appendChild(capa);
+  setTimeout(() => capa.remove(), 5500);
+}
+
+/* =====================================================================
    11. ARRANQUE
    ===================================================================== */
 function marcarBloqueCompletado(idBloque, completado = true) {
@@ -6908,6 +8920,7 @@ function marcarBloqueCompletado(idBloque, completado = true) {
 function reiniciarProgreso() {
   progreso = {};
   guardarJSON(CLAVE_PROGRESO, progreso);
+  try { localStorage.removeItem(CLAVE_CERTIFICADO); } catch (e) { /* sin almacenamiento */ }
   renderizar();
 }
 
@@ -6946,14 +8959,20 @@ function iniciar() {
   ajustarSegunPantalla();
 
   // Prioridad: enlace de la URL → última posición guardada → Bloque 0 / Teoría
-  const inicial = leerRuta(location.hash) || leerRuta(crearRutaGuardada()) || { bloque: 0, pestana: 'teoria' };
+  const deUrl = leerRuta(location.hash);
+  const inicial = (deUrl && !deUrl.certificado ? deUrl : null) || leerRuta(crearRutaGuardada()) || { bloque: 0, pestana: 'teoria' };
   estado.bloque = inicial.bloque;
   estado.pestana = inicial.pestana;
-  history.replaceState(null, '', crearRuta(inicial.bloque, inicial.pestana));
+  if (deUrl && deUrl.certificado) {
+    estado.vista = 'certificado';
+    history.replaceState(null, '', RUTA_CERTIFICADO);
+  } else {
+    history.replaceState(null, '', crearRuta(inicial.bloque, inicial.pestana));
+  }
   renderizar();
 }
 
 document.addEventListener('DOMContentLoaded', iniciar);
 
 // Acceso desde la consola del navegador para depurar
-window.RepasoPGC = { BLOQUES, CUADRO_PGC, PESTANAS, estado, ui, navegar, marcarBloqueCompletado, reiniciarProgreso, leerImporte, formatoEuros };
+window.RepasoPGC = { BLOQUES, CUADRO_PGC, PESTANAS, estado, ui, navegar, marcarBloqueCompletado, reiniciarProgreso, leerImporte, leerNumero, formatoEuros, lanzarConfeti };

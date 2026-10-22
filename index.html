@@ -71,6 +71,24 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
     }
+    /* Confeti del certificado final */
+    @keyframes confeti {
+      0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 1; }
+      85% { opacity: 1; }
+      100% { transform: translate3d(var(--deriva), 105vh, 0) rotate(var(--giro)); opacity: 0; }
+    }
+    /* Impresión / «Guardar como PDF»: solo la tarjeta del certificado */
+    @media print {
+      @page { size: A4 portrait; margin: 12mm; }
+      html, body { background: #fff !important; height: auto !important; min-height: 0 !important; }
+      .no-imprimir, #sidebar, #capa-menu, #aviso, #barra-movil, #pie-app, [data-confeti] { display: none !important; }
+      #area-principal { padding-left: 0 !important; }
+      #contenido { max-width: none !important; padding: 0 !important; }
+      #certificado-tarjeta { margin: 0 !important; box-shadow: none !important; animation: none !important; break-inside: avoid; }
+      #cert-nombre { border-color: transparent !important; }
+      #cert-nombre::placeholder { color: transparent; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
   </style>
 </head>
 
@@ -82,7 +100,7 @@
   </a>
 
   <!-- ===================== BARRA SUPERIOR (solo móvil) ===================== -->
-  <header class="sticky top-0 z-30 bg-tinta-900 text-white shadow-md lg:hidden"
+  <header id="barra-movil" class="sticky top-0 z-30 bg-tinta-900 text-white shadow-md lg:hidden"
           style="padding-top: env(safe-area-inset-top);">
     <div class="flex h-14 items-center gap-2 px-2">
       <button id="btn-abrir-menu" type="button"
@@ -134,13 +152,23 @@
     <nav class="flex-1 overflow-y-auto px-3 py-4" aria-label="Bloques temáticos">
       <p class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-white/40">Itinerario</p>
       <ol id="menu-bloques" class="space-y-1"></ol>
+      <p class="px-3 pb-2 pt-5 text-[11px] font-semibold uppercase tracking-wider text-white/40">Meta final</p>
+      <a id="enlace-certificado" href="#/certificado"
+         class="group flex min-h-[56px] items-center gap-3 rounded-xl px-3 py-2.5 text-white/70 transition hover:bg-white/5 hover:text-white active:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">
+        <span data-icono class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/5 text-white/60"></span>
+        <span class="min-w-0 flex-1">
+          <span class="block font-mono text-[10px] font-semibold uppercase tracking-wider text-white/40">7 bloques</span>
+          <span class="block truncate text-sm font-medium leading-snug">Certificado final</span>
+        </span>
+        <span data-estado class="shrink-0 rounded-md bg-white/5 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-white/50"></span>
+      </a>
     </nav>
 
     <!-- Pie del menú: progreso general -->
     <div class="border-t border-white/10 px-5 py-4">
       <div class="mb-2 flex items-center justify-between text-xs">
         <span class="text-white/60">Progreso general</span>
-        <span id="progreso-texto" class="font-mono font-semibold text-acento-100">0 / 6</span>
+        <span id="progreso-texto" class="font-mono font-semibold text-acento-100">0 / 7</span>
       </div>
       <div class="h-1.5 overflow-hidden rounded-full bg-white/10">
         <div id="progreso-barra" class="h-full w-0 rounded-full bg-acento-500 transition-all duration-500"></div>
@@ -149,8 +177,11 @@
   </aside>
 
   <!-- ===================== ÁREA PRINCIPAL ===================== -->
-  <div class="lg:pl-72">
+  <div id="area-principal" class="lg:pl-72">
     <main id="contenido" tabindex="-1" class="mx-auto max-w-4xl px-4 pb-16 pt-6 focus:outline-none sm:px-6 lg:px-10 lg:pt-10">
+
+      <!-- ===== Vista de bloque (cabecera, pestañas y paneles) ===== -->
+      <div id="vista-bloque">
 
       <!-- Cabecera del bloque activo (se rellena desde app.js) -->
       <section id="cabecera-bloque" aria-live="polite" class="mb-6">
@@ -195,7 +226,7 @@
         </div>
       </div>
 
-      <!-- Paneles de contenido (vacíos: se rellenarán en próximos pasos) -->
+      <!-- Paneles de contenido (se rellenan desde app.js) -->
       <section id="panel-teoria" role="tabpanel" aria-labelledby="tab-teoria" tabindex="0" class="pt-6 focus:outline-none"></section>
       <section id="panel-test" role="tabpanel" aria-labelledby="tab-test" tabindex="0" class="hidden pt-6 focus:outline-none"></section>
       <section id="panel-casos" role="tabpanel" aria-labelledby="tab-casos" tabindex="0" class="hidden pt-6 focus:outline-none"></section>
@@ -224,7 +255,11 @@
         </button>
       </nav>
 
-      <footer class="mt-12 border-t border-tinta-900/10 pt-6 text-xs text-tinta-700/50">
+      </div>
+      <!-- ===== Vista del certificado final (se rellena desde app.js) ===== -->
+      <div id="vista-certificado" class="hidden"></div>
+
+      <footer id="pie-app" class="mt-12 border-t border-tinta-900/10 pt-6 text-xs text-tinta-700/50">
         Contenido orientado a la práctica diaria bajo el PGC (RD 1514/2007 y modificaciones posteriores).
       </footer>
     </main>
