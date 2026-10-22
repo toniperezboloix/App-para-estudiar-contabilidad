@@ -108,7 +108,7 @@ const CUADRO_PGC = [
       { codigo: '11', nombre: 'Reservas', cuentas: [['112', 'Reserva legal'], ['113', 'Reservas voluntarias']] },
       { codigo: '12', nombre: 'Resultados pendientes de aplicación', cuentas: [['129', 'Resultado del ejercicio']] },
       { codigo: '13', nombre: 'Subvenciones, donaciones y legados', cuentas: [['130', 'Subvenciones oficiales de capital']] },
-      { codigo: '17', nombre: 'Deudas a largo plazo por préstamos recibidos', cuentas: [['170', 'Deudas a largo plazo con entidades de crédito'], ['173', 'Proveedores de inmovilizado a largo plazo']] },
+      { codigo: '17', nombre: 'Deudas a largo plazo por préstamos recibidos', cuentas: [['170', 'Deudas a largo plazo con entidades de crédito'], ['173', 'Proveedores de inmovilizado a largo plazo'], ['174', 'Acreedores por arrendamiento financiero a largo plazo']] },
     ],
   },
   {
@@ -153,9 +153,9 @@ const CUADRO_PGC = [
     subgrupos: [
       { codigo: '40', nombre: 'Proveedores', clave: true, cuentas: [['400', 'Proveedores'], ['401', 'Proveedores, efectos comerciales a pagar'], ['407', 'Anticipos a proveedores']] },
       { codigo: '41', nombre: 'Acreedores varios', clave: true, cuentas: [['410', 'Acreedores por prestaciones de servicios']] },
-      { codigo: '43', nombre: 'Clientes', clave: true, cuentas: [['430', 'Clientes'], ['436', 'Clientes de dudoso cobro'], ['438', 'Anticipos de clientes']] },
+      { codigo: '43', nombre: 'Clientes', clave: true, cuentas: [['430', 'Clientes'], ['431', 'Clientes, efectos comerciales a cobrar'], ['4311', 'Efectos comerciales descontados'], ['436', 'Clientes de dudoso cobro'], ['438', 'Anticipos de clientes']] },
       { codigo: '46', nombre: 'Personal', cuentas: [['460', 'Anticipos de remuneraciones'], ['465', 'Remuneraciones pendientes de pago']] },
-      { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['472', 'Hacienda Pública, IVA soportado'], ['473', 'Hacienda Pública, retenciones y pagos a cuenta'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
+      { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['472', 'Hacienda Pública, IVA soportado'], ['473', 'Hacienda Pública, retenciones y pagos a cuenta'], ['4750', 'Hacienda Pública, acreedora por IVA'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
       { codigo: '48', nombre: 'Ajustes por periodificación', cuentas: [['480', 'Gastos anticipados'], ['485', 'Ingresos anticipados']] },
       { codigo: '49', nombre: 'Deterioro de valor de créditos comerciales y provisiones a corto plazo', cuentas: [['490', 'Deterioro de valor de créditos por operaciones comerciales']] },
     ],
@@ -170,7 +170,7 @@ const CUADRO_PGC = [
     resumen: 'El dinero disponible (caja y bancos) y las deudas y créditos a corto plazo que no son comerciales.',
     enOficina: 'La 572 es la cuenta que más vas a puntear: cada movimiento del extracto tiene su reflejo aquí. La 555 sirve para aparcar un cobro o pago que aún no sabes identificar.',
     subgrupos: [
-      { codigo: '52', nombre: 'Deudas a corto plazo por préstamos recibidos y otros conceptos', cuentas: [['520', 'Deudas a corto plazo con entidades de crédito'], ['523', 'Proveedores de inmovilizado a corto plazo']] },
+      { codigo: '52', nombre: 'Deudas a corto plazo por préstamos recibidos y otros conceptos', cuentas: [['520', 'Deudas a corto plazo con entidades de crédito'], ['5208', 'Deudas por efectos descontados'], ['523', 'Proveedores de inmovilizado a corto plazo'], ['524', 'Acreedores por arrendamiento financiero a corto plazo']] },
       { codigo: '55', nombre: 'Otras cuentas no bancarias', cuentas: [['551', 'Cuenta corriente con socios y administradores'], ['555', 'Partidas pendientes de aplicación']] },
       { codigo: '57', nombre: 'Tesorería', clave: true, cuentas: [['570', 'Caja, euros'], ['572', 'Bancos e instituciones de crédito c/c vista, euros']] },
     ],
@@ -190,7 +190,7 @@ const CUADRO_PGC = [
       { codigo: '63', nombre: 'Tributos', cuentas: [['631', 'Otros tributos']] },
       { codigo: '64', nombre: 'Gastos de personal', cuentas: [['640', 'Sueldos y salarios'], ['642', 'Seguridad Social a cargo de la empresa']] },
       { codigo: '65', nombre: 'Otros gastos de gestión', cuentas: [['650', 'Pérdidas de créditos comerciales incobrables']] },
-      { codigo: '66', nombre: 'Gastos financieros', cuentas: [['662', 'Intereses de deudas']] },
+      { codigo: '66', nombre: 'Gastos financieros', cuentas: [['662', 'Intereses de deudas'], ['665', 'Intereses por descuento de efectos y operaciones de factoring']] },
       { codigo: '68', nombre: 'Dotaciones para amortizaciones', cuentas: [['681', 'Amortización del inmovilizado material']] },
       { codigo: '69', nombre: 'Pérdidas por deterioro y otras dotaciones', cuentas: [['694', 'Pérdidas por deterioro de créditos por operaciones comerciales']] },
     ],
@@ -2553,6 +2553,906 @@ const CONTENIDO_B2 = {
   ],
 };
 
+/* ---------- Bloque 3: Tesorería y Bancos (gestoría) ---------- */
+
+// Datos comunes de los extractos (banco y cuentas ficticios)
+const BANCO_FICTICIO = 'Banco Turia';
+
+const EXTRACTO_EJEMPLO_B3 = {
+  tipo: 'extracto',
+  banco: BANCO_FICTICIO,
+  titular: 'Moda Valentina, S.L.',
+  iban: 'ES00 9999 0001 1100 0012 3456',
+  periodo: '01/10/2026 – 08/10/2026',
+  saldoInicial: 6420.15,
+  movimientos: [
+    { fecha: '01/10', concepto: 'RECIBO ALQUILER LOCAL OCTUBRE', detalle: 'Inmuebles del Puerto, S.L.', importe: -1020 },
+    { fecha: '02/10', concepto: 'LIQUIDACION TPV 01/10', detalle: 'Bruto 845,00 · comisión 4,23', importe: 840.77 },
+    { fecha: '05/10', concepto: 'TRANSFERENCIA A TEXTILES ALBUFERA SL', detalle: 'Ref. FV-2026/1102', importe: -1210 },
+    { fecha: '06/10', concepto: 'COMISION MANTENIMIENTO', importe: -12 },
+    { fecha: '08/10', concepto: 'TRANSF. RECIBIDA', detalle: 'Ordenante: J. GARCIA · Concepto: PAGO', importe: 250 },
+  ],
+};
+
+const CONTENIDO_B3 = {
+  teoria: [
+    {
+      id: 'extracto',
+      titulo: 'El extracto: tu fuente de verdad',
+      resumen: 'Cómo leerlo sin confundirte de lado.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>En una gestoría, gran parte del trabajo de bancos consiste en <strong>contabilizar el extracto</strong> de cada cliente: cada movimiento debe acabar en un asiento, y al final del periodo el saldo de la cuenta 572 tiene que coincidir con el del banco.</p>',
+        },
+        { tipo: 'documento', documento: EXTRACTO_EJEMPLO_B3 },
+        {
+          tipo: 'consejo',
+          html: '<strong>La trampa del «abono».</strong> El banco habla desde su punto de vista: cuando dice que te <em>abona</em> 250 €, para tu cliente <strong>entra dinero</strong> y la 572 se carga (Debe). Cuando te <em>carga</em> una comisión, la 572 se abona (Haber). Fíjate en el signo del importe, no en la palabra.',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Del extracto al asiento',
+          columnas: ['Movimiento del extracto', 'Asiento habitual'],
+          filas: [
+            ['Ingreso (+) de un cliente', '572 al Debe · 430 al Haber'],
+            ['Pago (−) a un proveedor o acreedor', '400 / 410 / 523 al Debe · 572 al Haber'],
+            ['Pago (−) de un impuesto (303, 111, 115)', '4750 / 4751 al Debe · 572 al Haber'],
+            ['Comisión (−)', '626 al Debe · 572 al Haber, sin IVA'],
+            ['Cuota de préstamo (−)', '520 (capital) y 662 (intereses) al Debe · 572 al Haber'],
+            ['Movimiento sin identificar', '555 Partidas pendientes de aplicación, hasta aclararlo'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Pide los extractos en <strong>formato Norma 43</strong> (también llamado Cuaderno 43): la mayoría de programas contables los importan y proponen asientos automáticos. Tu trabajo pasa a ser revisar esas propuestas, que es donde se cuelan los errores.',
+        },
+      ],
+    },
+    {
+      id: 'cobros-pagos',
+      titulo: 'Cobros y pagos: cancelar saldos',
+      resumen: 'Cada movimiento cierra una deuda o un derecho.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Un cobro o un pago <strong>no es un ingreso ni un gasto</strong>: esos se registraron al contabilizar la factura. El movimiento del banco solo cancela la deuda pendiente. Por eso, antes de registrar un cobro, busca la factura en la 430 del cliente; antes de un pago, en la 400 o la 410 del proveedor.</p>',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Pago a una abogada: factura de 600 € + IVA − 15 % de retención',
+          subtitulo: 'La factura ya se registró (623 / 472 / 4751 / 410).',
+          lineas: [{ cuenta: '410', debe: 636 }, { cuenta: '572', haber: 636 }],
+          nota: 'Se paga lo que se le debe (636 €), no la base ni el total con IVA. La retención (90 €) se pagará a Hacienda con el modelo 111.',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Situaciones habituales',
+          columnas: ['Situación', 'Cómo se resuelve'],
+          filas: [
+            ['Una transferencia paga varias facturas', 'Se cancela cada factura en la subcuenta del proveedor (una línea por factura o una por el total)'],
+            ['Cobro parcial', 'Se cobra lo recibido; el resto queda pendiente en la 430'],
+            ['Cobro neto de un abono', 'Se cancelan la factura y el abono: el cobro coincide con la diferencia'],
+            ['Traspaso entre dos bancos del cliente', 'Subcuentas distintas de la 572: ni ingreso ni gasto'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Si un cliente paga facturas agrupadas o con descuentos sin avisar, <strong>no fuerces el cuadre</strong> llevando la diferencia a un gasto: pregunta. Una diferencia de céntimos puede deberse a un redondeo; una de 200 €, a una factura que no tienes.',
+        },
+      ],
+    },
+    {
+      id: 'comisiones-tpv',
+      titulo: 'Comisiones, TPV y devoluciones de recibos',
+      resumen: 'Los cargos pequeños que más se olvidan.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p><strong>Comisiones.</strong> Van a la <strong>626 Servicios bancarios y similares</strong>. La mayoría de servicios financieros están exentos de IVA, así que no hay línea de 472. Si una factura del banco trae IVA (por ejemplo, el alquiler de un datáfono), revísala: ese importe sí puede deducirse.</p><p><strong>Cobros con tarjeta (TPV).</strong> El banco no abona cada venta: agrupa las del día y descuenta su comisión. Muchas gestorías registran las ventas con tarjeta en una subcuenta de clientes («cobros con tarjeta pendientes») y la liquidación la cancela.</p>',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Liquidación del TPV: ventas de 845 €, comisión de 4,23 €',
+          lineas: [{ cuenta: '572', debe: 840.77 }, { cuenta: '626', debe: 4.23 }, { cuenta: '430', haber: 845 }],
+          nota: 'Entra el neto en el banco, la comisión es gasto y se cancela el total pendiente de las ventas con tarjeta.',
+        },
+        {
+          tipo: 'html',
+          html: '<p><strong>Devolución de un recibo.</strong> Si tu cliente cobró un recibo domiciliado y el banco del deudor lo devuelve (falta de saldo, orden de no pagar), el cobro se deshace: <strong>el cliente vuelve a deber</strong> (430 al Debe) y sale el dinero del banco. Además, el banco suele cobrar una comisión por la devolución.</p>',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Recibo de 354 € devuelto, con 4,50 € de comisión',
+          lineas: [{ cuenta: '430', debe: 354 }, { cuenta: '626', debe: 4.5 }, { cuenta: '572', haber: 358.5 }],
+          nota: 'La deuda vuelve a estar pendiente: hay que reclamarla. Si se repite, es la primera señal de un moroso (Bloque 2).',
+        },
+      ],
+    },
+    {
+      id: 'remesas',
+      titulo: 'Remesas de recibos y descuento de efectos',
+      resumen: 'Cobrar a muchos clientes de una vez, o adelantar el cobro.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Los clientes con muchos cobros recurrentes (distribuidores, academias, gimnasios) envían al banco una <strong>remesa</strong>: un fichero con todos los recibos del mes. Hay dos modalidades:</p>',
+        },
+        {
+          tipo: 'tabla',
+          columnas: ['', 'Gestión de cobro', 'Descuento'],
+          filas: [
+            ['¿Cuándo cobra tu cliente?', 'Al vencimiento, cuando pagan los deudores', 'Antes: el banco adelanta el dinero'],
+            ['Coste', 'Comisión de gestión (626)', 'Intereses (665) y comisiones (626)'],
+            ['Cuentas', '430 → 572 al cobrar', '4311 efectos descontados y 5208 deuda con el banco'],
+            ['Si un deudor no paga', 'Devolución del recibo: 430 vuelve a deber', 'El banco carga el efecto: se cancela la 5208 y el cliente vuelve a deber'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Abono de una remesa al cobro de 4.537,50 €, con 15 € de comisión',
+          lineas: [{ cuenta: '572', debe: 4522.5 }, { cuenta: '626', debe: 15 }, { cuenta: '430', haber: 4537.5 }],
+          nota: 'Se cancelan las deudas de todos los clientes incluidos en la remesa (en la práctica, una línea por cliente).',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Descuento de efectos por 3.000 €: intereses 25 € y comisión 6 €',
+          subtitulo: 'Los efectos se habían traspasado a la 4311 Efectos comerciales descontados.',
+          lineas: [{ cuenta: '572', debe: 2969 }, { cuenta: '665', debe: 25 }, { cuenta: '626', debe: 6 }, { cuenta: '5208', haber: 3000 }],
+          nota: 'Al vencimiento, si los clientes pagan, se cancelan la 5208 y la 4311 entre sí.',
+        },
+      ],
+    },
+    {
+      id: 'prestamos',
+      titulo: 'Préstamos: separar capital e intereses',
+      resumen: 'La cuota mensual no es todo gasto.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Cada cuota de un préstamo tiene dos partes: <strong>capital</strong>, que devuelve la deuda (no es gasto), e <strong>intereses</strong>, que son gasto financiero (<strong>662 Intereses de deudas</strong>, sin IVA). El banco detalla ambos en el recibo de cada cuota o en el cuadro de amortización.</p><p>La deuda está en la <strong>170</strong> (largo plazo) y en la <strong>520</strong> (lo que vence en los próximos 12 meses, reclasificado al cierre). Por eso las cuotas del año se cargan a la 520.</p>',
+        },
+        { tipo: 'prestamo' },
+        {
+          tipo: 'gestoria',
+          html: 'Pide a cada cliente con préstamos el <strong>cuadro de amortización</strong> al firmarlo y guárdalo en su carpeta. Con él contabilizas todas las cuotas del año sin esperar a los recibos y haces la reclasificación de largo a corto plazo al cierre.',
+        },
+      ],
+    },
+    {
+      id: 'renting-leasing',
+      titulo: 'Renting y leasing',
+      resumen: 'Parecen iguales en el extracto, pero no lo son.',
+      piezas: [
+        {
+          tipo: 'tabla',
+          columnas: ['', 'Renting', 'Leasing'],
+          filas: [
+            ['Qué es', 'Un alquiler con servicios (mantenimiento, seguro)', 'Una financiación con opción de compra'],
+            ['El bien', 'No se registra en el balance', 'Se registra como inmovilizado (218, 213…) y se amortiza'],
+            ['La cuota', 'Gasto: 621 Arrendamientos', 'Capital (524) + intereses (662)'],
+            ['IVA', 'Sobre toda la cuota', 'Sobre toda la cuota (capital e intereses)'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Cuota de renting de una furgoneta: 300 € + IVA',
+          lineas: [{ cuenta: '621', debe: 300 }, { cuenta: '472', debe: 63 }, { cuenta: '572', haber: 363 }],
+          nota: 'Si la factura se registra antes que el cargo, primero 621/472 contra la 410 y luego el pago 410/572.',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Cuota de leasing: capital 450 €, intereses 50 €, IVA 105 €',
+          lineas: [{ cuenta: '524', debe: 450 }, { cuenta: '662', debe: 50 }, { cuenta: '472', debe: 105 }, { cuenta: '572', haber: 605 }],
+          nota: 'La 524 recoge la deuda del leasing que vence en los próximos 12 meses (la 174, la de más plazo).',
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Turismos.</strong> Si el vehículo del renting o del leasing es un turismo de uso mixto, recuerda la regla del Bloque 1: en general solo se deduce el 50 % del IVA.',
+        },
+      ],
+    },
+    {
+      id: 'cuenta-555',
+      titulo: 'La cuenta 555: el cajón de sastre',
+      resumen: 'Útil un día, peligrosa si se acumula.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>La <strong>555 Partidas pendientes de aplicación</strong> sirve para registrar un movimiento del banco del que <strong>todavía no sabes el origen</strong>: un ingreso de un ordenante desconocido, un cargo sin concepto claro. Así el banco cuadra mientras lo averiguas.</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Buscar primero', texto: 'Antes de usar la 555, busca el importe en las facturas pendientes del cliente: cobros (430), pagos (400, 410) y otros movimientos del mes.' },
+            { titulo: 'Registrar en la 555', texto: 'Ingreso desconocido: 572 al Debe, 555 al Haber. Cargo desconocido: 555 al Debe, 572 al Haber.' },
+            { titulo: 'Preguntar al cliente', texto: 'Envía una lista de partidas pendientes con fecha, importe y concepto del banco.' },
+            { titulo: 'Aplicar', texto: 'Cuando sepas qué era, traspasa el importe de la 555 a su cuenta definitiva (por ejemplo, 555 al Debe y 430 al Haber si era un cobro).' },
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: '<strong>Ningún trimestre debería cerrarse con la 555 llena</strong>, y menos el ejercicio: un cobro sin aplicar puede esconder una venta sin facturar (IVA sin declarar) y un pago sin aplicar, un gasto que no se ha deducido. Revisa su saldo antes de presentar cada 303.',
+        },
+      ],
+    },
+    {
+      id: 'conciliacion',
+      titulo: 'Conciliación bancaria y punteo',
+      resumen: 'Explicar por qué el banco y la 572 no coinciden.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p><strong>Puntear</strong> es marcar cada movimiento del extracto con su apunte en el mayor de la 572. Lo que queda sin marcar se explica por una de dos razones:</p>',
+        },
+        {
+          tipo: 'tabla',
+          columnas: ['Partida sin puntear', 'Qué es', 'Qué hacer'],
+          filas: [
+            ['Está en el banco, no en la contabilidad', 'Comisiones, recibos domiciliados, cobros que nadie avisó', 'Registrarla en la contabilidad'],
+            ['Está en la contabilidad, no en el banco', 'Partidas en tránsito: un cheque ingresado o una transferencia de fin de mes que el banco aún no ha procesado', 'Nada: aparecerá en el extracto siguiente'],
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Estado de conciliación (ejemplo)',
+          columnas: ['Concepto', 'Importe'],
+          filas: [
+            ['Saldo según el extracto', '10.065,00 €'],
+            ['+ Cobros registrados que el banco aún no refleja', '+ 1.210,00 €'],
+            ['− Pagos registrados que el banco aún no refleja', '− 450,00 €'],
+            ['= Saldo del banco ajustado', '10.825,00 €'],
+            ['Saldo de la 572 tras registrar lo que faltaba', '10.825,00 € ✓'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Concilia <strong>cada mes</strong>, no solo al cierre: una diferencia de un mes se encuentra en minutos; una de todo el año, en días. Y guarda el estado de conciliación firmado en la carpeta del cliente: es lo primero que pide un auditor o un inspector.',
+        },
+      ],
+    },
+  ],
+
+  configTest: { preguntasPorIntento: 10, aprobado: 8 },
+
+  test: [
+    /* --- Extracto y conciliación --- */
+    {
+      id: 'b3-q01',
+      pregunta: 'El extracto dice que el banco «abona» 500 € en la cuenta de tu cliente. ¿Qué haces con la 572?',
+      correcta: 'Cargarla (Debe): entra dinero en la cuenta',
+      incorrectas: ['Abonarla (Haber), como dice el banco', 'Nada hasta el cierre del ejercicio'],
+      explicacion: 'El banco habla desde su contabilidad: para él tu dinero es una deuda. Un abono del banco es un ingreso para tu cliente, así que la 572 aumenta por el Debe.',
+    },
+    {
+      id: 'b3-q02',
+      pregunta: '¿Qué significa puntear un extracto bancario?',
+      correcta: 'Marcar cada movimiento del extracto con su apunte en la 572 para encontrar lo que falta',
+      incorrectas: ['Sumar los cargos y los abonos del mes', 'Imprimir el extracto y archivarlo'],
+      explicacion: 'Al puntear se emparejan los movimientos del banco con los apuntes contables. Lo que queda sin pareja es lo que hay que registrar o explicar en la conciliación.',
+    },
+    {
+      id: 'b3-q03',
+      pregunta: 'A fin de mes, el saldo del banco y el de la 572 no coinciden. ¿Es necesariamente un error?',
+      correcta: 'No: puede haber partidas en tránsito o cargos aún no registrados',
+      incorrectas: ['Sí, siempre es un error de contabilidad', 'Sí, y se ajusta la 572 al saldo del banco sin más'],
+      explicacion: 'La conciliación explica la diferencia: movimientos del banco pendientes de registrar y apuntes contables que el banco aún no ha procesado. Ajustar sin explicar esconde errores.',
+    },
+    {
+      id: 'b3-q04',
+      pregunta: 'Al puntear, encuentras una comisión de 12 € en el extracto que no está en la contabilidad. ¿Qué haces?',
+      correcta: 'Registrarla: 626 al Debe y 572 al Haber',
+      incorrectas: ['Nada: aparecerá en el extracto del mes siguiente', 'Anotarla en la 555 hasta el cierre'],
+      explicacion: 'Lo que está en el banco y no en la contabilidad hay que registrarlo. La comisión es un gasto conocido, así que no hace falta la 555.',
+    },
+    {
+      id: 'b3-q05',
+      pregunta: 'Registraste una transferencia a un proveedor el 31/10, pero el banco la ejecuta el 2/11. ¿Qué haces en la conciliación de octubre?',
+      correcta: 'Nada en la contabilidad: es una partida en tránsito que aparecerá en noviembre',
+      incorrectas: ['Anular el apunte de la contabilidad', 'Registrarla otra vez en noviembre'],
+      explicacion: 'Lo que está en la contabilidad y aún no en el banco se explica en el estado de conciliación. Cuando llegue al extracto de noviembre, simplemente se puntea.',
+    },
+    {
+      id: 'b3-q06',
+      pregunta: '¿Qué es el fichero Norma 43 (o Cuaderno 43)?',
+      correcta: 'El formato estándar de extracto bancario que importan los programas contables',
+      incorrectas: ['Un modelo de declaración de Hacienda', 'Una norma del PGC sobre las cuentas de bancos'],
+      explicacion: 'Es el formato estándar de la banca española para los extractos. Importarlo ahorra teclear movimientos y reduce errores.',
+    },
+    {
+      id: 'b3-q07',
+      pregunta: 'En un extracto, ¿qué es la «fecha valor»?',
+      correcta: 'La fecha que el banco usa para calcular intereses; puede no coincidir con la de la operación',
+      incorrectas: ['La fecha en que vence la factura pagada', 'La fecha en que se contabiliza en la empresa'],
+      explicacion: 'Un ingreso puede hacerse un día y tener fecha valor el siguiente. Para la contabilidad se suele usar la fecha de la operación, pero la fecha valor explica algunas diferencias de saldo.',
+    },
+    {
+      id: 'b3-q08',
+      pregunta: 'Al cierre de cada trimestre, ¿qué debe cumplirse con la cuenta 572?',
+      correcta: 'Que su saldo coincida con el banco, o que la diferencia esté explicada en la conciliación',
+      incorrectas: ['Que su saldo sea cero', 'Nada: puede diferir del banco sin explicación'],
+      explicacion: 'El saldo de la 572 debe reflejar el dinero real. Si no coincide con el extracto, la conciliación debe justificar cada euro de diferencia.',
+    },
+
+    /* --- Cobros y pagos --- */
+    {
+      id: 'b3-q09',
+      pregunta: 'Un cliente transfiere 2.178 € para pagar una factura ya contabilizada. ¿Qué asiento haces?',
+      correcta: '572 al Debe; 430 al Haber',
+      incorrectas: ['572 al Debe; 700 al Haber', '430 al Debe; 572 al Haber'],
+      explicacion: 'El cobro cancela el derecho frente al cliente. La venta ya se registró al emitir la factura: abonar la 700 la duplicaría.',
+    },
+    {
+      id: 'b3-q10',
+      pregunta: 'Pagas a una abogada su factura de 1.000 € + IVA con un 15 % de retención. ¿Cuánto sale del banco?',
+      correcta: '1.060 €, cargando la 410 y abonando la 572',
+      incorrectas: ['1.210 €, el total con IVA', '1.000 €, la base de la factura'],
+      explicacion: 'Se paga lo que se debe a la abogada: 1.000 + 210 − 150 = 1.060 €. La retención se ingresará a Hacienda con el modelo 111.',
+    },
+    {
+      id: 'b3-q11',
+      pregunta: 'Una sola transferencia paga tres facturas del mismo proveedor. ¿Cómo la registras?',
+      correcta: 'Cancelando las tres facturas en la 400 de ese proveedor contra la 572',
+      incorrectas: ['Registrando tres gastos nuevos', 'Llevándola a la 555 hasta el cierre'],
+      explicacion: 'El pago agrupado cancela varias deudas. Se puede hacer con una línea por factura o una por el total, pero hay que puntear cada factura en la subcuenta del proveedor.',
+    },
+    {
+      id: 'b3-q12',
+      pregunta: 'Un cliente paga 500 € de una factura de 1.210 €. ¿Qué haces?',
+      correcta: 'Registrar el cobro de 500 € (572 a 430); quedan 710 € pendientes',
+      incorrectas: ['Dar la factura por cobrada y llevar la diferencia a gasto', 'No registrar nada hasta que pague todo'],
+      explicacion: 'Se registra lo cobrado. El saldo pendiente sigue en la 430 y hay que reclamarlo.',
+    },
+    {
+      id: 'b3-q13',
+      pregunta: 'En el extracto aparece el cargo del modelo 111 del tercer trimestre. ¿Qué asiento haces?',
+      correcta: '4751 al Debe; 572 al Haber',
+      incorrectas: ['631 Otros tributos al Debe; 572 al Haber', '640 Sueldos y salarios al Debe; 572 al Haber'],
+      explicacion: 'El 111 ingresa las retenciones practicadas, que estaban como deuda en la 4751. Pagarlas cancela esa deuda: no es un gasto nuevo.',
+    },
+    {
+      id: 'b3-q14',
+      pregunta: 'Se domicilia el pago del modelo 303 con un resultado a ingresar de 1.200 €. ¿Qué cuenta se carga?',
+      correcta: '4750 Hacienda Pública, acreedora por IVA',
+      incorrectas: ['477 Hacienda Pública, IVA repercutido', '631 Otros tributos'],
+      explicacion: 'Al liquidar el trimestre, la diferencia entre 477 y 472 se lleva a la 4750 (si sale a ingresar). El pago cancela la 4750. Lo verás en detalle en el Bloque 4.',
+    },
+    {
+      id: 'b3-q15',
+      pregunta: 'Tu cliente traspasa 2.000 € de su cuenta en un banco a su cuenta en otro banco. ¿Qué asiento haces?',
+      correcta: '572 del banco que recibe al Debe; 572 del banco que envía al Haber',
+      incorrectas: ['572 al Debe; 705 al Haber', 'Ninguno: es el mismo dinero'],
+      explicacion: 'Cada banco tiene su subcuenta de la 572 (57200001, 57200002…). El traspaso mueve dinero entre ellas: ni ingreso ni gasto, pero sí asiento, para que cada subcuenta cuadre con su extracto.',
+    },
+
+    /* --- Comisiones, TPV y devoluciones --- */
+    {
+      id: 'b3-q16',
+      pregunta: 'El banco cobra 15 € de comisión de mantenimiento. ¿Qué asiento haces?',
+      correcta: '626 Servicios bancarios al Debe; 572 al Haber, sin IVA',
+      incorrectas: ['626 al Debe y 472 por el 21 % al Debe; 572 al Haber', '662 Intereses de deudas al Debe; 572 al Haber'],
+      explicacion: 'Las comisiones bancarias son, en general, servicios financieros exentos de IVA. Van enteras a la 626.',
+    },
+    {
+      id: 'b3-q17',
+      pregunta: 'Llega una factura del banco por el alquiler del datáfono que sí incluye IVA. ¿Qué haces?',
+      correcta: 'Registrar el IVA en la 472: el alquiler del terminal no es un servicio financiero exento',
+      incorrectas: ['Ignorar el IVA: los bancos nunca lo cobran', 'Llevar todo a la 662'],
+      explicacion: 'La mayoría de comisiones están exentas, pero no todo lo que factura un banco lo está. Si la factura trae IVA y cumple los requisitos, se deduce.',
+    },
+    {
+      id: 'b3-q18',
+      pregunta: 'El banco liquida las ventas con tarjeta del día: 2.000 € brutos, 10 € de comisión, abona 1.990 €. Las ventas estaban en la 430. ¿Qué asiento haces?',
+      correcta: '572 por 1.990 y 626 por 10 al Debe; 430 por 2.000 al Haber',
+      incorrectas: ['572 por 1.990 al Debe; 700 por 1.990 al Haber', '572 por 2.000 al Debe; 430 por 2.000 al Haber'],
+      explicacion: 'Se cancela el total pendiente de las ventas con tarjeta (2.000 €). Entra el neto y la comisión descontada es un gasto financiero.',
+    },
+    {
+      id: 'b3-q19',
+      pregunta: 'Devuelven un recibo de 300 € que tu cliente ya había dado por cobrado. ¿Qué asiento haces?',
+      correcta: '430 al Debe; 572 al Haber: el cliente vuelve a deber',
+      incorrectas: ['708 Devoluciones de ventas al Debe; 572 al Haber', '650 Pérdidas de créditos incobrables al Debe; 572 al Haber'],
+      explicacion: 'La devolución de un recibo no anula la venta: deshace el cobro. La deuda reaparece en la 430 y hay que reclamarla.',
+    },
+    {
+      id: 'b3-q20',
+      pregunta: 'Tu cliente paga la luz con recibo domiciliado, pero el banco lo devuelve por falta de saldo. El pago ya estaba registrado. ¿Qué haces?',
+      correcta: 'Deshacer el pago: 572 al Debe y 410 al Haber; la deuda con la eléctrica sigue pendiente',
+      incorrectas: ['Registrar un ingreso en la 759', 'Nada: la factura ya estaba pagada'],
+      explicacion: 'El dinero no ha salido, así que el pago se anula y la deuda vuelve a la 410. Avisa al cliente: tendrá que pagarla para evitar recargos o cortes.',
+    },
+
+    /* --- Remesas y descuento --- */
+    {
+      id: 'b3-q21',
+      pregunta: 'En una remesa de recibos en gestión de cobro, ¿cuándo entra el dinero en la cuenta?',
+      correcta: 'Al vencimiento, cuando el banco cobra a los deudores',
+      incorrectas: ['Al presentar la remesa', 'Al final del trimestre'],
+      explicacion: 'En la gestión de cobro el banco solo se encarga de cobrar. El dinero entra al vencimiento, menos la comisión de gestión.',
+    },
+    {
+      id: 'b3-q22',
+      pregunta: 'En el descuento de efectos, el banco adelanta el dinero antes del vencimiento. ¿Qué cuenta recoge la deuda con el banco?',
+      correcta: '5208 Deudas por efectos descontados',
+      incorrectas: ['170 Deudas a largo plazo con entidades de crédito', '438 Anticipos de clientes'],
+      explicacion: 'Si el deudor no paga, el banco devolverá el efecto a tu cliente. Mientras tanto, lo anticipado es una deuda con el banco: 5208.',
+    },
+    {
+      id: 'b3-q23',
+      pregunta: 'Al descontar efectos, el banco cobra 25 € de intereses. ¿En qué cuenta los registras?',
+      correcta: '665 Intereses por descuento de efectos y operaciones de factoring',
+      incorrectas: ['626 Servicios bancarios y similares', '662 Intereses de deudas'],
+      explicacion: 'El PGC tiene una cuenta específica para los intereses del descuento: 665. Las comisiones de la operación sí van a la 626.',
+    },
+    {
+      id: 'b3-q24',
+      pregunta: 'Llega el vencimiento y el deudor paga el efecto que estaba descontado. ¿Qué asiento haces?',
+      correcta: '5208 al Debe; 4311 Efectos comerciales descontados al Haber',
+      incorrectas: ['572 al Debe; 430 al Haber', 'Ninguno: el banco ya pagó'],
+      explicacion: 'El dinero ya entró al descontar. Al pagar el deudor, se cancelan a la vez la deuda con el banco (5208) y el efecto descontado (4311).',
+    },
+
+    /* --- Préstamos --- */
+    {
+      id: 'b3-q25',
+      pregunta: 'Cuota de préstamo de 500 €: 420 € de capital y 80 € de intereses. ¿Qué asiento haces?',
+      correcta: '520 por 420 y 662 por 80 al Debe; 572 por 500 al Haber',
+      incorrectas: ['662 por 500 al Debe; 572 por 500 al Haber', '170 por 500 al Debe; 572 por 500 al Haber'],
+      explicacion: 'El capital devuelve deuda (520) y solo los intereses son gasto (662). Registrar toda la cuota como gasto infla los gastos y deja la deuda sin bajar.',
+    },
+    {
+      id: 'b3-q26',
+      pregunta: '¿Llevan IVA los intereses de un préstamo?',
+      correcta: 'No: están exentos',
+      incorrectas: ['Sí, el 21 %', 'Sí, el 10 %'],
+      explicacion: 'La concesión de créditos y sus intereses son operaciones financieras exentas. No hay línea de 472.',
+    },
+    {
+      id: 'b3-q27',
+      pregunta: '¿Por qué las cuotas del año de un préstamo a 5 años se cargan a la 520 y no a la 170?',
+      correcta: 'Porque al cierre se reclasificó a corto plazo la parte que vence en los 12 meses siguientes',
+      incorrectas: ['Porque la 170 solo se usa al recibir el préstamo', 'Porque todos los préstamos son a corto plazo'],
+      explicacion: 'Al cierre se traspasa de la 170 a la 520 el capital que vence el año siguiente. Así el balance muestra qué parte de la deuda hay que pagar pronto.',
+    },
+    {
+      id: 'b3-q28',
+      pregunta: 'En un préstamo de cuota constante (sistema francés), ¿qué pasa a medida que se pagan cuotas?',
+      correcta: 'La cuota no cambia; los intereses bajan y el capital amortizado sube',
+      incorrectas: ['Los intereses suben cada mes', 'El capital es fijo y la cuota baja'],
+      explicacion: 'Los intereses se calculan sobre la deuda pendiente, que va bajando. Como la cuota es fija, cada mes una parte mayor devuelve capital.',
+    },
+    {
+      id: 'b3-q29',
+      pregunta: 'Al recibir un préstamo, el banco cobra 150 € de comisión de apertura. ¿Cómo lo registra normalmente una pyme?',
+      correcta: 'Como gasto en la 626 Servicios bancarios, sin IVA',
+      incorrectas: ['En la 472, porque lleva IVA', 'Sumándola a la deuda en la 520'],
+      explicacion: 'Es el criterio habitual en pymes. En rigor, el PGC permite repartir estos costes a lo largo de la vida del préstamo (coste amortizado), pero no lleva IVA en ningún caso.',
+    },
+    {
+      id: 'b3-q30',
+      pregunta: '¿Dónde encuentras el capital y los intereses de cada cuota de un préstamo?',
+      correcta: 'En el recibo de la cuota o en el cuadro de amortización del banco',
+      incorrectas: ['En el modelo 303 del trimestre', 'En el modelo 347'],
+      explicacion: 'El banco detalla cada cuota. Con el cuadro de amortización puedes contabilizar todo el año y reclasificar a corto plazo al cierre.',
+    },
+
+    /* --- Renting y leasing --- */
+    {
+      id: 'b3-q31',
+      pregunta: 'Cuota mensual de renting de una furgoneta: 400 € + IVA. ¿Qué asiento haces al pagarla (sin factura previa registrada)?',
+      correcta: '621 por 400 y 472 por 84 al Debe; 572 por 484 al Haber',
+      incorrectas: ['218 Elementos de transporte por 484 al Debe; 572 al Haber', '662 por 400 y 472 por 84 al Debe; 572 al Haber'],
+      explicacion: 'El renting es un alquiler: la cuota es gasto (621) y su IVA, deducible si el vehículo está afecto a la actividad. La furgoneta no entra en el balance.',
+    },
+    {
+      id: 'b3-q32',
+      pregunta: '¿Cuál es la principal diferencia contable entre renting y leasing?',
+      correcta: 'En el renting la cuota es gasto; en el leasing el bien es inmovilizado y hay una deuda (524/174)',
+      incorrectas: ['Ninguna: los dos son gasto', 'En el leasing la cuota es gasto y en el renting el bien es inmovilizado'],
+      explicacion: 'El leasing es una financiación con opción de compra: el bien se registra como inmovilizado y se amortiza, y las cuotas devuelven deuda e intereses.',
+    },
+    {
+      id: 'b3-q33',
+      pregunta: 'Cuota de leasing: 450 € de capital, 50 € de intereses y 105 € de IVA. ¿Qué asiento haces?',
+      correcta: '524 por 450, 662 por 50 y 472 por 105 al Debe; 572 por 605 al Haber',
+      incorrectas: ['621 por 500 y 472 por 105 al Debe; 572 por 605 al Haber', '218 por 605 al Debe; 572 por 605 al Haber'],
+      explicacion: 'El capital reduce la deuda del leasing a corto plazo (524), los intereses son gasto (662) y el IVA de la cuota se deduce (472).',
+    },
+    {
+      id: 'b3-q34',
+      pregunta: 'En una cuota de leasing, ¿sobre qué se calcula el IVA?',
+      correcta: 'Sobre la cuota completa: capital e intereses',
+      incorrectas: ['Solo sobre los intereses', 'No lleva IVA porque es una financiación'],
+      explicacion: 'A diferencia de un préstamo, el leasing es un arrendamiento a efectos de IVA: cada cuota completa lleva IVA.',
+    },
+
+    /* --- Cuenta 555 --- */
+    {
+      id: 'b3-q35',
+      pregunta: 'Aparece en el extracto un ingreso de 605 € de un ordenante que no reconoces. ¿Qué haces?',
+      correcta: '572 al Debe y 555 Partidas pendientes de aplicación al Haber, y preguntar al cliente',
+      incorrectas: ['Registrarlo como venta en la 705', 'Abonarlo a la 430 de cualquier cliente con deuda'],
+      explicacion: 'Si no sabes qué es, la 555 deja el banco cuadrado sin inventar un origen. Un ingreso no es automáticamente una venta.',
+    },
+    {
+      id: 'b3-q36',
+      pregunta: 'El cliente aclara que esos 605 € eran el cobro de una factura de una clienta. ¿Qué asiento haces?',
+      correcta: '555 al Debe; 430 al Haber',
+      incorrectas: ['572 al Debe; 430 al Haber', '555 al Debe; 705 al Haber'],
+      explicacion: 'El dinero ya entró en el banco. Ahora solo se traspasa la partida de la 555 a su cuenta definitiva: se cancela la deuda de la clienta.',
+    },
+    {
+      id: 'b3-q37',
+      pregunta: '¿Puede quedar saldo en la 555 al cerrar el ejercicio?',
+      correcta: 'No debería: hay que aclarar y aplicar todas las partidas antes del cierre',
+      incorrectas: ['Sí, sin ningún problema', 'Sí: se traspasa al resultado (129)'],
+      explicacion: 'Un saldo en la 555 puede esconder ventas sin facturar o gastos sin deducir. Es de lo primero que revisa un auditor.',
+    },
+    {
+      id: 'b3-q38',
+      pregunta: 'Hay un cargo de 120 € en el extracto con un concepto que nadie entiende. ¿Qué haces mientras lo averiguas?',
+      correcta: '555 al Debe; 572 al Haber',
+      incorrectas: ['629 Otros servicios al Debe; 572 al Haber', '626 Servicios bancarios al Debe; 572 al Haber'],
+      explicacion: 'Un cargo desconocido también va a la 555, pero en el lado contrario. Llevarlo a un gasto sin saber qué es puede deducir algo que no corresponde.',
+    },
+    {
+      id: 'b3-q39',
+      pregunta: 'Antes de usar la 555 con un ingreso desconocido, ¿qué conviene hacer?',
+      correcta: 'Buscar ese importe entre las facturas pendientes de cobro y pago del cliente',
+      incorrectas: ['Nada: es la cuenta para cualquier duda', 'Preguntar al banco qué IVA lleva'],
+      explicacion: 'Muchas veces el importe coincide con una factura pendiente o con la suma de varias. Unos minutos de búsqueda evitan una pregunta innecesaria al cliente.',
+    },
+    {
+      id: 'b3-q40',
+      pregunta: '¿Qué riesgo tiene un ingreso sin aplicar en la 555 durante meses?',
+      correcta: 'Que esconda una venta sin facturar y, por tanto, IVA sin declarar',
+      incorrectas: ['Ninguno: el dinero ya está en el banco', 'Que el banco cobre una comisión por él'],
+      explicacion: 'Si el ingreso corresponde a una venta que nunca se facturó, el IVA de esa venta no se ha declarado. Por eso la 555 se revisa antes de cada 303.',
+    },
+  ],
+
+  casos: [
+    {
+      id: 'b3-cobro',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Cobro de un cliente, neto de un abono',
+      enunciado: 'En el extracto de octubre aparece el cobro del restaurante. Recuerda que tenía pendiente la factura 2026/0241 (2.178 €) y el abono R-2026/007 (−145,20 €). Registra el movimiento resaltado.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Distribuciones Levante, S.L.',
+        iban: 'ES00 9999 0001 1100 0045 1290',
+        periodo: '20/10/2026 – 24/10/2026',
+        saldoInicial: 18304.62,
+        movimientos: [
+          { fecha: '20/10', concepto: 'RECIBO TELEFONICA', detalle: 'Fibra y móviles octubre', importe: -96.8 },
+          { fecha: '22/10', concepto: 'TRANSF. RECIBIDA MESON LA ENCINA SL', detalle: 'Concepto: FRA 2026/0241 Y ABONO R-2026/007', importe: 2032.8, resaltar: true },
+          { fecha: '24/10', concepto: 'TRANSFERENCIA A TRANSPORTES RAPIDOS SL', detalle: 'Portes septiembre', importe: -242 },
+        ],
+      },
+      cuentasDisponibles: ['572', '430', '700', '708', '477', '555', '626'],
+      solucion: [{ cuenta: '572', debe: 2032.8 }, { cuenta: '430', haber: 2032.8 }],
+      pista: 'La venta y el abono ya están registrados. El cobro solo cancela lo que el restaurante debía.',
+      explicacion: 'Entran 2.032,80 € en el banco (572 al Debe) y se cancela la deuda neta del restaurante en la 430: 2.178 − 145,20 = 2.032,80 €. No se toca la 700 ni la 708: la venta y el abono ya se registraron.',
+    },
+    {
+      id: 'b3-pago',
+      tipo: 'asiento',
+      cliente: { nombre: 'Reformas Integrales Turia, S.L.', actividad: 'Empresa de reformas' },
+      titulo: 'Pago a la abogada',
+      enunciado: 'La empresa ha pagado la factura de la abogada que registraste en el Bloque 1 (600 € + IVA − 15 % de retención). Registra el movimiento resaltado.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Reformas Integrales Turia, S.L.',
+        iban: 'ES00 9999 0001 1100 0078 3311',
+        periodo: '16/10/2026 – 20/10/2026',
+        saldoInicial: 9512.4,
+        movimientos: [
+          { fecha: '16/10', concepto: 'TRANSF. RECIBIDA PROMOCIONES HUERTA NORTE', detalle: 'Certificación obra n.º 3', importe: 7260 },
+          { fecha: '19/10', concepto: 'TRANSFERENCIA A LAURA MENDEZ RUIZ', detalle: 'Concepto: FRA 2026/047', importe: -636, resaltar: true },
+          { fecha: '20/10', concepto: 'RECIBO SEGURO RC', detalle: 'Póliza 88-112 · trimestral', importe: -312.5 },
+        ],
+      },
+      cuentasDisponibles: ['410', '400', '623', '472', '4751', '572', '555'],
+      solucion: [{ cuenta: '410', debe: 636 }, { cuenta: '572', haber: 636 }],
+      pista: 'El gasto, el IVA y la retención se registraron con la factura. ¿Qué queda pendiente con la abogada?',
+      explicacion: 'Se cancela la deuda con la abogada (410 al Debe, 636 €) y sale el dinero del banco (572 al Haber). La retención de 90 € no se paga a ella: sigue en la 4751 hasta el modelo 111.',
+    },
+    {
+      id: 'b3-comisiones',
+      tipo: 'asiento',
+      cliente: { nombre: 'Moda Valentina, S.L.', actividad: 'Tienda de ropa' },
+      titulo: 'Comisiones bancarias',
+      enunciado: 'Al revisar el extracto de la tienda encuentras dos cargos del banco sin registrar. Contabilízalos en un único asiento.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Moda Valentina, S.L.',
+        iban: 'ES00 9999 0001 1100 0012 3456',
+        periodo: '01/10/2026 – 31/10/2026',
+        saldoInicial: 6420.15,
+        movimientos: [
+          { fecha: '05/10', concepto: 'TRANSFERENCIA A TEXTILES ALBUFERA SL', detalle: 'Ref. FV-2026/1102', importe: -1210 },
+          { fecha: '05/10', concepto: 'COMISION EMISION TRANSFERENCIA', importe: -2.5, resaltar: true },
+          { fecha: '31/10', concepto: 'COMISION MANTENIMIENTO CUENTA', detalle: 'Periodo 10/2026', importe: -15, resaltar: true },
+        ],
+      },
+      cuentasDisponibles: ['626', '662', '629', '472', '572', '555', '410'],
+      solucion: [{ cuenta: '626', debe: 17.5 }, { cuenta: '572', haber: 17.5 }],
+      pista: 'Suma las dos comisiones. ¿Llevan IVA los servicios bancarios?',
+      explicacion: 'Las comisiones (2,50 + 15 = 17,50 €) van a la 626 Servicios bancarios, sin IVA porque son servicios financieros exentos. No son intereses (662).',
+    },
+    {
+      id: 'b3-tpv',
+      tipo: 'asiento',
+      cliente: { nombre: 'Calzados Sierra, S.L.', actividad: 'Zapatería' },
+      titulo: 'Liquidación del TPV',
+      enunciado: 'La zapatería registra sus ventas con tarjeta en la subcuenta 43000999 «Cobros con tarjeta pendientes». Hoy el banco ha liquidado las ventas de ayer. Registra el movimiento resaltado.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Calzados Sierra, S.L.',
+        iban: 'ES00 9999 0001 1100 0033 7810',
+        periodo: '21/10/2026 – 22/10/2026',
+        saldoInicial: 4108.9,
+        movimientos: [
+          { fecha: '21/10', concepto: 'LIQUIDACION TPV 20/10', detalle: 'Bruto 980,00 · comisión 4,90', importe: 975.1 },
+          { fecha: '22/10', concepto: 'LIQUIDACION TPV 21/10', detalle: 'Bruto 1.250,00 · comisión 6,25', importe: 1243.75, resaltar: true },
+        ],
+      },
+      cuentasDisponibles: ['572', '626', '430', '700', '477', '472', '555'],
+      solucion: [{ cuenta: '572', debe: 1243.75 }, { cuenta: '626', debe: 6.25 }, { cuenta: '430', haber: 1250 }],
+      pista: 'Las ventas (y su IVA) ya están registradas por el bruto. El banco ingresa menos: ¿qué es la diferencia?',
+      explicacion: 'Se cancela el total pendiente de cobrar con tarjeta (430, 1.250 €). Entra el neto en el banco (572, 1.243,75 €) y la comisión descontada es gasto (626, 6,25 €). No se vuelve a registrar la venta.',
+    },
+    {
+      id: 'b3-remesa',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Abono de una remesa de recibos',
+      enunciado: 'El distribuidor envió al banco una remesa de 15 recibos en gestión de cobro. Ha llegado el vencimiento y todos se han cobrado. Registra los dos movimientos resaltados en un único asiento.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Distribuciones Levante, S.L.',
+        iban: 'ES00 9999 0001 1100 0045 1290',
+        periodo: '30/10/2026 – 31/10/2026',
+        saldoInicial: 20094.62,
+        movimientos: [
+          { fecha: '30/10', concepto: 'ABONO REMESA RECIBOS SEPA', detalle: 'Remesa 2026-10 · 15 recibos', importe: 4537.5, resaltar: true },
+          { fecha: '30/10', concepto: 'COMISION GESTION REMESA', detalle: '15 recibos × 1,00', importe: -15, resaltar: true },
+          { fecha: '31/10', concepto: 'RECIBO RENTING FURGONETA', detalle: 'Cuota 10/2026', importe: -484 },
+        ],
+      },
+      cuentasDisponibles: ['572', '626', '665', '430', '5208', '700', '555'],
+      solucion: [{ cuenta: '572', debe: 4522.5 }, { cuenta: '626', debe: 15 }, { cuenta: '430', haber: 4537.5 }],
+      pista: 'Es gestión de cobro, no descuento: no hay deuda con el banco. ¿Qué cancelan los recibos cobrados?',
+      explicacion: 'Se cancelan las deudas de los clientes de la remesa (430, 4.537,50 €; en la práctica, una línea por cliente). Entra en el banco el neto (572, 4.522,50 €) y la comisión de gestión es gasto (626, 15 €). Sin 5208 ni 665: eso sería un descuento.',
+    },
+    {
+      id: 'b3-devolucion',
+      tipo: 'asiento',
+      cliente: { nombre: 'Horno San Blas, S.L.', actividad: 'Panadería y bollería' },
+      titulo: 'Devolución de un recibo',
+      enunciado: 'La panadería cobró en octubre por recibo domiciliado la factura HSB-2026/0388 de la cafetería (354 €), y ya se registró el cobro. Hoy el banco lo ha devuelto. Registra los movimientos resaltados en un único asiento.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Horno San Blas, S.L.',
+        iban: 'ES00 9999 0001 1100 0056 4402',
+        periodo: '12/11/2026 – 13/11/2026',
+        saldoInicial: 3876.4,
+        movimientos: [
+          { fecha: '12/11', concepto: 'DEVOLUCION RECIBO CAFETERIA PLAZA MAYOR', detalle: 'Ref. HSB-2026/0388 · Motivo: AM04 fondos insuficientes', importe: -354, resaltar: true },
+          { fecha: '12/11', concepto: 'COMISION DEVOLUCION RECIBO', importe: -4.5, resaltar: true },
+          { fecha: '13/11', concepto: 'LIQUIDACION TPV 12/11', detalle: 'Bruto 412,00 · comisión 2,06', importe: 409.94 },
+        ],
+      },
+      cuentasDisponibles: ['430', '436', '708', '626', '650', '572', '555'],
+      solucion: [{ cuenta: '430', debe: 354 }, { cuenta: '626', debe: 4.5 }, { cuenta: '572', haber: 358.5 }],
+      pista: 'La venta sigue siendo válida: lo que se deshace es el cobro. ¿Quién vuelve a deber?',
+      explicacion: 'La cafetería vuelve a deber la factura: 430 al Debe por 354 €. La comisión de la devolución es gasto (626, 4,50 €) y del banco salen 358,50 €. No es un abono (708) ni todavía un incobrable (650): primero hay que reclamar.',
+    },
+    {
+      id: 'b3-prestamo',
+      tipo: 'asiento',
+      cliente: { nombre: 'Horno San Blas, S.L.', actividad: 'Panadería y bollería' },
+      titulo: 'Cuota del préstamo del horno',
+      enunciado: 'La panadería financió el horno con un préstamo a 5 años. Las cuotas de este año ya están reclasificadas a corto plazo. Registra la cuota resaltada.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Horno San Blas, S.L.',
+        iban: 'ES00 9999 0001 1100 0056 4402',
+        periodo: '01/11/2026 – 05/11/2026',
+        saldoInicial: 4521.3,
+        movimientos: [
+          { fecha: '01/11', concepto: 'RECIBO CUOTA PRESTAMO 0099-123456', detalle: 'Cuota 23/60 · capital 412,30 · intereses 87,70', importe: -500, resaltar: true },
+          { fecha: '04/11', concepto: 'TRANSF. RECIBIDA CAFETERIA PLAZA MAYOR SL', detalle: 'Fra HSB-2026/0402', importe: 412.8 },
+        ],
+      },
+      cuentasDisponibles: ['520', '170', '662', '626', '472', '572', '213'],
+      solucion: [{ cuenta: '520', debe: 412.3 }, { cuenta: '662', debe: 87.7 }, { cuenta: '572', haber: 500 }],
+      pista: 'Lee el detalle del recibo: una parte devuelve deuda y otra es el coste del dinero. ¿Dónde está la deuda de este año?',
+      explicacion: 'El capital (412,30 €) reduce la deuda a corto plazo (520) y los intereses (87,70 €) son gasto financiero (662), sin IVA. Sale del banco la cuota completa: 500 €. No es la 170: esa parte ya se reclasificó.',
+    },
+    {
+      id: 'b3-renting',
+      tipo: 'asiento',
+      cliente: { nombre: 'Reformas Integrales Turia, S.L.', actividad: 'Empresa de reformas' },
+      titulo: 'Cuota de renting de una furgoneta',
+      enunciado: 'La empresa tiene una furgoneta de obra en renting. Junto con el cargo ha llegado la factura de la cuota (300 € + IVA), que aún no estaba registrada. Registra el movimiento resaltado en un único asiento.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Reformas Integrales Turia, S.L.',
+        iban: 'ES00 9999 0001 1100 0078 3311',
+        periodo: '01/11/2026 – 03/11/2026',
+        saldoInicial: 15823.9,
+        movimientos: [
+          { fecha: '01/11', concepto: 'RECIBO RENTING VEHICULOS SL', detalle: 'Fra RT-2026-11 · furgoneta 1234-ABC', importe: -363, resaltar: true },
+          { fecha: '03/11', concepto: 'TRANSFERENCIA A MATERIALES DEL TURIA SA', detalle: 'Fras 2026/551 y 2026/560', importe: -2480.6 },
+        ],
+      },
+      cuentasDisponibles: ['621', '218', '524', '662', '472', '572', '410'],
+      solucion: [{ cuenta: '621', debe: 300 }, { cuenta: '472', debe: 63 }, { cuenta: '572', haber: 363 }],
+      pista: 'El renting es un alquiler: la furgoneta no es de la empresa. ¿La cuota es deuda o gasto?',
+      explicacion: 'La cuota de renting es gasto de arrendamiento (621, 300 €) con su IVA deducible (472, 63 €): es una furgoneta de obra afecta a la actividad. La furgoneta no entra en el balance (no es 218) y no hay intereses (662).',
+    },
+    {
+      id: 'b3-leasing',
+      tipo: 'asiento',
+      cliente: { nombre: 'Maquinaria Hostelera del Mediterráneo, S.A.', actividad: 'Venta de maquinaria para hostelería' },
+      titulo: 'Cuota de leasing de una carretilla',
+      enunciado: 'La empresa adquirió una carretilla elevadora mediante leasing (ya registrada como inmovilizado). El banco carga la cuota con el detalle de la financiación. Registra el movimiento resaltado.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Maquinaria Hostelera del Mediterráneo, S.A.',
+        iban: 'ES00 9999 0001 1100 0091 2205',
+        periodo: '05/11/2026 – 06/11/2026',
+        saldoInicial: 48210.55,
+        movimientos: [
+          { fecha: '05/11', concepto: 'CUOTA LEASING 77-5501', detalle: 'Recuperación coste 450,00 · intereses 50,00 · IVA 105,00', importe: -605, resaltar: true },
+          { fecha: '06/11', concepto: 'TRANSF. RECIBIDA HORNO SAN BLAS SL', detalle: 'Fra MHM-26-00912', importe: 5808 },
+        ],
+      },
+      cuentasDisponibles: ['524', '174', '621', '662', '472', '213', '572'],
+      solucion: [{ cuenta: '524', debe: 450 }, { cuenta: '662', debe: 50 }, { cuenta: '472', debe: 105 }, { cuenta: '572', haber: 605 }],
+      pista: 'En el leasing, el bien ya está en el balance. La cuota devuelve deuda, paga intereses y lleva IVA.',
+      explicacion: 'La recuperación del coste reduce la deuda del leasing a corto plazo (524, 450 €), los intereses son gasto (662, 50 €) y el IVA de la cuota completa se deduce (472, 105 €). No es 621: eso sería un renting.',
+    },
+    {
+      id: 'b3-555',
+      tipo: 'asiento',
+      cliente: { nombre: 'Moda Valentina, S.L.', actividad: 'Tienda de ropa' },
+      titulo: 'Un ingreso que nadie reconoce',
+      enunciado: 'En el extracto aparece un ingreso que no coincide con ninguna factura pendiente de la tienda. Has escrito a la clienta para preguntar, pero hoy cierras el mes. Registra el movimiento resaltado.',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Moda Valentina, S.L.',
+        iban: 'ES00 9999 0001 1100 0012 3456',
+        periodo: '27/10/2026 – 29/10/2026',
+        saldoInicial: 7015.3,
+        movimientos: [
+          { fecha: '27/10', concepto: 'LIQUIDACION TPV 26/10', detalle: 'Bruto 610,00 · comisión 3,05', importe: 606.95 },
+          { fecha: '29/10', concepto: 'TRANSF. RECIBIDA', detalle: 'Ordenante: J. GARCIA L. · Concepto: PAGO', importe: 605, resaltar: true },
+        ],
+      },
+      cuentasDisponibles: ['572', '555', '430', '700', '705', '477', '759'],
+      solucion: [{ cuenta: '572', debe: 605 }, { cuenta: '555', haber: 605 }],
+      pista: 'El dinero ha entrado, pero no sabes de qué. ¿Hay una cuenta para dejarlo «aparcado» sin inventar su origen?',
+      explicacion: 'Entra el dinero (572 al Debe) y, hasta saber su origen, se registra en la 555 Partidas pendientes de aplicación. Registrarlo como venta (700) o abonarlo a un cliente al azar podría ser un error con efectos en el IVA.',
+    },
+    {
+      id: 'b3-555-aplicar',
+      tipo: 'asiento',
+      cliente: { nombre: 'Moda Valentina, S.L.', actividad: 'Tienda de ropa' },
+      titulo: 'Aplicar la partida pendiente',
+      enunciado: 'La clienta te ha respondido sobre el ingreso del caso anterior. Regulariza la cuenta 555.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Mayor de la cuenta 555 y respuesta de la clienta',
+        subtitulo: '55500000 · Partidas pendientes de aplicación',
+        emisor: { nombre: 'Moda Valentina, S.L.', nif: 'B98765432' },
+        columnas: ['Fecha', 'Concepto', 'Haber', 'Saldo'],
+        filas: [
+          ['29/10/2026', 'Transf. recibida J. García L. · «PAGO»', '605,00', '605,00 H'],
+        ],
+        notas: [
+          'Respuesta de la clienta: «Es Julia García, de la Boutique Julia (cliente nuestra). Nos ha pagado la factura 2026/112 del pedido de septiembre».',
+          'La factura 2026/112 (605,00 €) figura pendiente de cobro en la 430 de Boutique Julia.',
+        ],
+      },
+      cuentasDisponibles: ['555', '572', '430', '700', '477', '708', '759'],
+      solucion: [{ cuenta: '555', debe: 605 }, { cuenta: '430', haber: 605 }],
+      pista: 'El dinero ya está registrado en el banco. Solo falta llevar la partida desde la 555 a su cuenta definitiva.',
+      explicacion: 'Se cancela la partida pendiente (555 al Debe) y la deuda de la Boutique Julia (430 al Haber). La 572 no se toca: el ingreso ya se registró. Y no es una venta nueva: la factura ya estaba contabilizada.',
+    },
+    {
+      id: 'b3-conciliacion',
+      tipo: 'clasificar',
+      cliente: { nombre: 'Estudio Creativo Píxel, S.L.', actividad: 'Agencia de diseño' },
+      titulo: 'Puntea el extracto con el mayor',
+      enunciado: 'Es fin de mes. Compara el extracto de octubre con el mayor de la 572 e indica la situación de cada movimiento.',
+      documentos: [
+        {
+          tipo: 'extracto',
+          banco: BANCO_FICTICIO,
+          titular: 'Estudio Creativo Píxel, S.L.',
+          iban: 'ES00 9999 0001 1100 0067 9021',
+          periodo: '01/10/2026 – 31/10/2026',
+          saldoInicial: 8240,
+          movimientos: [
+            { fecha: '06/10', concepto: 'TRANSF. RECIBIDA ATELIER LUMIERE SARL', detalle: 'Invoice PX-2026/061', importe: 3000 },
+            { fecha: '10/10', concepto: 'COMPRA TARJETA ADSTREAM IRELAND', detalle: 'Online ads', importe: -800 },
+            { fecha: '15/10', concepto: 'RECIBO RENTING VEHICULOS SL', detalle: 'Fra RT-2026-10 · furgoneta', importe: -363 },
+            { fecha: '31/10', concepto: 'COMISION MANTENIMIENTO', importe: -12 },
+          ],
+        },
+        {
+          tipo: 'resumen',
+          titulo: 'Mayor de la cuenta 572 · octubre',
+          subtitulo: '57200001 · Banco Turia',
+          emisor: { nombre: 'Estudio Creativo Píxel, S.L.', nif: 'B98445566' },
+          columnas: ['Fecha', 'Concepto', 'Debe', 'Haber'],
+          filas: [
+            ['01/10', 'Saldo inicial', '8.240,00', ''],
+            ['06/10', 'Cobro Atelier Lumière', '3.000,00', ''],
+            ['10/10', 'Pago AdStream (tarjeta)', '', '800,00'],
+            ['30/10', 'Ingreso cheque Hotel Palmeras', '1.210,00', ''],
+            ['31/10', 'Transf. a Imprenta Gráfica Sur', '', '450,00'],
+          ],
+          notas: ['Saldo de la 572 a 31/10: 11.200,00 € (deudor).'],
+        },
+      ],
+      rejilla: 'grid-cols-3',
+      opciones: [
+        { valor: 'punteado', etiqueta: 'Punteado', detalle: 'en los dos' },
+        { valor: 'contab', etiqueta: 'Solo banco', detalle: 'registrarlo' },
+        { valor: 'transito', etiqueta: 'Solo 572', detalle: 'en tránsito' },
+      ],
+      cuentas: [
+        { id: 'atelier', texto: 'Cobro de Atelier Lumière · 3.000,00 €', correcta: 'punteado', pista: 'Búscalo en el extracto y en el mayor.', explicacion: 'Aparece en los dos con el mismo importe.' },
+        { id: 'adstream', texto: 'Pago con tarjeta a AdStream · 800,00 €', correcta: 'punteado', pista: '¿Está en el extracto? ¿Y en el mayor?', explicacion: 'Registrado y cargado: punteado.' },
+        { id: 'renting', texto: 'Cuota de renting de la furgoneta · 363,00 €', correcta: 'contab', pista: 'El banco ya lo ha cargado. ¿Lo ves en el mayor?', explicacion: 'Falta registrarlo en la contabilidad.' },
+        { id: 'comision', texto: 'Comisión de mantenimiento · 12,00 €', correcta: 'contab', pista: 'Los cargos del banco a fin de mes se olvidan con facilidad.', explicacion: 'Falta registrarla en la contabilidad.' },
+        { id: 'cheque', texto: 'Ingreso del cheque del Hotel Palmeras · 1.210,00 €', correcta: 'transito', pista: 'Está en la contabilidad. ¿Lo ha abonado ya el banco?', explicacion: 'Cobro en tránsito: aparecerá en noviembre.' },
+        { id: 'imprenta', texto: 'Transferencia a Imprenta Gráfica Sur · 450,00 €', correcta: 'transito', pista: 'Se ordenó el último día del mes.', explicacion: 'Pago en tránsito: el banco lo ejecutará en noviembre.' },
+      ],
+      resumenOk: 'Conciliación: extracto 10.065 € + cheque en tránsito 1.210 € − transferencia en tránsito 450 € = 10.825 €. Mayor 11.200 € − renting 363 € − comisión 12 € = 10.825 €. Cuadra. En el siguiente caso registras lo que faltaba.',
+    },
+    {
+      id: 'b3-conciliacion-asiento',
+      tipo: 'asiento',
+      cliente: { nombre: 'Estudio Creativo Píxel, S.L.', actividad: 'Agencia de diseño' },
+      titulo: 'Registrar lo que faltaba',
+      enunciado: 'Tras el punteo del caso anterior, registra en un único asiento los dos cargos del banco que faltaban en la contabilidad. Tienes la factura del renting (300 € + IVA, furgoneta afecta a la actividad).',
+      documento: {
+        tipo: 'extracto',
+        banco: BANCO_FICTICIO,
+        titular: 'Estudio Creativo Píxel, S.L.',
+        iban: 'ES00 9999 0001 1100 0067 9021',
+        periodo: '01/10/2026 – 31/10/2026',
+        saldoInicial: 8240,
+        movimientos: [
+          { fecha: '06/10', concepto: 'TRANSF. RECIBIDA ATELIER LUMIERE SARL', detalle: 'Invoice PX-2026/061', importe: 3000 },
+          { fecha: '10/10', concepto: 'COMPRA TARJETA ADSTREAM IRELAND', detalle: 'Online ads', importe: -800 },
+          { fecha: '15/10', concepto: 'RECIBO RENTING VEHICULOS SL', detalle: 'Fra RT-2026-10 · furgoneta', importe: -363, resaltar: true },
+          { fecha: '31/10', concepto: 'COMISION MANTENIMIENTO', importe: -12, resaltar: true },
+        ],
+      },
+      cuentasDisponibles: ['621', '626', '662', '472', '572', '555', '410'],
+      solucion: [{ cuenta: '621', debe: 300 }, { cuenta: '626', debe: 12 }, { cuenta: '472', debe: 63 }, { cuenta: '572', haber: 375 }],
+      pista: 'Dos gastos distintos, uno con IVA y otro sin él. Del banco salieron 363 + 12 €.',
+      explicacion: 'Renting a la 621 (300 €) con su IVA (472, 63 €) y comisión a la 626 (12 €), sin IVA. Salen del banco 375 €. Ahora la 572 queda en 10.825 €, igual que el saldo ajustado del banco.',
+    },
+  ],
+};
+
 const BLOQUES = [
   {
     id: 0,
@@ -2596,7 +3496,7 @@ const BLOQUES = [
     distintivo: null,
     icono: ICONOS.banco,
     temas: ['Bancos (572)', 'Punteo y conciliación', 'Comisiones (626)', 'Préstamos (520 / 170 / 662)', 'Leasing y renting', 'Partidas pendientes (555)'],
-    contenido: { teoria: [], test: [], casos: [] },
+    contenido: CONTENIDO_B3,
   },
   {
     id: 4,
@@ -3065,7 +3965,65 @@ function campoDoc(campo, resaltar) {
 function htmlDocumento(doc, { resaltar = null } = {}) {
   if (doc.tipo === 'ticket') return htmlTicket(doc);
   if (doc.tipo === 'resumen') return htmlResumen(doc);
+  if (doc.tipo === 'extracto') return htmlExtracto(doc);
   return htmlFactura(doc, resaltar);
+}
+
+// Saldos del extracto calculados a partir del saldo inicial
+function calcularExtracto(doc) {
+  let saldo = doc.saldoInicial;
+  const movimientos = doc.movimientos.map((m) => {
+    saldo = r2(saldo + m.importe);
+    return { ...m, saldo };
+  });
+  return { movimientos, saldoFinal: saldo };
+}
+
+const importeConSigno = (n) => `${n < 0 ? '−' : '+'}${formatoEuros(Math.abs(n))}`;
+
+// Extracto bancario con aspecto de banca online (lista apta para móvil)
+function htmlExtracto(doc) {
+  const { movimientos, saldoFinal } = calcularExtracto(doc);
+  return `
+    <figure class="mx-auto w-full max-w-xl" aria-label="Extracto bancario de ${escaparHTML(doc.titular)}">
+      <div class="overflow-hidden rounded-xl bg-white text-slate-700 shadow-[0_1px_2px_rgba(15,27,45,.08),0_10px_30px_-12px_rgba(15,27,45,.35)] ring-1 ring-slate-900/10">
+        <div class="bg-[#0b3b5c] px-4 py-3 text-white">
+          <div class="flex items-center justify-between gap-3">
+            <span class="flex items-center gap-2 text-[15px] font-bold tracking-tight">
+              <span class="flex h-6 w-6 items-center justify-center rounded-md bg-white/15">${svgIcono(ICONOS.banco, 'h-4 w-4')}</span>${escaparHTML(doc.banco)}
+            </span>
+            <span class="text-[10px] font-semibold uppercase tracking-wider text-white/60">Extracto</span>
+          </div>
+          <p class="mt-2 text-[12.5px] font-medium text-white/90">${escaparHTML(doc.titular)}</p>
+          <p class="font-mono text-[11px] text-white/65">${escaparHTML(doc.iban)}</p>
+        </div>
+        <div class="flex flex-wrap justify-between gap-x-3 gap-y-0.5 bg-slate-50 px-4 py-2 text-[11.5px] text-slate-500">
+          <span>${escaparHTML(doc.periodo)}</span>
+          <span>Saldo inicial <span class="font-mono font-semibold text-slate-700">${formatoEuros(doc.saldoInicial)}</span></span>
+        </div>
+        <ul class="divide-y divide-slate-200">
+          ${movimientos.map((m) => `
+            <li class="px-4 py-2.5 ${m.resaltar ? 'border-l-4 border-amber-400 bg-amber-50 pl-3' : ''}">
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-mono text-[10.5px] text-slate-400">${escaparHTML(m.fecha)}</p>
+                  <p class="break-words text-[12.5px] font-semibold uppercase leading-snug tracking-tight text-slate-800">${escaparHTML(m.concepto)}</p>
+                  ${m.detalle ? `<p class="text-[11.5px] leading-snug text-slate-500">${escaparHTML(m.detalle)}</p>` : ''}
+                </div>
+                <div class="shrink-0 text-right">
+                  <p class="whitespace-nowrap font-mono text-[13px] font-bold ${m.importe < 0 ? 'text-rose-600' : 'text-emerald-700'}">${importeConSigno(m.importe)}</p>
+                  <p class="whitespace-nowrap font-mono text-[10.5px] text-slate-400">${formatoEuros(m.saldo)}</p>
+                </div>
+              </div>
+              ${m.resaltar ? '<p class="mt-1 text-[10.5px] font-bold uppercase tracking-wider text-amber-700">▲ Movimiento a registrar</p>' : ''}
+            </li>`).join('')}
+        </ul>
+        <div class="flex justify-between border-t-2 border-slate-800 px-4 py-2.5 text-[12.5px] font-bold text-slate-900">
+          <span>Saldo final</span><span class="font-mono">${formatoEuros(saldoFinal)}</span>
+        </div>
+        <p class="bg-slate-50 px-4 py-1.5 text-center text-[10px] uppercase tracking-wider text-slate-400">Documento ficticio · material de formación</p>
+      </div>
+    </figure>`;
 }
 
 // Informe o extracto sacado del programa del cliente (cierres de caja, mayor de una cuenta…)
@@ -3090,7 +4048,7 @@ function htmlResumen(doc) {
             <tbody>
               ${doc.filas.map((fila) => `
                 <tr class="border-b border-slate-200 align-top">
-                  ${fila.map((v, i) => `<td class="py-2 ${numerica(i) ? 'whitespace-nowrap text-right font-mono text-[12px] tabular-nums' : ''} ${i === 0 && doc.columnas.length > 2 ? 'whitespace-nowrap' : ''} ${i > 0 ? 'pl-2' : ''} ${i === fila.length - 1 ? 'font-semibold text-slate-900' : ''}">${escaparHTML(v)}</td>`).join('')}
+                  ${fila.map((v, i) => `<td class="py-2 ${numerica(i) ? 'whitespace-nowrap text-right font-mono text-[12px] tabular-nums' : ''} ${i === 0 && doc.columnas.length > 2 ? 'whitespace-nowrap' : ''} ${i > 0 ? 'pl-2' : ''} ${i === fila.length - 1 && (doc.columnas.length === 2 || /saldo/i.test(doc.columnas[i])) ? 'font-semibold text-slate-900' : ''}">${escaparHTML(v)}</td>`).join('')}
                 </tr>`).join('')}
             </tbody>
           </table>
@@ -3232,7 +4190,7 @@ function htmlTicket(doc) {
    ===================================================================== */
 function estadoTeoria(idBloque) {
   if (!ui.teoria[idBloque]) {
-    ui.teoria[idBloque] = { grupo: 1, paso: 0, campo: 'receptor', calc: { base: '1000', iva: 21, ret: 15 } };
+    ui.teoria[idBloque] = { grupo: 1, paso: 0, campo: 'receptor', calc: { base: '1000', iva: 21, ret: 15 }, prestamo: { capital: '20000', tipo: '5', meses: '60' } };
   }
   return ui.teoria[idBloque];
 }
@@ -3289,6 +4247,7 @@ function renderizarPieza(pieza, bloque) {
     case 'gestoria': return piezaGestoria(pieza.html);
     case 'anatomia-factura': return piezaAnatomia(pieza, bloque);
     case 'calculadora': return piezaCalculadora(bloque, pieza);
+    case 'prestamo': return piezaPrestamo(bloque);
     case 'documento': return `<div class="my-5">${htmlDocumento(pieza.documento)}</div>`;
     default: return '';
   }
@@ -3682,6 +4641,91 @@ function htmlCalcResultado(calc) {
     </div>
     <p class="mb-1.5 mt-3 text-[11px] font-semibold uppercase tracking-wider text-tinta-700/50">Asiento resultante</p>
     ${htmlAsiento(lineas, { compacto: true })}`;
+}
+
+// Préstamo de cuota constante (sistema francés)
+function cuadroPrestamo(capital, tipoAnual, meses) {
+  const i = tipoAnual / 1200;
+  const cuota = i ? r2(capital * i / (1 - Math.pow(1 + i, -meses))) : r2(capital / meses);
+  const filas = [];
+  let pendiente = capital;
+  for (let n = 1; n <= meses; n += 1) {
+    const interes = r2(pendiente * i);
+    const amort = n === meses ? r2(pendiente) : r2(cuota - interes);
+    pendiente = r2(pendiente - amort);
+    filas.push({ n, cuota: r2(interes + amort), interes, amort, pendiente });
+  }
+  return { cuota, filas, totalIntereses: r2(filas.reduce((s, f) => s + f.interes, 0)) };
+}
+
+function htmlPrestamoResultado(p) {
+  const capital = leerImporte(p.capital);
+  const tipo = leerImporte(p.tipo);
+  const meses = Number(String(p.meses).trim());
+  if (!(capital > 0) || !(tipo >= 0) || !Number.isInteger(meses) || meses < 1 || meses > 480) {
+    return '<p class="rounded-lg bg-tinta-900/[0.03] p-3 text-sm text-tinta-700/70">Introduce un capital, un tipo de interés anual y un plazo en meses (1 a 480).</p>';
+  }
+  const { cuota, filas, totalIntereses } = cuadroPrestamo(capital, tipo, meses);
+  const visibles = filas.slice(0, Math.min(6, filas.length));
+  const ultima = filas[filas.length - 1];
+  const fila = (f, extra = '') => `
+    <div class="grid grid-cols-[2.25rem_repeat(3,minmax(0,1fr))] gap-2 px-3 py-1.5 text-[12.5px] tabular-nums ${extra}">
+      <span class="font-mono text-tinta-700/60">${f.n}</span>
+      <span class="text-right text-rose-700">${formatoEuros(f.interes)}</span>
+      <span class="text-right text-acento-700">${formatoEuros(f.amort)}</span>
+      <span class="text-right">${formatoEuros(f.pendiente)}</span>
+    </div>`;
+  return `
+    <div class="grid grid-cols-2 gap-2">
+      <div class="rounded-lg bg-tinta-900 p-3 text-white">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-white/60">Cuota mensual</p>
+        <p class="font-mono text-lg font-bold">${formatoEuros(cuota)}</p>
+      </div>
+      <div class="rounded-lg bg-rose-50 p-3 text-rose-900">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-rose-700/70">Intereses totales</p>
+        <p class="font-mono text-lg font-bold">${formatoEuros(totalIntereses)}</p>
+      </div>
+    </div>
+    <div class="mt-3 overflow-hidden rounded-lg border border-tinta-900/10">
+      <div class="grid grid-cols-[2.25rem_repeat(3,minmax(0,1fr))] gap-2 bg-tinta-900/[0.04] px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-tinta-700/60">
+        <span>Mes</span><span class="text-right">Intereses</span><span class="text-right">Capital</span><span class="text-right">Pendiente</span>
+      </div>
+      ${visibles.map((f) => fila(f)).join('')}
+      ${filas.length > 7 ? '<p class="px-3 py-1 text-center text-xs text-tinta-700/50">⋯</p>' : ''}
+      ${filas.length > 6 ? fila(ultima, 'border-t border-tinta-900/10 bg-tinta-900/[0.02]') : ''}
+    </div>
+    <p class="mb-1.5 mt-3 text-[11px] font-semibold uppercase tracking-wider text-tinta-700/50">Asiento de la cuota 1</p>
+    ${htmlAsiento([{ cuenta: '520', debe: filas[0].amort }, { cuenta: '662', debe: filas[0].interes }, { cuenta: '572', haber: filas[0].cuota }], { compacto: true })}
+    <p class="mt-2 text-[12.5px] text-tinta-700/70">Fíjate en cómo los intereses de cada cuota bajan y el capital sube, aunque la cuota no cambia.</p>`;
+}
+
+function piezaPrestamo(bloque) {
+  const { prestamo } = estadoTeoria(bloque.id);
+  const campo = (id, etiqueta, sufijo, modo) => `
+    <div>
+      <label for="prest-${id}" class="mb-1 block text-xs font-semibold text-tinta-700/70">${etiqueta}</label>
+      <div class="relative">
+        <input id="prest-${id}" type="text" inputmode="${modo}" enterkeyhint="done" autocomplete="off" data-entrada="prest-${id}" data-foco="prest-${id}"
+               value="${escaparHTML(prestamo[id])}"
+               class="h-12 w-full rounded-xl border-2 border-tinta-900/15 bg-white pl-3 pr-9 text-base font-semibold tabular-nums outline-none transition focus:border-acento-500" />
+        <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-tinta-700/50">${sufijo}</span>
+      </div>
+    </div>`;
+  return `
+    <div class="my-6 overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm" data-widget="prestamo">
+      <div class="border-b border-tinta-900/10 bg-tinta-900/[0.03] px-4 py-3">
+        <p class="text-sm font-bold">Simulador de préstamo (cuota constante)</p>
+        <p class="text-xs text-tinta-700/70">Cambia los datos y mira cómo se reparte cada cuota entre intereses y capital.</p>
+      </div>
+      <div class="space-y-4 p-4">
+        <div class="grid grid-cols-3 gap-2">
+          ${campo('capital', 'Capital', '€', 'decimal')}
+          ${campo('tipo', 'Interés anual', '%', 'decimal')}
+          ${campo('meses', 'Plazo', 'm', 'numeric')}
+        </div>
+        <div id="prestamo-resultado" aria-live="polite">${htmlPrestamoResultado(prestamo)}</div>
+      </div>
+    </div>`;
 }
 
 function piezaCalculadora(bloque, pieza = {}) {
@@ -4088,19 +5132,24 @@ function corregirContra(lineasSolucion, lineas) {
   return { correcto, mensajes: [...new Set(mensajes)], estadoLinea };
 }
 
+const documentosDe = (caso) => caso.documentos || (caso.documento ? [caso.documento] : []);
+
 function htmlBloqueDocumento(caso, st) {
   const oculto = Boolean(st.docOculto);
-  const etiqueta = { ticket: 'el ticket', resumen: 'el informe' }[caso.documento.tipo] || 'la factura';
+  const docs = documentosDe(caso);
+  const etiqueta = docs.length > 1
+    ? 'los documentos'
+    : ({ ticket: 'el ticket', resumen: 'el informe', extracto: 'el extracto' }[docs[0].tipo] || 'la factura');
   return `
     <section id="documento-${caso.id}" class="scroll-mt-40 rounded-2xl bg-gradient-to-b from-tinta-900/[0.06] to-tinta-900/[0.02] p-3 sm:p-5 lg:scroll-mt-24">
       <div class="mb-3 flex items-center justify-between gap-2">
-        <p class="flex items-center gap-2 text-sm font-bold">${svgIcono(ICONO_DOCUMENTO, 'h-4 w-4')} Documento del cliente</p>
+        <p class="flex items-center gap-2 text-sm font-bold">${svgIcono(ICONO_DOCUMENTO, 'h-4 w-4')} ${docs.length > 1 ? 'Documentos del cliente' : 'Documento del cliente'}</p>
         <button type="button" data-accion="doc-toggle" data-foco="doc-toggle" aria-expanded="${!oculto}"
                 class="inline-flex min-h-[40px] items-center rounded-lg px-2.5 text-xs font-semibold text-tinta-700 hover:bg-white active:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">
           ${oculto ? `Mostrar ${etiqueta}` : `Ocultar ${etiqueta}`}
         </button>
       </div>
-      ${oculto ? '' : htmlDocumento(caso.documento)}
+      ${oculto ? '' : `<div class="space-y-4">${docs.map((d) => htmlDocumento(d)).join('')}</div>`}
     </section>`;
 }
 
@@ -4182,7 +5231,7 @@ function htmlCasoAsiento(caso, bloque) {
     <div class="rounded-xl border border-tinta-900/10 bg-tinta-900/[0.02] p-3.5 sm:p-4">
       <div class="mb-3 flex items-center justify-between gap-2">
         <p class="text-sm font-bold">Añadir una línea al asiento</p>
-        ${caso.documento ? `<button type="button" data-accion="ver-documento" class="inline-flex min-h-[40px] items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-acento-700 hover:bg-acento-50 active:bg-acento-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">${svgIcono('M12 19V5M5 12l7-7 7 7', 'h-4 w-4', 2.2)} Ver documento</button>` : ''}
+        ${documentosDe(caso).length ? `<button type="button" data-accion="ver-documento" class="inline-flex min-h-[40px] items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-acento-700 hover:bg-acento-50 active:bg-acento-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">${svgIcono('M12 19V5M5 12l7-7 7 7', 'h-4 w-4', 2.2)} Ver documento</button>` : ''}
       </div>
       <p class="mb-2 text-xs font-semibold text-tinta-700/70"><span class="mr-1 font-mono">1</span> Elige la cuenta</p>
       <div class="grid gap-2 sm:grid-cols-2">${chipsCuentas}</div>
@@ -4236,7 +5285,7 @@ function htmlCasoAsiento(caso, bloque) {
     <article class="overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm">
       ${cabeceraCaso(caso, numero, bloque.contenido.casos.length)}
       <div class="space-y-4 p-4 sm:p-5">
-        ${caso.documento ? htmlBloqueDocumento(caso, st) : ''}
+        ${documentosDe(caso).length ? htmlBloqueDocumento(caso, st) : ''}
         <div class="rounded-xl bg-amber-50/70 text-sm text-amber-950">
           <button type="button" data-accion="pista-toggle" data-foco="pista" aria-expanded="${Boolean(st.pista)}"
                   class="flex min-h-[44px] w-full items-center gap-2 rounded-xl px-3.5 text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">
@@ -4326,6 +5375,7 @@ function htmlCasoClasificar(caso, bloque) {
     <article class="overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm">
       ${cabeceraCaso(caso, numero, bloque.contenido.casos.length)}
       <div class="space-y-4 p-4 sm:p-5">
+        ${documentosDe(caso).length ? htmlBloqueDocumento(caso, st) : ''}
         <div>
           <div class="mb-1.5 flex justify-between text-xs font-semibold text-tinta-700/70">
             <span>${hechas} de ${total} acertadas</span><span class="${st.errores ? 'text-rose-600' : ''}">${st.errores} ${st.errores === 1 ? 'fallo' : 'fallos'}</span>
@@ -4700,6 +5750,11 @@ function registrarEventos() {
     if (tipo === 'importe') {
       const caso = casoActual();
       if (caso) estadoCaso(caso).borrador.importe = e.target.value;
+    } else if (tipo && tipo.startsWith('prest-')) {
+      const st = estadoTeoria(estado.bloque);
+      st.prestamo[tipo.slice(6)] = e.target.value;
+      const destino = $('#prestamo-resultado');
+      if (destino) destino.innerHTML = htmlPrestamoResultado(st.prestamo);
     } else if (tipo === 'calc-base') {
       const st = estadoTeoria(estado.bloque);
       st.calc.base = e.target.value;
@@ -4708,7 +5763,7 @@ function registrarEventos() {
     }
   });
   $('#contenido').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && e.target.dataset && e.target.dataset.entrada === 'calc-base') {
+    if (e.key === 'Enter' && e.target.dataset && /^(calc-base|prest-)/.test(e.target.dataset.entrada || '')) {
       e.preventDefault();
       e.target.blur();
       return;
