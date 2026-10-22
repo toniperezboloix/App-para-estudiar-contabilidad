@@ -153,10 +153,11 @@ const CUADRO_PGC = [
     subgrupos: [
       { codigo: '40', nombre: 'Proveedores', clave: true, cuentas: [['400', 'Proveedores'], ['401', 'Proveedores, efectos comerciales a pagar'], ['407', 'Anticipos a proveedores']] },
       { codigo: '41', nombre: 'Acreedores varios', clave: true, cuentas: [['410', 'Acreedores por prestaciones de servicios']] },
-      { codigo: '43', nombre: 'Clientes', clave: true, cuentas: [['430', 'Clientes'], ['436', 'Clientes de dudoso cobro']] },
+      { codigo: '43', nombre: 'Clientes', clave: true, cuentas: [['430', 'Clientes'], ['436', 'Clientes de dudoso cobro'], ['438', 'Anticipos de clientes']] },
       { codigo: '46', nombre: 'Personal', cuentas: [['460', 'Anticipos de remuneraciones'], ['465', 'Remuneraciones pendientes de pago']] },
       { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['472', 'Hacienda Pública, IVA soportado'], ['473', 'Hacienda Pública, retenciones y pagos a cuenta'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
       { codigo: '48', nombre: 'Ajustes por periodificación', cuentas: [['480', 'Gastos anticipados'], ['485', 'Ingresos anticipados']] },
+      { codigo: '49', nombre: 'Deterioro de valor de créditos comerciales y provisiones a corto plazo', cuentas: [['490', 'Deterioro de valor de créditos por operaciones comerciales']] },
     ],
   },
   {
@@ -188,8 +189,10 @@ const CUADRO_PGC = [
       { codigo: '62', nombre: 'Servicios exteriores', clave: true, cuentas: [['621', 'Arrendamientos y cánones'], ['622', 'Reparaciones y conservación'], ['623', 'Servicios de profesionales independientes'], ['624', 'Transportes'], ['625', 'Primas de seguros'], ['626', 'Servicios bancarios y similares'], ['627', 'Publicidad, propaganda y relaciones públicas'], ['628', 'Suministros'], ['629', 'Otros servicios']] },
       { codigo: '63', nombre: 'Tributos', cuentas: [['631', 'Otros tributos']] },
       { codigo: '64', nombre: 'Gastos de personal', cuentas: [['640', 'Sueldos y salarios'], ['642', 'Seguridad Social a cargo de la empresa']] },
+      { codigo: '65', nombre: 'Otros gastos de gestión', cuentas: [['650', 'Pérdidas de créditos comerciales incobrables']] },
       { codigo: '66', nombre: 'Gastos financieros', cuentas: [['662', 'Intereses de deudas']] },
       { codigo: '68', nombre: 'Dotaciones para amortizaciones', cuentas: [['681', 'Amortización del inmovilizado material']] },
+      { codigo: '69', nombre: 'Pérdidas por deterioro y otras dotaciones', cuentas: [['694', 'Pérdidas por deterioro de créditos por operaciones comerciales']] },
     ],
   },
   {
@@ -202,9 +205,10 @@ const CUADRO_PGC = [
     resumen: 'Lo que la empresa gana con su actividad: ventas de mercaderías, servicios prestados y otros ingresos.',
     enOficina: 'Es el espejo del grupo 6: aquí va la base imponible (el importe sin IVA) de cada factura emitida.',
     subgrupos: [
-      { codigo: '70', nombre: 'Ventas de mercaderías, de producción propia, de servicios, etc.', cuentas: [['700', 'Ventas de mercaderías'], ['705', 'Prestaciones de servicios'], ['708', 'Devoluciones de ventas y operaciones similares']] },
+      { codigo: '70', nombre: 'Ventas de mercaderías, de producción propia, de servicios, etc.', cuentas: [['700', 'Ventas de mercaderías'], ['705', 'Prestaciones de servicios'], ['706', 'Descuentos sobre ventas por pronto pago'], ['708', 'Devoluciones de ventas y operaciones similares'], ['709', 'Rappels sobre ventas']] },
       { codigo: '75', nombre: 'Otros ingresos de gestión', cuentas: [['752', 'Ingresos por arrendamientos'], ['759', 'Ingresos por servicios diversos']] },
       { codigo: '76', nombre: 'Ingresos financieros', cuentas: [['769', 'Otros ingresos financieros']] },
+      { codigo: '79', nombre: 'Excesos y aplicaciones de provisiones y de pérdidas por deterioro', cuentas: [['794', 'Reversión del deterioro de créditos por operaciones comerciales']] },
     ],
   },
 ];
@@ -214,6 +218,7 @@ CUADRO_PGC.forEach((g) => g.subgrupos.forEach((s) => s.cuentas.forEach(([codigo,
 
 // Etiquetas genéricas usadas en ejemplos (no son cuentas del PGC)
 CUENTAS['6xx'] = 'Cuenta de gasto (621, 623, 627…)';
+CUENTAS['7xx'] = 'Cuenta de ingreso (700, 705…)';
 
 const nombreCuenta = (codigo) => CUENTAS[codigo] || `Cuenta ${codigo}`;
 const grupoPGC = (numero) => CUADRO_PGC.find((g) => g.grupo === Number(numero));
@@ -904,7 +909,7 @@ const CONTENIDO_B1 = {
             ['21 % · general', 'La mayoría: ropa, electrónica, servicios profesionales, alquiler de locales, publicidad, reparaciones'],
             ['10 % · reducido', 'Hostelería, carne y pescado, transporte de viajeros, obras de renovación de vivienda'],
             ['4 % · superreducido', 'Pan, leche, huevos, frutas, verduras, tubérculos, libros, medicamentos'],
-            ['Exento · sin IVA', 'Seguros, la mayoría de servicios bancarios, sanidad, enseñanza reglada, alquiler de vivienda'],
+            ['Exento · sin IVA', 'Seguros, la mayoría de servicios bancarios, sanidad, enseñanza en centros autorizados, alquiler de vivienda'],
           ],
         },
         {
@@ -918,7 +923,7 @@ const CONTENIDO_B1 = {
           filas: [
             ['Atenciones a clientes (comidas, regalos)', 'No deducible aunque la factura esté perfecta'],
             ['Turismo de uso mixto (empresa y privado)', 'Se presume un 50 % de uso empresarial: se deduce el 50 %'],
-            ['Cliente con actividad exenta (clínica, aseguradora, enseñanza reglada)', 'No deduce; si combina actividades exentas y no exentas, aplica la prorrata'],
+            ['Cliente con actividad exenta (clínica, correduría de seguros, colegio)', 'No deduce; si combina actividades exentas y no exentas, aplica la prorrata'],
             ['Factura sin requisitos o a nombre de otro', 'No deducible hasta que se corrija'],
           ],
         },
@@ -1557,14 +1562,14 @@ const CONTENIDO_B1 = {
     {
       id: 'b1-alquiler',
       tipo: 'asiento',
-      cliente: { nombre: 'Academia de Idiomas Norte, S.L.', actividad: 'Academia de idiomas (no reglada)' },
+      cliente: { nombre: 'Bicicletas Ruedas del Turia, S.L.', actividad: 'Tienda y taller de bicicletas' },
       titulo: 'Alquiler del local',
-      enunciado: 'Llega la factura mensual del alquiler del local donde la academia da sus clases. Registra el asiento.',
+      enunciado: 'Llega la factura mensual del alquiler del local donde está la tienda. Registra el asiento.',
       documento: {
         tipo: 'factura',
         color: '#be123c',
         emisor: { nombre: 'Inmuebles Ribera, S.L.', nif: 'B98667788', direccion: ['Gran Vía Marqués del Turia, 50 · 46005 Valencia'] },
-        receptor: { nombre: 'Academia de Idiomas Norte, S.L.', nif: 'B98112299', direccion: ['C/ Alboraya, 14, bajo · 46010 Valencia'] },
+        receptor: { nombre: 'Bicicletas Ruedas del Turia, S.L.', nif: 'B98112299', direccion: ['C/ Alboraya, 14, bajo · 46010 Valencia'] },
         numero: 'ALQ-2026-10',
         fecha: '01/10/2026',
         formaPago: 'Recibo domiciliado del 1 al 5 de cada mes',
@@ -1577,7 +1582,7 @@ const CONTENIDO_B1 = {
       cuentasDisponibles: ['621', '623', '472', '473', '4751', '400', '410', '572'],
       solucion: [{ cuenta: '621', debe: 1000 }, { cuenta: '472', debe: 210 }, { cuenta: '4751', haber: 190 }, { cuenta: '410', haber: 1020 }],
       pista: 'Mismo esquema que un profesional, pero con otro porcentaje de retención. ¿Y la cuenta de gasto?',
-      explicacion: 'Alquiler a la 621 por la base (1.000 €) e IVA a la 472 (210 €). La retención del 19 % (190 €) a la 4751: se ingresará con el modelo 115. Al arrendador se le pagan 1.020 €: 410. Como la academia no imparte enseñanza reglada, su actividad no está exenta y deduce el IVA.',
+      explicacion: 'Alquiler a la 621 por la base (1.000 €) e IVA a la 472 (210 €). La retención del 19 % (190 €) a la 4751: se ingresará con el modelo 115. Al arrendador se le pagan 1.020 €: 410. La tienda vende con IVA, así que deduce el IVA del alquiler.',
     },
     {
       id: 'b1-suplidos',
@@ -1661,6 +1666,893 @@ const CONTENIDO_B1 = {
   ],
 };
 
+/* ---------- Bloque 2: Ventas y Clientes (gestoría) ---------- */
+
+const FACTURA_EMITIDA_EJEMPLO_B2 = {
+  tipo: 'factura',
+  color: '#0f766e',
+  emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030', direccion: ['C/ Font d’en Carròs, 9 · 46017 Valencia'] },
+  receptor: { nombre: 'Mesón La Encina, S.L.', nif: 'B98556677', direccion: ['C/ Mayor, 8 · 46900 Torrent (Valencia)'] },
+  numero: '2026/0233',
+  fecha: '05/10/2026',
+  vencimiento: '04/11/2026',
+  formaPago: 'Transferencia a 30 días',
+  lineas: [
+    { concepto: 'Mantel de papel 100 × 100 (caja de 400)', cantidad: 5, precio: 32, iva: 21 },
+    { concepto: 'Servilleta de papel 40 × 40 (caja de 1.200)', cantidad: 4, precio: 35, iva: 21 },
+  ],
+};
+
+const CONTENIDO_B2 = {
+  teoria: [
+    {
+      id: 'emitir',
+      titulo: 'Facturar a clientes desde la gestoría',
+      resumen: 'Quién emite, cuándo y qué numeración.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>En compras recibes lo que te mandan; en ventas eres responsable de que <strong>cada factura que emite tu cliente esté bien hecha</strong>, porque de ella sale el IVA que ingresará en el 303. Unos clientes facturan con su propio programa y te pasan las facturas; a otros se las preparas tú. En ambos casos, las reglas son las mismas.</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Reglas básicas de emisión',
+          columnas: ['Regla', 'Qué significa en la práctica'],
+          filas: [
+            ['Plazo: cliente particular', 'En el momento de la operación'],
+            ['Plazo: cliente empresario o profesional', 'Antes del día 16 del mes siguiente a la operación (se admiten facturas recapitulativas mensuales)'],
+            ['Numeración', 'Correlativa dentro de cada serie, sin huecos. Puede haber series por año, por tienda o por tipo'],
+            ['Rectificativas', 'En una serie propia (por ejemplo, R-2026/001), indicando qué factura rectifican y por qué'],
+            ['Operación exenta o sin IVA', 'La factura debe indicar el motivo: el artículo de la ley o «inversión del sujeto pasivo»'],
+          ],
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Revisar la serie del trimestre', texto: 'Ordena las facturas por número y busca huecos, duplicados o fechas fuera de orden.' },
+            { titulo: 'Registrar', texto: 'Cada factura alimenta el libro registro de facturas expedidas, y de ahí el IVA devengado del 303, el 347 y el 349.' },
+            { titulo: 'Puntear los cobros', texto: 'Cada cobro cancela la deuda del cliente (430). Lo que no se cobra en plazo hay que vigilarlo: es el camino a un moroso.' },
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Si falta un número en la serie, <strong>pregunta antes de presentar el 303</strong>. Puede ser una factura que el cliente no te mandó (IVA sin declarar) o una anulada que debe poder justificarse. Hacienda detecta los huecos con facilidad.',
+        },
+      ],
+    },
+    {
+      id: 'asiento-venta',
+      titulo: 'El asiento de venta y las ventas con ticket',
+      resumen: '430 · 700 · 705 · 477, y el resumen de caja.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Es el espejo de la compra: el cliente debe el total (<strong>430 Clientes</strong>, al Debe), el ingreso va por la base (<strong>700</strong> si se venden productos, <strong>705</strong> si se prestan servicios) y el IVA cobrado es una deuda con Hacienda (<strong>477 IVA repercutido</strong>, al Haber).</p>',
+        },
+        { tipo: 'documento', documento: FACTURA_EMITIDA_EJEMPLO_B2 },
+        {
+          tipo: 'asiento',
+          titulo: 'Registro de la factura anterior',
+          lineas: [{ cuenta: '430', debe: 363 }, { cuenta: '700', haber: 300 }, { cuenta: '477', haber: 63 }],
+          nota: 'Base: 5 × 32 + 4 × 35 = 300 €. IVA: 63 €. El restaurante debe 363 €. Comprueba siempre que las líneas suman la base de la factura.',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Cuentas de ventas que más vas a usar',
+          columnas: ['Cuenta', 'Cuándo se usa'],
+          filas: [
+            ['700 Ventas de mercaderías', 'Tiendas, distribuidores, hostelería (comida y bebida servida)'],
+            ['705 Prestaciones de servicios', 'Profesionales, talleres, academias, agencias, consultoras'],
+            ['752 Ingresos por arrendamientos', 'Alquiler de un local o nave cuando no es la actividad principal'],
+            ['708 · 709 · 706', 'Devoluciones, rappels y descuentos por pronto pago concedidos'],
+            ['438 Anticipos de clientes', 'Cobros recibidos antes de entregar o prestar'],
+            ['436 Clientes de dudoso cobro', 'Deudas de clientes con riesgo serio de impago'],
+          ],
+        },
+        {
+          tipo: 'html',
+          html: '<p><strong>Ventas con ticket.</strong> Bares, tiendas y peluquerías venden a particulares con factura simplificada. No se registra ticket a ticket: se hace un <strong>asiento resumen</strong> (diario o mensual) con los cierres de caja (informes Z), separando lo cobrado en efectivo (570) y con tarjeta (572), y calculando la base y el IVA a partir del total.</p>',
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>De total a base:</strong> divide entre 1,21, 1,10 o 1,04 según el tipo. Por ejemplo, 15.400 € con un 10 % de IVA incluido son 15.400 / 1,10 = 14.000 € de base y 1.400 € de IVA.',
+        },
+      ],
+    },
+    {
+      id: 'iva-repercutido',
+      titulo: 'IVA repercutido y recargo de equivalencia',
+      resumen: 'Qué tipo aplica cada cliente y cuándo se añade el recargo.',
+      piezas: [
+        {
+          tipo: 'tabla',
+          titulo: 'El tipo depende de lo que vende tu cliente',
+          columnas: ['Tipo', 'Ejemplos en tu cartera de clientes'],
+          filas: [
+            ['21 % · general', 'Tiendas de ropa y electrónica, consultoras, arquitectos, talleres, agencias de publicidad'],
+            ['10 % · reducido', 'Restaurantes y bares, bollería y pastelería, carne y pescado, obras de renovación de vivienda para particulares (con requisitos)'],
+            ['4 % · superreducido', 'Pan común, leche, huevos, frutas y verduras, libros en papel'],
+            ['Exento', 'Médicos, dentistas y fisioterapeutas (asistencia sanitaria), corredurías de seguros, alquiler de vivienda'],
+          ],
+        },
+        {
+          tipo: 'html',
+          html: '<p><strong>Recargo de equivalencia.</strong> Los comerciantes minoristas que son <strong>personas físicas</strong> (o comunidades de bienes) y revenden sin transformar están en este régimen: no presentan el 303. A cambio, su proveedor les cobra en la factura, además del IVA, un recargo que ingresa a Hacienda.</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Tipos de recargo vigentes',
+          columnas: ['IVA', 'Recargo de equivalencia'],
+          filas: [
+            ['21 %', '5,2 %'],
+            ['10 %', '1,4 %'],
+            ['4 %', '0,5 %'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Venta de 1.000 € al 21 % a una tienda en recargo de equivalencia',
+          subtitulo: 'IVA 210 € + recargo 52 € = 262 €',
+          lineas: [{ cuenta: '430', debe: 1262 }, { cuenta: '700', haber: 1000 }, { cuenta: '477', haber: 262 }],
+          nota: 'El recargo se ingresa en el 303 junto al IVA. Muchas gestorías lo separan en una subcuenta propia (por ejemplo, 47700002) para cuadrarlo mejor.',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Si llevas a un <strong>mayorista</strong>, comprueba qué clientes suyos están en recargo: es un error habitual facturarles sin él. Y si llevas a un <strong>minorista en recargo</strong>, recuerda que no deduce nada: el IVA y el recargo que paga son más coste de sus compras.',
+        },
+      ],
+    },
+    {
+      id: 'retenciones-emitidas',
+      titulo: 'Cuando tu cliente es un profesional: retenciones soportadas',
+      resumen: 'El otro lado de la 4751: la cuenta 473.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Muchos clientes de una gestoría son autónomos profesionales: arquitectos, abogados, diseñadores. Cuando facturan a una empresa, esta les retiene el 15 % (o el 7 % los primeros años). Para tu cliente, esa retención <strong>no es una pérdida</strong>: es un pago adelantado de su IRPF, un derecho frente a Hacienda que se registra en la <strong>473</strong>.</p>',
+        },
+        {
+          tipo: 'calculadora',
+          modo: 'venta',
+          inicial: { base: '2000', iva: 21, ret: 15 },
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Solo retienen las empresas y los profesionales.</strong> Si el arquitecto factura a un particular para la reforma de su casa, no hay retención: cobra el total.',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Al preparar la renta de un cliente profesional, <strong>cuadra su 473 con los certificados de retenciones</strong> de sus pagadores. Ellos declaran esas retenciones en su modelo 190, así que Hacienda ya tiene los datos: cualquier diferencia saltará.',
+        },
+      ],
+    },
+    {
+      id: 'anticipos',
+      titulo: 'Anticipos de clientes',
+      resumen: 'Cobrar antes de entregar: la cuenta 438.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Carpinterías, talleres, agencias o reformistas suelen cobrar una parte por adelantado. El anticipo <strong>devenga IVA en el momento del cobro</strong>, así que hay que emitir una factura de anticipo. El importe recibido es una deuda con el cliente (aún no se ha vendido nada): <strong>438 Anticipos de clientes</strong>.</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Cobro del anticipo', texto: 'Factura de anticipo con IVA. Asiento: 572 al Debe; 438 (base) y 477 (IVA) al Haber.' },
+            { titulo: 'Entrega y factura final', texto: 'La factura final recoge la venta completa y descuenta el anticipo ya facturado: solo se repercute el IVA pendiente.' },
+            { titulo: 'Cancelar el anticipo', texto: 'En el asiento de la factura final, la 438 se carga (Debe) y la venta se registra por el total.' },
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Anticipo de 1.000 € + IVA cobrado por transferencia',
+          lineas: [{ cuenta: '572', debe: 1210 }, { cuenta: '438', haber: 1000 }, { cuenta: '477', haber: 210 }],
+          nota: 'Si la venta se cancela, el anticipo se devuelve con una factura rectificativa.',
+        },
+      ],
+    },
+    {
+      id: 'abonos',
+      titulo: 'Abonos, devoluciones y descuentos',
+      resumen: 'Rectificativas emitidas: 708, 709 y 706.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Una factura emitida <strong>nunca se borra ni se edita</strong>: si hay un error o una devolución, se emite una <strong>factura rectificativa</strong> (abono) en su propia serie. En el asiento, los importes negativos de la rectificativa se registran en positivo en el lado contrario al de la venta.</p>',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Abono por devolución de mercancía: 200 € + IVA',
+          lineas: [{ cuenta: '708', debe: 200 }, { cuenta: '477', debe: 42 }, { cuenta: '430', haber: 242 }],
+          nota: 'Baja el ingreso (708 Devoluciones de ventas), baja el IVA repercutido y baja lo que debe el cliente. También se admite cargar directamente la 700.',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Qué cuenta usar',
+          columnas: ['Situación', 'Cuenta (al Debe)'],
+          filas: [
+            ['Devolución de mercancía o error a favor del cliente', '708 Devoluciones de ventas y operaciones similares'],
+            ['Rappel por volumen de compras del cliente', '709 Rappels sobre ventas'],
+            ['Descuento por pronto pago concedido después de facturar', '706 Descuentos sobre ventas por pronto pago'],
+            ['Descuento incluido en la propia factura', 'No se contabiliza aparte: la venta va por el neto'],
+          ],
+        },
+      ],
+    },
+    {
+      id: 'morosos',
+      titulo: 'Clientes morosos e impagados',
+      resumen: 'De la factura vencida a recuperar el IVA.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>El impago es donde una gestoría demuestra su valor: hay <strong>plazos legales para recuperar el IVA</strong> que tu cliente ya ingresó, y si se pasan, se pierde. La ley de morosidad fija un plazo máximo de pago entre empresas de <strong>60 días</strong> (30 si no se pacta otro).</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Factura vencida', texto: 'Se reclama el cobro y se documenta cada reclamación.' },
+            { titulo: 'Dudoso cobro', texto: 'Si hay riesgo serio (meses de retraso, el cliente no contesta, está en concurso), se reclasifica: 436 al Debe, 430 al Haber.' },
+            { titulo: 'Deterioro al cierre', texto: 'Se reconoce la pérdida estimada: 694 al Debe, 490 al Haber. Fiscalmente, en general, se exigen 6 meses desde el vencimiento.' },
+            { titulo: 'Recuperar el IVA', texto: 'Cumpliendo los requisitos legales, factura rectificativa que anula la cuota: 477 al Debe, 436 al Haber.' },
+            { titulo: 'Final', texto: 'Si se cobra: 572 a 436 y se revierte el deterioro (490 a 794). Si es definitivamente incobrable: 650 a 436 (y se aplica el deterioro).' },
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Recuperar el IVA de un impagado (sin concurso): requisitos',
+          columnas: ['Requisito', 'Detalle'],
+          filas: [
+            ['Plazo desde el devengo', '6 meses; 1 año si el cliente facturó más de 6.010.121,04 € el año anterior'],
+            ['Reclamación', 'Judicial, requerimiento notarial o cualquier otro medio que acredite fehacientemente la reclamación'],
+            ['Importe mínimo', 'Si el deudor es un consumidor final, base imponible de al menos 50 €'],
+            ['Rectificativa', 'En los 6 meses siguientes al fin del plazo anterior'],
+            ['Comunicación', 'A la AEAT, en el mes siguiente a la emisión de la rectificativa'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Lleva un <strong>registro de impagados por cliente</strong> con la fecha de cada factura, sus reclamaciones y la fecha límite para la rectificativa. Si el deudor entra en <strong>concurso de acreedores</strong>, el procedimiento y los plazos son distintos (artículo 80.Tres de la Ley del IVA): revísalo en cuanto lo sepas.',
+        },
+      ],
+    },
+    {
+      id: 'extranjero',
+      titulo: 'Ventas a clientes de otros países',
+      resumen: 'Facturas sin IVA que sí hay que declarar.',
+      piezas: [
+        {
+          tipo: 'tabla',
+          titulo: 'Qué IVA lleva la factura',
+          columnas: ['Operación', 'Tratamiento'],
+          filas: [
+            ['Venta de bienes a una empresa de otro país de la UE (con NIF-IVA válido)', 'Entrega intracomunitaria exenta. Modelo 349, clave E'],
+            ['Servicio a una empresa de otro país de la UE', 'Sin IVA español: lo autorrepercute el cliente (inversión del sujeto pasivo). Modelo 349, clave S'],
+            ['Venta de bienes fuera de la UE', 'Exportación exenta, justificada con el documento aduanero'],
+            ['Venta a distancia a un particular de otro país de la UE', 'Con IVA español mientras el total de estas ventas en la UE no supere 10.000 € al año; por encima, IVA del país del cliente (ventanilla única)'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Servicio de 2.000 € a una empresa alemana',
+          lineas: [{ cuenta: '430', debe: 2000 }, { cuenta: '705', haber: 2000 }],
+          nota: 'Sin línea de 477. La factura debe indicar «inversión del sujeto pasivo» y el NIF-IVA del cliente, comprobado en el VIES.',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Antes de facturar sin IVA a un cliente de la UE, comprueba su NIF-IVA en el <strong>VIES</strong> y guarda la captura. Si no es válido, la operación lleva IVA español y el error lo paga tu cliente.',
+        },
+      ],
+    },
+  ],
+
+  configTest: { preguntasPorIntento: 10, aprobado: 8 },
+
+  test: [
+    /* --- Emisión --- */
+    {
+      id: 'b2-q01',
+      pregunta: 'Tu cliente vende material a una empresa el 20 de octubre. ¿Hasta cuándo puede emitir la factura?',
+      correcta: 'Antes del 16 de noviembre',
+      incorrectas: ['Hasta el 31 de diciembre', 'Solo el mismo 20 de octubre'],
+      explicacion: 'Cuando el destinatario es empresario o profesional, la factura debe expedirse antes del día 16 del mes siguiente a la operación. A un particular, se le factura en el momento.',
+    },
+    {
+      id: 'b2-q02',
+      pregunta: 'Un cliente quiere numerar sus facturas por años (2026/001, 2026/002…) y usar otra serie para las rectificativas. ¿Es correcto?',
+      correcta: 'Sí: la numeración es correlativa dentro de cada serie',
+      incorrectas: ['No: debe existir una única serie para siempre', 'No: las rectificativas deben llevar el mismo número que la original'],
+      explicacion: 'Se pueden usar varias series (por año, por establecimiento o por tipo) siempre que dentro de cada una la numeración sea correlativa. Las rectificativas deben ir en una serie específica.',
+    },
+    {
+      id: 'b2-q03',
+      pregunta: '¿Cómo se registran habitualmente las ventas con ticket de un bar?',
+      correcta: 'Con un asiento resumen, diario o mensual, a partir de los cierres de caja',
+      incorrectas: ['Con un asiento por cada ticket emitido', 'No se registran hasta el cierre del ejercicio'],
+      explicacion: 'Las ventas a particulares con factura simplificada se registran de forma agregada, separando lo cobrado en efectivo (570) y con tarjeta (572), y desglosando base e IVA.',
+    },
+    {
+      id: 'b2-q04',
+      pregunta: '¿De qué libro registro sale el IVA devengado que declara tu cliente en el 303?',
+      correcta: 'Del libro registro de facturas expedidas',
+      incorrectas: ['Del libro registro de facturas recibidas', 'Del libro de inventarios y cuentas anuales'],
+      explicacion: 'Las facturas emitidas alimentan el IVA devengado (repercutido). Las recibidas, el IVA deducible.',
+    },
+    {
+      id: 'b2-q05',
+      pregunta: 'Revisando las ventas del trimestre, entre la factura 044 y la 046 falta la 045. ¿Qué haces?',
+      correcta: 'Preguntar al cliente antes de presentar el 303',
+      incorrectas: ['Nada: los huecos en la numeración no importan', 'Crear tú una factura 045 por importe cero'],
+      explicacion: 'Un hueco puede ser una factura no entregada (con IVA sin declarar) o una anulada que hay que poder justificar. Nunca se inventan facturas para tapar huecos.',
+    },
+
+    /* --- Asiento de venta y anticipos --- */
+    {
+      id: 'b2-q06',
+      pregunta: 'Una distribuidora vende mercancía a un restaurante a 30 días. ¿Cómo queda el asiento?',
+      correcta: '430 Clientes al Debe; 700 Ventas y 477 IVA repercutido al Haber',
+      incorrectas: ['700 Ventas al Debe; 430 Clientes al Haber', '430 Clientes al Debe; 705 y 472 al Haber'],
+      explicacion: 'El cliente debe el total (430, Debe). El ingreso por la base (700, Haber) y el IVA cobrado es una deuda con Hacienda (477, Haber). La 472 es el IVA de las compras.',
+    },
+    {
+      id: 'b2-q07',
+      pregunta: 'Un taller mecánico factura una reparación a un cliente. ¿Qué cuenta de ingreso usas?',
+      correcta: '705 Prestaciones de servicios',
+      incorrectas: ['700 Ventas de mercaderías', '759 Ingresos por servicios diversos'],
+      explicacion: 'Cuando la actividad principal es prestar un servicio, el ingreso va a la 705. Si el taller vendiera un recambio suelto en el mostrador, sería una venta (700).',
+    },
+    {
+      id: 'b2-q08',
+      pregunta: 'Una empresa alquila a otra una nave que no utiliza; alquilar no es su actividad principal. ¿Dónde registras el ingreso?',
+      correcta: '752 Ingresos por arrendamientos',
+      incorrectas: ['705 Prestaciones de servicios', '621 Arrendamientos y cánones'],
+      explicacion: 'Los ingresos accesorios por alquiler van a la 752. La 621 es el gasto del que paga el alquiler.',
+    },
+    {
+      id: 'b2-q09',
+      pregunta: 'Una tienda cobra con tarjeta una venta de 121 € (IVA incluido) a un particular. ¿Qué asiento haces?',
+      correcta: '572 Bancos 121 al Debe; 700 Ventas 100 y 477 IVA 21 al Haber',
+      incorrectas: ['570 Caja 121 al Debe; 700 Ventas 121 al Haber', '572 Bancos 121 al Debe; 700 Ventas 121 al Haber'],
+      explicacion: 'El cobro con tarjeta acaba en el banco (572). Del total, 121 / 1,21 = 100 € es la venta y 21 € el IVA repercutido.',
+    },
+    {
+      id: 'b2-q10',
+      pregunta: '¿Qué representa el saldo de la cuenta 477 IVA repercutido antes de liquidar el trimestre?',
+      correcta: 'Una deuda con Hacienda: el IVA cobrado a los clientes',
+      incorrectas: ['Un ingreso de la empresa', 'Un derecho de cobro frente a Hacienda'],
+      explicacion: 'El IVA repercutido no es un ingreso: la empresa lo cobra en nombre de Hacienda. En la liquidación del 303 se compensa con el IVA soportado (472).',
+    },
+    {
+      id: 'b2-q11',
+      pregunta: 'Un cliente adelanta 2.000 € + IVA antes de recibir un encargo. ¿En qué cuenta registras el anticipo?',
+      correcta: '438 Anticipos de clientes',
+      incorrectas: ['700 Ventas de mercaderías', '407 Anticipos a proveedores'],
+      explicacion: 'Aún no hay venta: el anticipo es una deuda con el cliente (438, Haber). La 407 es la cuenta que usaría quien paga el anticipo.',
+    },
+    {
+      id: 'b2-q12',
+      pregunta: '¿Lleva IVA un anticipo cobrado a un cliente?',
+      correcta: 'Sí: el IVA se devenga al cobrarlo y hay que emitir factura',
+      incorrectas: ['No: el IVA solo se aplica en la factura final', 'Solo si el anticipo supera los 3.000 €'],
+      explicacion: 'En los pagos anticipados, el IVA se devenga en el momento del cobro por el importe cobrado. En la factura final solo se repercute el IVA pendiente.',
+    },
+    {
+      id: 'b2-q13',
+      pregunta: 'Al registrar la factura final de un encargo con anticipo, ¿qué haces con la cuenta 438?',
+      correcta: 'Cargarla (Debe) para cancelarla y registrar la venta completa',
+      incorrectas: ['Abonarla otra vez por el importe del anticipo', 'Dejarla abierta hasta el cierre del ejercicio'],
+      explicacion: 'La venta se registra por el total (700/705, Haber). El anticipo se aplica cargando la 438, y el cliente queda a deber solo la parte pendiente con su IVA.',
+    },
+
+    /* --- IVA repercutido y recargo --- */
+    {
+      id: 'b2-q14',
+      pregunta: 'Un restaurante cobra un menú del día. ¿Qué tipo de IVA repercute?',
+      correcta: '10 %',
+      incorrectas: ['21 %', '4 %'],
+      explicacion: 'Los servicios de hostelería y restauración tributan al tipo reducido del 10 %.',
+    },
+    {
+      id: 'b2-q15',
+      pregunta: 'Una panadería vende barras de pan común. ¿Qué tipo de IVA repercute?',
+      correcta: '4 %',
+      incorrectas: ['10 %', '21 %'],
+      explicacion: 'El pan común tributa al tipo superreducido del 4 %, igual que la leche, los huevos, las frutas o las verduras.',
+    },
+    {
+      id: 'b2-q16',
+      pregunta: 'Esa misma panadería vende cruasanes y ensaimadas. ¿Qué tipo de IVA aplica?',
+      correcta: '10 %',
+      incorrectas: ['4 %, como el pan', '21 %'],
+      explicacion: 'La bollería y la pastelería tributan al 10 %. Por eso una misma factura de panadería suele tener dos tipos.',
+    },
+    {
+      id: 'b2-q17',
+      pregunta: 'Un autónomo reforma el baño de la vivienda de un particular; los materiales son menos del 40 % del total. ¿Qué IVA aplica?',
+      correcta: '10 %, si se cumplen los requisitos de las obras de renovación de vivienda',
+      incorrectas: ['21 % siempre', '4 %'],
+      explicacion: 'Las obras de renovación y reparación de viviendas para particulares pueden ir al 10 % si los materiales aportados no superan el 40 % de la base y la vivienda tiene más de dos años. Si no se cumplen, el 21 %.',
+    },
+    {
+      id: 'b2-q18',
+      pregunta: 'Un fisioterapeuta colegiado factura una sesión a un paciente. ¿Qué IVA lleva?',
+      correcta: 'Ninguno: es asistencia sanitaria exenta',
+      incorrectas: ['21 %', '10 %'],
+      explicacion: 'La asistencia sanitaria prestada por profesionales sanitarios está exenta. La factura debe indicar la exención, y el fisioterapeuta no deduce el IVA de sus compras.',
+    },
+    {
+      id: 'b2-q19',
+      pregunta: 'Una factura emitida tiene bases al 10 % y al 4 %. ¿Cómo registras el IVA repercutido?',
+      correcta: 'Una sola 477 con la suma de las cuotas',
+      incorrectas: ['Solo la cuota del tipo más alto', 'Una 477 por la cuota y una 472 por la otra'],
+      explicacion: 'En el asiento basta una línea de 477 con el total de cuotas. El desglose por tipos lo recoge el libro de facturas expedidas.',
+    },
+    {
+      id: 'b2-q20',
+      pregunta: 'Tu cliente mayorista vende a una tienda de barrio de un autónomo en recargo de equivalencia. ¿Qué cambia en la factura?',
+      correcta: 'Además del IVA, se añade el recargo: 5,2 % sobre la base de lo que va al 21 %',
+      incorrectas: ['Nada: es una factura normal', 'Se aplica una retención del 1 %'],
+      explicacion: 'Al minorista en recargo se le cobra IVA y recargo (5,2 %, 1,4 % o 0,5 % según el tipo de IVA). El mayorista ingresa ambos en su 303.',
+    },
+    {
+      id: 'b2-q21',
+      pregunta: '¿Quién puede estar en el régimen de recargo de equivalencia?',
+      correcta: 'Comerciantes minoristas personas físicas o comunidades de bienes que revenden sin transformar',
+      incorrectas: ['Cualquier sociedad que venda al público', 'Los bares y restaurantes'],
+      explicacion: 'El régimen es para minoristas personas físicas (o comunidades de bienes). Las sociedades, la hostelería y quienes transforman lo que venden quedan fuera.',
+    },
+    {
+      id: 'b2-q22',
+      pregunta: 'Un minorista en recargo de equivalencia, ¿presenta el modelo 303?',
+      correcta: 'No: el IVA y el recargo que paga a sus proveedores son coste de sus compras',
+      incorrectas: ['Sí, cada trimestre como cualquier empresa', 'Sí, pero solo para deducir el IVA de sus compras'],
+      explicacion: 'El minorista en recargo no repercute ni deduce IVA en sus ventas a consumidores, así que no presenta el 303 por esa actividad.',
+    },
+    {
+      id: 'b2-q23',
+      pregunta: 'Una factura emitida está exenta de IVA. ¿Qué debe indicar?',
+      correcta: 'La causa de la exención (por ejemplo, el artículo de la Ley del IVA)',
+      incorrectas: ['Nada: basta con poner IVA 0 %', 'Que se emite como factura simplificada'],
+      explicacion: 'Las facturas exentas, con inversión del sujeto pasivo o entregas intracomunitarias deben mencionar el motivo por el que no llevan IVA.',
+    },
+
+    /* --- Retenciones soportadas --- */
+    {
+      id: 'b2-q24',
+      pregunta: 'Tu cliente, una arquitecta autónoma, factura 2.000 € + IVA a una empresa con un 15 % de retención. ¿Cómo queda el asiento?',
+      correcta: '430 por 2.120 y 473 por 300 al Debe; 705 por 2.000 y 477 por 420 al Haber',
+      incorrectas: ['430 por 2.420 al Debe; 705 por 2.000 y 477 por 420 al Haber', '430 por 2.120 al Debe; 4751 por 300, 705 y 477 al Haber'],
+      explicacion: 'La empresa le pagará 2.000 + 420 − 300 = 2.120 €. La retención es un pago a cuenta de su IRPF: un derecho frente a Hacienda (473, Debe).',
+    },
+    {
+      id: 'b2-q25',
+      pregunta: 'Para tu cliente profesional, ¿qué es la retención que le practican sus clientes?',
+      correcta: 'Un pago a cuenta de su IRPF: un derecho frente a Hacienda (473)',
+      incorrectas: ['Una deuda con Hacienda (4751)', 'Un gasto de su actividad'],
+      explicacion: 'La 4751 la usa quien retiene; quien soporta la retención usa la 473. La descontará en sus pagos fraccionados y en su declaración de la renta.',
+    },
+    {
+      id: 'b2-q26',
+      pregunta: 'La arquitecta factura a un particular el proyecto de reforma de su casa. ¿Hay retención?',
+      correcta: 'No: los particulares no practican retenciones',
+      incorrectas: ['Sí, del 15 %', 'Sí, del 7 %'],
+      explicacion: 'Solo están obligados a retener las empresas y los profesionales. El particular paga el total de la factura.',
+    },
+
+    /* --- Abonos y descuentos --- */
+    {
+      id: 'b2-q27',
+      pregunta: 'Un cliente devuelve mercancía y emites un abono. ¿Cómo queda el asiento?',
+      correcta: '708 Devoluciones de ventas y 477 al Debe; 430 al Haber',
+      incorrectas: ['430 al Debe; 708 y 477 al Haber', 'Se borra la factura original del libro'],
+      explicacion: 'El abono reduce el ingreso (708, Debe), el IVA repercutido (477, Debe) y lo que debe el cliente (430, Haber).',
+    },
+    {
+      id: 'b2-q28',
+      pregunta: 'A final de año tu cliente concede un rappel por volumen a su mejor comprador. ¿Qué cuenta usa?',
+      correcta: '709 Rappels sobre ventas',
+      incorrectas: ['609 Rappels por compras', '708 Devoluciones de ventas'],
+      explicacion: 'El rappel concedido reduce las ventas: 709, al Debe. La 609 la usaría el comprador que lo recibe.',
+    },
+    {
+      id: 'b2-q29',
+      pregunta: 'Tu cliente concede un descuento a un comprador por pagar antes del vencimiento. ¿Qué cuenta usa?',
+      correcta: '706 Descuentos sobre ventas por pronto pago',
+      incorrectas: ['626 Servicios bancarios y similares', '606 Descuentos sobre compras por pronto pago'],
+      explicacion: 'El descuento por pronto pago concedido fuera de factura va a la 706, al Debe. La 606 es la del comprador.',
+    },
+    {
+      id: 'b2-q30',
+      pregunta: 'Una factura emitida tiene mal el NIF del cliente. ¿Cómo se corrige?',
+      correcta: 'Con una factura rectificativa que haga referencia a la original',
+      incorrectas: ['Editando el PDF y volviéndolo a enviar', 'Emitiendo otra factura con el mismo número'],
+      explicacion: 'Las facturas emitidas no se modifican ni se borran: se corrigen con una rectificativa en su serie propia, indicando qué factura rectifica y el motivo.',
+    },
+
+    /* --- Morosos --- */
+    {
+      id: 'b2-q31',
+      pregunta: 'Un cliente lleva 4 meses sin pagar y ya no contesta. ¿Qué asiento haces?',
+      correcta: '436 Clientes de dudoso cobro al Debe; 430 Clientes al Haber',
+      incorrectas: ['650 Pérdidas de créditos incobrables al Debe; 430 al Haber', '694 al Debe; 490 al Haber, sin tocar la 430'],
+      explicacion: 'El primer paso es reclasificar la deuda a dudoso cobro. La pérdida se reconoce después (deterioro al cierre o baja definitiva si es incobrable).',
+    },
+    {
+      id: 'b2-q32',
+      pregunta: 'Al cierre, estimas que una deuda de dudoso cobro de 5.000 € no se cobrará. ¿Qué asiento haces?',
+      correcta: '694 Pérdidas por deterioro de créditos comerciales al Debe; 490 Deterioro de valor de créditos al Haber',
+      incorrectas: ['650 al Debe; 436 al Haber', '490 al Debe; 794 al Haber'],
+      explicacion: 'El deterioro reconoce la pérdida estimada sin dar de baja la deuda: gasto en la 694 y corrección de valor en la 490. La 650 es para la pérdida definitiva.',
+    },
+    {
+      id: 'b2-q33',
+      pregunta: 'Una deuda de dudoso cobro, sin deterioro previo, resulta definitivamente incobrable. ¿Qué asiento haces?',
+      correcta: '650 Pérdidas de créditos comerciales incobrables al Debe; 436 al Haber',
+      incorrectas: ['694 al Debe; 490 al Haber', '436 al Debe; 430 al Haber'],
+      explicacion: 'La pérdida definitiva va a la 650 y la deuda se da de baja. Si antes se hubiera dotado deterioro, también se aplicaría la 490.',
+    },
+    {
+      id: 'b2-q34',
+      pregunta: 'Cobras por banco una deuda por la que dotaste deterioro el año pasado. Además del cobro (572 a 436), ¿qué haces?',
+      correcta: 'Revertir el deterioro: 490 al Debe y 794 al Haber',
+      incorrectas: ['Nada más: el cobro lo cierra todo', 'Registrar un ingreso en la 769'],
+      explicacion: 'El deterioro ya no tiene sentido, así que se revierte: se cancela la 490 y se reconoce un ingreso en la 794 Reversión del deterioro de créditos por operaciones comerciales.',
+    },
+    {
+      id: 'b2-q35',
+      pregunta: '¿Qué hace falta, en general, para recuperar el IVA de una factura impagada cuando el deudor no está en concurso?',
+      correcta: 'Que pase el plazo legal, reclamar el cobro de forma fehaciente y emitir una rectificativa',
+      incorrectas: ['Basta con que la factura esté vencida', 'Solo es posible si el deudor entra en concurso'],
+      explicacion: 'Deben pasar 6 meses desde el devengo (1 año para grandes empresas), reclamarse el cobro (judicialmente, por notario u otro medio fehaciente) y emitirse una rectificativa dentro de los 6 meses siguientes.',
+    },
+    {
+      id: 'b2-q36',
+      pregunta: 'Después de emitir la rectificativa por impago, ¿qué falta?',
+      correcta: 'Comunicarlo a la AEAT en el plazo de un mes',
+      incorrectas: ['Nada más', 'Presentar un 390 complementario'],
+      explicacion: 'La modificación de la base imponible por impago debe comunicarse a la Agencia Tributaria en el mes siguiente a la fecha de la rectificativa.',
+    },
+    {
+      id: 'b2-q37',
+      pregunta: 'Al registrar la rectificativa que anula el IVA de un impagado, ¿qué ocurre con la 477?',
+      correcta: 'Se carga (Debe) por la cuota, con abono a la 436',
+      incorrectas: ['Se abona (Haber) por la cuota', 'Se sustituye por la 472'],
+      explicacion: 'Se reduce el IVA repercutido que se debía a Hacienda (477, Debe) y la deuda del cliente en ese importe (436, Haber). El resto de la deuda se sigue reclamando.',
+    },
+    {
+      id: 'b2-q38',
+      pregunta: '¿Cuál es el plazo máximo de pago entre empresas que fija la ley de morosidad?',
+      correcta: '60 días (30 si no se pacta otro)',
+      incorrectas: ['90 días', '120 días'],
+      explicacion: 'El plazo legal es de 30 días si no se pacta nada, y las partes pueden ampliarlo como máximo a 60 días.',
+    },
+
+    /* --- Ventas a otros países --- */
+    {
+      id: 'b2-q39',
+      pregunta: 'Tu cliente vende mercancía a una empresa francesa con un NIF-IVA válido. ¿Qué IVA lleva la factura?',
+      correcta: 'Ninguno: es una entrega intracomunitaria exenta, que va al 349 con la clave E',
+      incorrectas: ['21 % de IVA español', 'El IVA francés, que cobra tu cliente'],
+      explicacion: 'Las entregas de bienes a empresarios de otro país de la UE con NIF-IVA válido están exentas. Hay que comprobar el NIF en el VIES y declararlas en el 349.',
+    },
+    {
+      id: 'b2-q40',
+      pregunta: 'Una agencia de diseño española factura un servicio a una empresa alemana. ¿Qué IVA lleva?',
+      correcta: 'Ninguno español: lo autorrepercute el cliente alemán; va al 349 con la clave S',
+      incorrectas: ['21 % de IVA español', 'Está exenta como una exportación'],
+      explicacion: 'Los servicios entre empresas se gravan, en general, donde está el cliente. La factura indica «inversión del sujeto pasivo» y la operación se declara en el 349.',
+    },
+  ],
+
+  casos: [
+    {
+      id: 'b2-venta',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje para hostelería' },
+      titulo: 'Factura de venta a un restaurante',
+      enunciado: 'Tu cliente te pasa una de las facturas que ha emitido este mes. Revisa los datos y registra la venta.',
+      documento: {
+        tipo: 'factura',
+        color: '#0f766e',
+        emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030', direccion: ['C/ Font d’en Carròs, 9 · 46017 Valencia'] },
+        receptor: { nombre: 'Mesón La Encina, S.L.', nif: 'B98556677', direccion: ['C/ Mayor, 8 · 46900 Torrent (Valencia)'] },
+        numero: '2026/0241',
+        fecha: '08/10/2026',
+        vencimiento: '07/11/2026',
+        formaPago: 'Transferencia a 30 días',
+        lineas: [
+          { concepto: 'Plato llano de porcelana 27 cm (caja de 12)', cantidad: 20, precio: 54, iva: 21 },
+          { concepto: 'Copa de vino 35 cl (caja de 24)', cantidad: 10, precio: 24, iva: 21 },
+          { concepto: 'Cubertería de acero (set de 24 piezas)', cantidad: 8, precio: 60, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['430', '400', '700', '705', '600', '472', '477', '572'],
+      solucion: [{ cuenta: '430', debe: 2178 }, { cuenta: '700', haber: 1800 }, { cuenta: '477', haber: 378 }],
+      pista: 'Es el espejo de una compra: ¿quién debe el total?, ¿qué se ha vendido?, ¿qué IVA se ha cobrado?',
+      explicacion: 'El restaurante debe el total: 430 por 2.178 €. La venta de mercaderías va a la 700 por la base (1.080 + 240 + 480 = 1.800 €) y el IVA cobrado a la 477 (378 €).',
+    },
+    {
+      id: 'b2-dos-tipos',
+      tipo: 'asiento',
+      cliente: { nombre: 'Horno San Blas, S.L.', actividad: 'Panadería y bollería' },
+      titulo: 'Venta con pan y bollería',
+      enunciado: 'La panadería sirve cada semana a una cafetería. Registra esta factura emitida: fíjate en los tipos de IVA.',
+      documento: {
+        tipo: 'factura',
+        color: '#b45309',
+        emisor: { nombre: 'Horno San Blas, S.L.', nif: 'B98221133', direccion: ['C/ San Vicente, 77 · 46007 Valencia'] },
+        receptor: { nombre: 'Cafetería Plaza Mayor, S.L.', nif: 'B98445511', direccion: ['Plaza Mayor, 2 · 46001 Valencia'] },
+        numero: 'HSB-2026/0388',
+        fecha: '11/10/2026',
+        vencimiento: '10/11/2026',
+        formaPago: 'Recibo domiciliado a 30 días',
+        lineas: [
+          { concepto: 'Barra de pan común', cantidad: 300, precio: 0.5, iva: 4 },
+          { concepto: 'Cruasán de mantequilla', cantidad: 200, precio: 0.6, iva: 10 },
+          { concepto: 'Ensaimada', cantidad: 50, precio: 1.2, iva: 10 },
+        ],
+      },
+      cuentasDisponibles: ['430', '700', '705', '472', '477', '438', '572'],
+      solucion: [{ cuenta: '430', debe: 354 }, { cuenta: '700', haber: 330 }, { cuenta: '477', haber: 24 }],
+      pista: 'Suma las bases de los dos tipos para la venta y las dos cuotas para el IVA.',
+      explicacion: 'Pan al 4 % (base 150 €, cuota 6 €) y bollería al 10 % (base 180 €, cuota 18 €). Venta por 330 €, una sola 477 por 24 € y el cliente debe 354 €.',
+    },
+    {
+      id: 'b2-caja',
+      tipo: 'asiento',
+      cliente: { nombre: 'Bar Los Arcos, S.L.', actividad: 'Bar y restaurante' },
+      titulo: 'Ventas del mes según los cierres de caja',
+      enunciado: 'El bar no emite facturas completas: vende con ticket. Te manda el resumen mensual de sus cierres de caja. Registra las ventas del mes en un único asiento.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Resumen de cierres de caja (informes Z)',
+        subtitulo: 'Octubre 2026 · TPV del local',
+        emisor: { nombre: 'Bar Los Arcos, S.L.', nif: 'B98667700' },
+        columnas: ['Concepto', 'Importe'],
+        filas: [
+          ['Días con actividad', '27'],
+          ['Tickets emitidos', '3.912'],
+          ['Ventas totales (IVA 10 % incluido)', '15.400,00 €'],
+          ['Cobrado en efectivo', '4.400,00 €'],
+          ['Cobrado con tarjeta', '11.000,00 €'],
+        ],
+        notas: ['Todos los productos y servicios del local tributan al 10 %.', 'Los cobros con tarjeta se abonan íntegros en la cuenta del banco.'],
+      },
+      cuentasDisponibles: ['570', '572', '430', '700', '705', '477', '472'],
+      solucion: [{ cuenta: '570', debe: 4400 }, { cuenta: '572', debe: 11000 }, { cuenta: '700', haber: 14000 }, { cuenta: '477', haber: 1400 }],
+      alternativas: [[{ cuenta: '570', debe: 4400 }, { cuenta: '572', debe: 11000 }, { cuenta: '705', haber: 14000 }, { cuenta: '477', haber: 1400 }]],
+      pista: 'Los importes del informe llevan el IVA incluido: divide entre 1,10 para obtener la base. El dinero está en la caja y en el banco.',
+      explicacion: 'Lo cobrado entra en la caja (570, 4.400 €) y en el banco (572, 11.000 €). La base es 15.400 / 1,10 = 14.000 € de ventas (700; algunas gestorías usan la 705 en hostelería) y el IVA repercutido, 1.400 € (477).',
+    },
+    {
+      id: 'b2-tipos',
+      tipo: 'clasificar',
+      titulo: '¿Qué IVA repercute cada cliente?',
+      enunciado: 'Repasas las ventas de varios clientes de la gestoría. Indica el tipo de IVA que corresponde a cada operación.',
+      rejilla: 'grid-cols-4',
+      opciones: [
+        { valor: '21', etiqueta: '21 %' },
+        { valor: '10', etiqueta: '10 %' },
+        { valor: '4', etiqueta: '4 %' },
+        { valor: 'exenta', etiqueta: 'Exenta' },
+      ],
+      cuentas: [
+        { id: 'menu', texto: 'Un restaurante cobra un menú del día', correcta: '10', pista: 'Es un servicio de hostelería.', explicacion: 'Hostelería y restauración: tipo reducido.' },
+        { id: 'pan', texto: 'Una panadería vende barras de pan común', correcta: '4', pista: 'Es un alimento de primera necesidad.', explicacion: 'Pan común: tipo superreducido.' },
+        { id: 'consultoria', texto: 'Una consultora factura un estudio de mercado a una empresa', correcta: '21', pista: 'Servicio profesional sin ningún tipo especial.', explicacion: 'Servicios profesionales: tipo general.' },
+        { id: 'fisio', texto: 'Un fisioterapeuta colegiado factura una sesión a un paciente', correcta: 'exenta', pista: 'Es asistencia sanitaria.', explicacion: 'Asistencia sanitaria: exenta.' },
+        { id: 'libro', texto: 'Una librería vende un libro en papel', correcta: '4', pista: 'Libros, periódicos y revistas tienen un tipo especial.', explicacion: 'Libros: tipo superreducido.' },
+        { id: 'reforma', texto: 'Un autónomo reforma el baño de la vivienda de un particular (vivienda de más de 2 años, materiales por debajo del 40 %)', correcta: '10', pista: 'Las obras de renovación de vivienda tienen un tipo reducido si se cumplen requisitos.', explicacion: 'Renovación de vivienda con requisitos: tipo reducido.' },
+        { id: 'abrigo', texto: 'Una tienda de ropa vende un abrigo', correcta: '21', pista: 'La ropa no tiene tipo reducido.', explicacion: 'Ropa: tipo general.' },
+        { id: 'correduria', texto: 'Una correduría cobra su comisión por mediar en un seguro', correcta: 'exenta', pista: 'Los seguros y su mediación tienen un tratamiento especial.', explicacion: 'Seguros y su mediación: exentos.' },
+      ],
+      resumenOk: 'Aplicar el tipo correcto es responsabilidad de quien factura: si tu cliente cobra un 10 % donde tocaba un 21 %, la diferencia la pagará él en una comprobación.',
+    },
+    {
+      id: 'b2-recargo',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje' },
+      titulo: 'Venta a una tienda en recargo de equivalencia',
+      enunciado: 'Tu cliente vende a un bazar de barrio que lleva una autónoma en recargo de equivalencia. Registra la factura emitida.',
+      documento: {
+        tipo: 'factura',
+        color: '#0f766e',
+        recargo: true,
+        emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030', direccion: ['C/ Font d’en Carròs, 9 · 46017 Valencia'] },
+        receptor: { nombre: 'Rosa Martí Ferrer · Bazar Rosa', nif: '34567890V', direccion: ['C/ Doctor Sumsi, 12 · 46005 Valencia'] },
+        numero: '2026/0257',
+        fecha: '14/10/2026',
+        vencimiento: '13/11/2026',
+        formaPago: 'Transferencia a 30 días',
+        menciones: ['Cliente acogido al régimen especial del recargo de equivalencia.'],
+        lineas: [
+          { concepto: 'Juego de vasos (pack de 6)', cantidad: 40, precio: 8, iva: 21 },
+          { concepto: 'Sartén antiadherente 24 cm', cantidad: 20, precio: 24, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['430', '700', '477', '472', '473', '4751', '572'],
+      solucion: [{ cuenta: '430', debe: 1009.6 }, { cuenta: '700', haber: 800 }, { cuenta: '477', haber: 209.6 }],
+      pista: 'El recargo, como el IVA, se cobra al cliente y se ingresa a Hacienda. ¿Dónde va entonces?',
+      explicacion: 'Venta por la base (800 €). IVA (168 €) y recargo (41,60 €) son deudas con Hacienda: 477 por 209,60 € (muchas gestorías llevan el recargo en una subcuenta propia de la 477). La tienda debe 1.009,60 €.',
+    },
+    {
+      id: 'b2-retencion',
+      tipo: 'asiento',
+      cliente: { nombre: 'Marta Gil Soler', actividad: 'Arquitecta autónoma' },
+      titulo: 'Factura de una profesional con retención',
+      enunciado: 'Tu clienta es arquitecta. Ha facturado un proyecto a una promotora, que le practicará la retención. Registra su factura emitida.',
+      documento: {
+        tipo: 'factura',
+        color: '#1e3a8a',
+        emisor: { nombre: 'Marta Gil Soler · Arquitecta', nif: '23456789D', direccion: ['C/ Cirilo Amorós, 60, 2.º · 46004 Valencia'] },
+        receptor: { nombre: 'Promociones Huerta Norte, S.L.', nif: 'B98990022', direccion: ['Av. de Aragón, 30 · 46021 Valencia'] },
+        numero: 'MG-2026/019',
+        fecha: '15/10/2026',
+        formaPago: 'Transferencia a 15 días',
+        retencion: 15,
+        lineas: [
+          { concepto: 'Honorarios: proyecto básico de reforma de local', cantidad: 1, precio: 2000, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['430', '473', '4751', '705', '700', '477', '472', '410'],
+      solucion: [{ cuenta: '430', debe: 2120 }, { cuenta: '473', debe: 300 }, { cuenta: '705', haber: 2000 }, { cuenta: '477', haber: 420 }],
+      pista: 'La promotora le pagará menos del total con IVA. La diferencia no se pierde: ¿quién la debe ahora?',
+      explicacion: 'Ingreso por la base en la 705 (2.000 €) e IVA repercutido en la 477 (420 €). La promotora pagará 2.120 € (430). Los 300 € retenidos los ingresa la promotora a Hacienda a cuenta del IRPF de la arquitecta: para ella son un derecho (473). No es la 4751: esa la usa quien retiene.',
+    },
+    {
+      id: 'b2-anticipo',
+      tipo: 'asiento',
+      cliente: { nombre: 'Cocinas Martí, S.L.', actividad: 'Venta e instalación de cocinas' },
+      titulo: 'Cobro de un anticipo',
+      enunciado: 'Una clienta ha encargado una cocina y ha pagado por transferencia el 30 % por adelantado. Tu cliente ha emitido esta factura de anticipo. Registra el cobro.',
+      documento: {
+        tipo: 'factura',
+        titulo: 'FACTURA DE ANTICIPO',
+        color: '#7c3aed',
+        emisor: { nombre: 'Cocinas Martí, S.L.', nif: 'B98334477', direccion: ['C/ Archiduque Carlos, 88 · 46014 Valencia'] },
+        receptor: { nombre: 'Elena Ferrer Sanz', nif: '45678901G', direccion: ['C/ Pintor Benedito, 5, 4.º · 46007 Valencia'] },
+        numero: 'A-2026/012',
+        fecha: '02/10/2026',
+        formaPago: 'Cobrado por transferencia el 02/10/2026',
+        lineas: [
+          { concepto: 'Anticipo del 30 %: cocina a medida según presupuesto P-2026-118', cantidad: 1, precio: 1500, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['572', '430', '438', '407', '700', '477', '472'],
+      solucion: [{ cuenta: '572', debe: 1815 }, { cuenta: '438', haber: 1500 }, { cuenta: '477', haber: 315 }],
+      pista: 'El dinero ya está en el banco, pero la cocina aún no se ha entregado: todavía no hay venta.',
+      explicacion: 'Entra el dinero en el banco (572, 1.815 €). Como aún no hay venta, la base es una deuda con la clienta: 438 Anticipos de clientes (1.500 €). El IVA del anticipo se devenga al cobrarlo: 477 (315 €).',
+    },
+    {
+      id: 'b2-final',
+      tipo: 'asiento',
+      cliente: { nombre: 'Cocinas Martí, S.L.', actividad: 'Venta e instalación de cocinas' },
+      titulo: 'Factura final descontando el anticipo',
+      enunciado: 'Se ha instalado la cocina del caso anterior. Tu cliente emite la factura final, que descuenta el anticipo ya facturado. Registra el asiento.',
+      documento: {
+        tipo: 'factura',
+        color: '#7c3aed',
+        emisor: { nombre: 'Cocinas Martí, S.L.', nif: 'B98334477', direccion: ['C/ Archiduque Carlos, 88 · 46014 Valencia'] },
+        receptor: { nombre: 'Elena Ferrer Sanz', nif: '45678901G', direccion: ['C/ Pintor Benedito, 5, 4.º · 46007 Valencia'] },
+        numero: '2026/0154',
+        fecha: '23/10/2026',
+        vencimiento: '23/10/2026',
+        formaPago: 'Transferencia a la entrega',
+        lineas: [
+          { concepto: 'Cocina a medida: muebles, encimera e instalación (presupuesto P-2026-118)', cantidad: 1, precio: 5000, iva: 21 },
+          { concepto: 'A deducir: anticipo facturado (factura A-2026/012)', cantidad: 1, precio: -1500, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['430', '438', '572', '700', '705', '477', '472'],
+      solucion: [{ cuenta: '430', debe: 4235 }, { cuenta: '438', debe: 1500 }, { cuenta: '700', haber: 5000 }, { cuenta: '477', haber: 735 }],
+      alternativas: [[{ cuenta: '430', debe: 4235 }, { cuenta: '438', debe: 1500 }, { cuenta: '705', haber: 5000 }, { cuenta: '477', haber: 735 }]],
+      pista: 'La venta es por el total de la cocina. El anticipo se cancela y solo se repercute el IVA pendiente.',
+      explicacion: 'La venta se registra completa (700, 5.000 €). Se cancela el anticipo (438 al Debe, 1.500 €). El IVA pendiente es el 21 % de 3.500 € = 735 € (477), y la clienta debe 4.235 € (430).',
+    },
+    {
+      id: 'b2-abono',
+      tipo: 'asiento',
+      cliente: { nombre: 'Distribuciones Levante, S.L.', actividad: 'Distribuidor de menaje para hostelería' },
+      titulo: 'Abono por devolución',
+      enunciado: 'El restaurante devolvió unas cajas de copas que llegaron rotas. Tu cliente ha emitido esta factura rectificativa. Registra el abono.',
+      documento: {
+        tipo: 'factura',
+        titulo: 'FACTURA RECTIFICATIVA',
+        color: '#c2410c',
+        emisor: { nombre: 'Distribuciones Levante, S.L.', nif: 'B98102030', direccion: ['C/ Font d’en Carròs, 9 · 46017 Valencia'] },
+        receptor: { nombre: 'Mesón La Encina, S.L.', nif: 'B98556677', direccion: ['C/ Mayor, 8 · 46900 Torrent (Valencia)'] },
+        numero: 'R-2026/007',
+        fecha: '16/10/2026',
+        rectifica: 'Rectifica la factura 2026/0241 de 08/10/2026. Motivo: devolución de mercancía dañada en el transporte.',
+        formaPago: 'Se descontará del próximo cobro',
+        lineas: [
+          { concepto: 'Devolución: copa de vino 35 cl (caja de 24)', cantidad: -5, precio: 24, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['430', '700', '708', '709', '477', '472', '572'],
+      solucion: [{ cuenta: '708', debe: 120 }, { cuenta: '477', debe: 25.2 }, { cuenta: '430', haber: 145.2 }],
+      alternativas: [[{ cuenta: '700', debe: 120 }, { cuenta: '477', debe: 25.2 }, { cuenta: '430', haber: 145.2 }]],
+      pista: 'Los importes son negativos: anota cantidades positivas en el lado contrario al de una venta.',
+      explicacion: 'Baja el ingreso (708 Devoluciones de ventas al Debe, 120 €; también vale cargar la 700), baja el IVA repercutido (477 al Debe, 25,20 €) y baja la deuda del restaurante (430 al Haber, 145,20 €).',
+    },
+    {
+      id: 'b2-ue',
+      tipo: 'asiento',
+      cliente: { nombre: 'Estudio Creativo Píxel, S.L.', actividad: 'Agencia de diseño' },
+      titulo: 'Servicio a una empresa francesa',
+      enunciado: 'La agencia ha diseñado la imagen de marca de una empresa de Lyon, cuyo NIF-IVA has comprobado en el VIES. Registra la factura emitida.',
+      documento: {
+        tipo: 'factura',
+        color: '#2563eb',
+        emisor: { nombre: 'Estudio Creativo Píxel, S.L.', nif: 'ESB98445566', direccion: ['C/ Literato Azorín, 11 · 46006 Valencia'] },
+        receptor: { nombre: 'Atelier Lumière SARL', nif: 'FR12345678901', direccion: ['12 rue de l’Exemple · 69002 Lyon (Francia)'] },
+        numero: 'PX-2026/077',
+        fecha: '20/10/2026',
+        vencimiento: '19/11/2026',
+        formaPago: 'Transferencia a 30 días',
+        menciones: ['Operación con inversión del sujeto pasivo (art. 196 de la Directiva 2006/112/CE).'],
+        lineas: [
+          { concepto: 'Diseño de identidad corporativa y manual de marca', cantidad: 1, precio: 3000, iva: 0 },
+        ],
+      },
+      cuentasDisponibles: ['430', '705', '700', '477', '472', '473', '572'],
+      solucion: [{ cuenta: '430', debe: 3000 }, { cuenta: '705', haber: 3000 }],
+      pista: 'La factura no lleva IVA español. ¿Hace falta alguna línea de IVA en tu asiento?',
+      explicacion: 'Solo dos líneas: el cliente francés debe 3.000 € (430) y el ingreso es una prestación de servicios (705). No hay 477: el IVA lo autorrepercute la empresa francesa en su país. La operación va al modelo 349 con la clave S.',
+    },
+    {
+      id: 'b2-dudoso',
+      tipo: 'asiento',
+      cliente: { nombre: 'Reformas Integrales Turia, S.L.', actividad: 'Empresa de reformas' },
+      titulo: 'Un cliente que no paga',
+      enunciado: 'Revisas el saldo de clientes de la empresa de reformas. Una de sus facturas lleva meses vencida. Registra el asiento que corresponde ahora.',
+      documento: {
+        tipo: 'resumen',
+        titulo: 'Extracto de cuenta de cliente',
+        subtitulo: '43000045 · Construcciones Hidalgo, S.L. · a 20/10/2026',
+        emisor: { nombre: 'Reformas Integrales Turia, S.L.', nif: 'B98443322' },
+        columnas: ['Fecha', 'Concepto', 'Debe', 'Saldo'],
+        filas: [
+          ['15/03/2026', 'Factura F\u20112026/021 (obra C/\u00a0Sagunto)', '6.050,00', '6.050,00'],
+        ],
+        notas: [
+          'Vencimiento: 14/04/2026. Ningún cobro desde entonces.',
+          '02/06/2026: reclamación por correo electrónico, sin respuesta.',
+          '10/07/2026: requerimiento notarial de pago, sin respuesta.',
+        ],
+      },
+      cuentasDisponibles: ['436', '430', '490', '694', '650', '477', '572'],
+      solucion: [{ cuenta: '436', debe: 6050 }, { cuenta: '430', haber: 6050 }],
+      pista: 'Todavía no sabes si se perderá. El primer paso es separar esta deuda de las que se cobran con normalidad.',
+      explicacion: 'Con meses de retraso y reclamaciones sin respuesta, la deuda es de dudoso cobro: se reclasifica de la 430 a la 436 por el total (6.050 €). La pérdida se reconocerá después: deterioro al cierre (694/490) o baja definitiva (650).',
+    },
+    {
+      id: 'b2-iva-impagado',
+      tipo: 'asiento',
+      cliente: { nombre: 'Reformas Integrales Turia, S.L.', actividad: 'Empresa de reformas' },
+      titulo: 'Recuperar el IVA del impagado',
+      enunciado: 'Se cumplen los requisitos para recuperar el IVA de la factura impagada del caso anterior y has emitido esta rectificativa (ya está comunicada a la AEAT). La deuda se sigue reclamando. Registra solo el efecto en el IVA.',
+      documento: {
+        tipo: 'factura',
+        titulo: 'FACTURA RECTIFICATIVA',
+        color: '#c2410c',
+        emisor: { nombre: 'Reformas Integrales Turia, S.L.', nif: 'B98443322', direccion: ['C/ Músico Ginés, 31 · 46022 Valencia'] },
+        receptor: { nombre: 'Construcciones Hidalgo, S.L.', nif: 'B98113355', direccion: ['C/ Sagunto, 150 · 46009 Valencia'] },
+        numero: 'R-2026/003',
+        fecha: '20/10/2026',
+        rectifica: 'Rectifica la factura F-2026/021 de 15/03/2026. Motivo: modificación de la base imponible por crédito incobrable (art. 80.Cuatro de la Ley del IVA).',
+        lineas: [
+          { concepto: 'Modificación de la base imponible de la obra facturada en F-2026/021', cantidad: 1, precio: -5000, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['477', '472', '436', '430', '650', '694', '490', '708'],
+      solucion: [{ cuenta: '477', debe: 1050 }, { cuenta: '436', haber: 1050 }],
+      pista: 'Lo que recuperas es el IVA que ya ingresaste a Hacienda. ¿Qué cuenta recogió ese IVA y cuál la deuda del cliente?',
+      explicacion: 'Se anula el IVA repercutido que nunca se cobró: 477 al Debe por 1.050 €, con abono a la 436. El cliente sigue debiendo la base (5.000 €), que se deteriorará al cierre o se dará de baja si resulta definitivamente incobrable. Si algún día paga, habrá que volver a repercutir el IVA.',
+    },
+  ],
+};
+
 const BLOQUES = [
   {
     id: 0,
@@ -1693,7 +2585,7 @@ const BLOQUES = [
     distintivo: null,
     icono: ICONOS.ventas,
     temas: ['Factura emitida (430 / 700 / 705 / 477)', 'Cobros de clientes', 'Abonos y rectificativas emitidas', 'Impagados (436)'],
-    contenido: { teoria: [], test: [], casos: [] },
+    contenido: CONTENIDO_B2,
   },
   {
     id: 3,
@@ -2125,6 +3017,10 @@ const claseBoton = {
    ===================================================================== */
 const r2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
 
+// Recargo de equivalencia según el tipo de IVA (vigente en 2026)
+const RECARGO_EQUIVALENCIA = { 21: 5.2, 10: 1.4, 4: 0.5 };
+const pctTexto = (n) => String(n).replace('.', ',');
+
 function calcularDocumento(doc) {
   const lineas = doc.lineas.map((l) => ({ ...l, importe: r2(l.cantidad * l.precio) }));
   if (doc.tipo === 'ticket') {
@@ -2135,12 +3031,16 @@ function calcularDocumento(doc) {
   const porTipo = {};
   lineas.forEach((l) => { porTipo[l.iva] = r2((porTipo[l.iva] || 0) + l.importe); });
   const desglose = Object.keys(porTipo).map(Number).sort((a, b) => b - a)
-    .map((pct) => ({ pct, base: porTipo[pct], cuota: r2(porTipo[pct] * pct / 100) }));
+    .map((pct) => {
+      const re = doc.recargo ? (RECARGO_EQUIVALENCIA[pct] || 0) : 0;
+      return { pct, base: porTipo[pct], cuota: r2(porTipo[pct] * pct / 100), re, cuotaRe: r2(porTipo[pct] * re / 100) };
+    });
   const base = r2(desglose.reduce((s, d) => s + d.base, 0));
   const cuota = r2(desglose.reduce((s, d) => s + d.cuota, 0));
+  const recargo = r2(desglose.reduce((s, d) => s + d.cuotaRe, 0));
   const retencion = doc.retencion ? r2(base * doc.retencion / 100) : 0;
   const suplidos = r2((doc.suplidos || []).reduce((s, x) => s + x.importe, 0));
-  return { lineas, desglose, base, cuota, retencion, suplidos, total: r2(base + cuota - retencion + suplidos) };
+  return { lineas, desglose, base, cuota, recargo, retencion, suplidos, total: r2(base + cuota + recargo - retencion + suplidos) };
 }
 
 const TEXTOS_DOC = {
@@ -2163,7 +3063,45 @@ function campoDoc(campo, resaltar) {
 }
 
 function htmlDocumento(doc, { resaltar = null } = {}) {
-  return doc.tipo === 'ticket' ? htmlTicket(doc) : htmlFactura(doc, resaltar);
+  if (doc.tipo === 'ticket') return htmlTicket(doc);
+  if (doc.tipo === 'resumen') return htmlResumen(doc);
+  return htmlFactura(doc, resaltar);
+}
+
+// Informe o extracto sacado del programa del cliente (cierres de caja, mayor de una cuenta…)
+function htmlResumen(doc) {
+  const numerica = (i) => i > 0 && doc.columnas.length > 2 ? i >= doc.columnas.length - 2 : i > 0;
+  return `
+    <figure class="mx-auto w-full max-w-xl" aria-label="${escaparHTML(doc.titulo)}">
+      <div class="overflow-hidden rounded-lg bg-white text-[12.5px] leading-snug text-slate-700 shadow-[0_1px_2px_rgba(15,27,45,.08),0_10px_30px_-12px_rgba(15,27,45,.35)] ring-1 ring-slate-900/10">
+        <div class="flex items-center justify-between gap-3 bg-slate-800 px-4 py-2.5 text-white">
+          <span class="min-w-0 truncate text-[12px] font-semibold">${escaparHTML(doc.emisor.nombre)}</span>
+          <span class="shrink-0 font-mono text-[10.5px] text-white/60">${escaparHTML(doc.emisor.nif || '')}</span>
+        </div>
+        <div class="p-4 sm:p-5">
+          <p class="text-[15px] font-bold leading-tight text-slate-900">${escaparHTML(doc.titulo)}</p>
+          ${doc.subtitulo ? `<p class="mt-0.5 text-slate-500">${escaparHTML(doc.subtitulo)}</p>` : ''}
+          <table class="mt-3 w-full border-collapse text-[12.5px]">
+            <thead>
+              <tr class="border-b-2 border-slate-800 text-[10.5px] uppercase tracking-wider text-slate-500">
+                ${doc.columnas.map((c, i) => `<th class="pb-1.5 font-semibold ${numerica(i) ? 'text-right' : 'text-left'} ${i > 0 ? 'pl-2' : ''}">${escaparHTML(c)}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${doc.filas.map((fila) => `
+                <tr class="border-b border-slate-200 align-top">
+                  ${fila.map((v, i) => `<td class="py-2 ${numerica(i) ? 'whitespace-nowrap text-right font-mono text-[12px] tabular-nums' : ''} ${i === 0 && doc.columnas.length > 2 ? 'whitespace-nowrap' : ''} ${i > 0 ? 'pl-2' : ''} ${i === fila.length - 1 ? 'font-semibold text-slate-900' : ''}">${escaparHTML(v)}</td>`).join('')}
+                </tr>`).join('')}
+            </tbody>
+          </table>
+          ${(doc.notas || []).length ? `
+            <ul class="mt-3 space-y-1 rounded-md bg-amber-50 p-2.5 text-[12px] text-amber-950">
+              ${doc.notas.map((n) => `<li class="flex gap-1.5"><span aria-hidden="true">•</span><span>${escaparHTML(n)}</span></li>`).join('')}
+            </ul>` : ''}
+        </div>
+        <p class="bg-slate-50 px-4 py-1.5 text-center text-[10px] uppercase tracking-wider text-slate-400">Documento ficticio · material de formación</p>
+      </div>
+    </figure>`;
 }
 
 function htmlFactura(doc, resaltar) {
@@ -2200,6 +3138,7 @@ function htmlFactura(doc, resaltar) {
       <div ${campoDoc('iva', resaltar)}>
         ${c.desglose.map((d) => filaTotal(`${t.iva} ${d.pct} %`, f(d.cuota))).join('')}
       </div>
+      ${c.recargo ? c.desglose.filter((d) => d.re).map((d) => filaTotal(`Recargo equiv. ${pctTexto(d.re)} %`, f(d.cuotaRe))).join('') : ''}
       ${c.retencion ? filaTotal(`${t.retencion} ${doc.retencion} %`, `−${f(c.retencion)}`) : ''}
       ${c.suplidos ? filaTotal(t.suplidos, f(c.suplidos)) : ''}
       <div ${campoDoc('total', resaltar)}>
@@ -2349,7 +3288,7 @@ function renderizarPieza(pieza, bloque) {
     case 'tabla': return piezaTabla(pieza);
     case 'gestoria': return piezaGestoria(pieza.html);
     case 'anatomia-factura': return piezaAnatomia(pieza, bloque);
-    case 'calculadora': return piezaCalculadora(bloque);
+    case 'calculadora': return piezaCalculadora(bloque, pieza);
     case 'documento': return `<div class="my-5">${htmlDocumento(pieza.documento)}</div>`;
     default: return '';
   }
@@ -2713,6 +3652,7 @@ function piezaAnatomia(pieza, bloque) {
 
 // Calculadora de factura con IVA y retención
 function htmlCalcResultado(calc) {
+  const venta = calc.modo === 'venta';
   const base = leerImporte(calc.base);
   if (!(base > 0)) {
     return '<p class="rounded-lg bg-tinta-900/[0.03] p-3 text-sm text-tinta-700/70">Escribe una base imponible para ver el cálculo.</p>';
@@ -2720,24 +3660,35 @@ function htmlCalcResultado(calc) {
   const cuota = r2(base * calc.iva / 100);
   const ret = r2(base * calc.ret / 100);
   const total = r2(base + cuota - ret);
-  const lineas = [{ cuenta: '6xx', debe: base }];
-  if (cuota) lineas.push({ cuenta: '472', debe: cuota });
-  if (ret) lineas.push({ cuenta: '4751', haber: ret });
-  lineas.push({ cuenta: '410', haber: total });
+  let lineas;
+  if (venta) {
+    lineas = [{ cuenta: '430', debe: total }];
+    if (ret) lineas.push({ cuenta: '473', debe: ret });
+    lineas.push({ cuenta: '7xx', haber: base });
+    if (cuota) lineas.push({ cuenta: '477', haber: cuota });
+  } else {
+    lineas = [{ cuenta: '6xx', debe: base }];
+    if (cuota) lineas.push({ cuenta: '472', debe: cuota });
+    if (ret) lineas.push({ cuenta: '4751', haber: ret });
+    lineas.push({ cuenta: '410', haber: total });
+  }
   const fila = (a, b, fuerte = false) => `<div class="flex justify-between gap-3 ${fuerte ? 'border-t border-tinta-900/10 pt-1.5 text-[15px] font-bold' : ''}"><span>${a}</span><span class="tabular-nums">${b}</span></div>`;
   return `
     <div class="space-y-1 rounded-lg bg-tinta-900/[0.03] p-3 text-sm">
       ${fila('Base imponible', formatoEuros(base))}
       ${fila(`IVA ${calc.iva} %`, `+ ${formatoEuros(cuota)}`)}
       ${fila(`Retención ${calc.ret} %`, ret ? `− ${formatoEuros(ret)}` : formatoEuros(0))}
-      ${fila('Total a pagar al proveedor', formatoEuros(total), true)}
+      ${fila(venta ? 'Total a cobrar del cliente' : 'Total a pagar al proveedor', formatoEuros(total), true)}
     </div>
     <p class="mb-1.5 mt-3 text-[11px] font-semibold uppercase tracking-wider text-tinta-700/50">Asiento resultante</p>
     ${htmlAsiento(lineas, { compacto: true })}`;
 }
 
-function piezaCalculadora(bloque) {
+function piezaCalculadora(bloque, pieza = {}) {
   const { calc } = estadoTeoria(bloque.id);
+  if (!calc.iniciada) {
+    Object.assign(calc, pieza.inicial || {}, { modo: pieza.modo || 'compra', iniciada: true });
+  }
   const chips = (accion, valores, actual, sufijo) => valores.map((v) => `
     <button type="button" data-accion="${accion}" data-valor="${v}" data-foco="${accion}-${v}" aria-pressed="${v === actual}"
             class="min-h-[44px] rounded-lg border-2 text-sm font-bold transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${v === actual ? 'border-tinta-900 bg-tinta-900 text-white' : 'border-tinta-900/10 bg-white hover:border-tinta-900/25'}">
@@ -2746,7 +3697,7 @@ function piezaCalculadora(bloque) {
   return `
     <div class="my-6 overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm" data-widget="calculadora">
       <div class="border-b border-tinta-900/10 bg-tinta-900/[0.03] px-4 py-3">
-        <p class="text-sm font-bold">Calculadora de factura recibida</p>
+        <p class="text-sm font-bold">${calc.modo === 'venta' ? 'Calculadora de factura emitida' : 'Calculadora de factura recibida'}</p>
         <p class="text-xs text-tinta-700/70">Cambia los datos y mira cómo queda el total y el asiento.</p>
       </div>
       <div class="space-y-4 p-4">
@@ -3139,7 +4090,7 @@ function corregirContra(lineasSolucion, lineas) {
 
 function htmlBloqueDocumento(caso, st) {
   const oculto = Boolean(st.docOculto);
-  const etiqueta = caso.documento.tipo === 'ticket' ? 'el ticket' : 'la factura';
+  const etiqueta = { ticket: 'el ticket', resumen: 'el informe' }[caso.documento.tipo] || 'la factura';
   return `
     <section id="documento-${caso.id}" class="scroll-mt-40 rounded-2xl bg-gradient-to-b from-tinta-900/[0.06] to-tinta-900/[0.02] p-3 sm:p-5 lg:scroll-mt-24">
       <div class="mb-3 flex items-center justify-between gap-2">
