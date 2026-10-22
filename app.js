@@ -50,6 +50,7 @@ const ICONO_OK = 'M5 12l4 4 10-10';
 const ICONO_MAL = 'M6 6l12 12M18 6L6 18';
 const ICONO_INFO = 'M12 8h.01M11 12h1v5h1M12 3a9 9 0 110 18 9 9 0 010-18z';
 const ICONO_BOMBILLA = 'M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0012 3z';
+const ICONO_DOCUMENTO = 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6';
 const ICONO_PAPELERA = 'M4 7h16M10 11v6M14 11v6M5 7l1 13h12l1-13M9 7V4h6v3';
 
 // 6000 → "6.000,00 €" (formato español, siempre con separador de miles)
@@ -121,7 +122,7 @@ const CUADRO_PGC = [
     enOficina: 'Si llega la factura de un ordenador, un vehículo o una licencia de software para varios años, no es un gasto: va aquí y se amortiza poco a poco.',
     subgrupos: [
       { codigo: '20', nombre: 'Inmovilizaciones intangibles', cuentas: [['206', 'Aplicaciones informáticas']] },
-      { codigo: '21', nombre: 'Inmovilizaciones materiales', cuentas: [['211', 'Construcciones'], ['216', 'Mobiliario'], ['217', 'Equipos para procesos de información'], ['218', 'Elementos de transporte']] },
+      { codigo: '21', nombre: 'Inmovilizaciones materiales', cuentas: [['211', 'Construcciones'], ['213', 'Maquinaria'], ['216', 'Mobiliario'], ['217', 'Equipos para procesos de información'], ['218', 'Elementos de transporte']] },
       { codigo: '28', nombre: 'Amortización acumulada del inmovilizado', cuentas: [['280', 'Amortización acumulada del inmovilizado intangible'], ['281', 'Amortización acumulada del inmovilizado material']] },
     ],
   },
@@ -150,11 +151,11 @@ const CUADRO_PGC = [
     resumen: 'Todo lo que la empresa debe o le deben por su actividad diaria: proveedores, acreedores, clientes, personal y Hacienda.',
     enOficina: 'Es tu grupo principal: cada factura de compra genera una deuda con un proveedor (400) o un acreedor (410) y, casi siempre, un IVA soportado (472).',
     subgrupos: [
-      { codigo: '40', nombre: 'Proveedores', clave: true, cuentas: [['400', 'Proveedores'], ['401', 'Proveedores, efectos comerciales a pagar']] },
+      { codigo: '40', nombre: 'Proveedores', clave: true, cuentas: [['400', 'Proveedores'], ['401', 'Proveedores, efectos comerciales a pagar'], ['407', 'Anticipos a proveedores']] },
       { codigo: '41', nombre: 'Acreedores varios', clave: true, cuentas: [['410', 'Acreedores por prestaciones de servicios']] },
       { codigo: '43', nombre: 'Clientes', clave: true, cuentas: [['430', 'Clientes'], ['436', 'Clientes de dudoso cobro']] },
       { codigo: '46', nombre: 'Personal', cuentas: [['460', 'Anticipos de remuneraciones'], ['465', 'Remuneraciones pendientes de pago']] },
-      { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['472', 'Hacienda Pública, IVA soportado'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
+      { codigo: '47', nombre: 'Administraciones Públicas', clave: true, cuentas: [['472', 'Hacienda Pública, IVA soportado'], ['473', 'Hacienda Pública, retenciones y pagos a cuenta'], ['477', 'Hacienda Pública, IVA repercutido'], ['4751', 'Hacienda Pública, acreedora por retenciones practicadas'], ['476', 'Organismos de la Seguridad Social, acreedores']] },
       { codigo: '48', nombre: 'Ajustes por periodificación', cuentas: [['480', 'Gastos anticipados'], ['485', 'Ingresos anticipados']] },
     ],
   },
@@ -183,8 +184,8 @@ const CUADRO_PGC = [
     resumen: 'Todo lo que consume la empresa para funcionar: compras, alquileres, suministros, profesionales, sueldos o intereses.',
     enOficina: 'La mayoría de facturas de proveedor llevan su gasto aquí. Elegir bien la cuenta (¿suministro 628 o reparación 622?) es buena parte de tu trabajo.',
     subgrupos: [
-      { codigo: '60', nombre: 'Compras', cuentas: [['600', 'Compras de mercaderías'], ['602', 'Compras de otros aprovisionamientos'], ['607', 'Trabajos realizados por otras empresas']] },
-      { codigo: '62', nombre: 'Servicios exteriores', clave: true, cuentas: [['621', 'Arrendamientos y cánones'], ['622', 'Reparaciones y conservación'], ['623', 'Servicios de profesionales independientes'], ['625', 'Primas de seguros'], ['626', 'Servicios bancarios y similares'], ['628', 'Suministros'], ['629', 'Otros servicios']] },
+      { codigo: '60', nombre: 'Compras', cuentas: [['600', 'Compras de mercaderías'], ['602', 'Compras de otros aprovisionamientos'], ['606', 'Descuentos sobre compras por pronto pago'], ['607', 'Trabajos realizados por otras empresas'], ['608', 'Devoluciones de compras y operaciones similares'], ['609', 'Rappels por compras']] },
+      { codigo: '62', nombre: 'Servicios exteriores', clave: true, cuentas: [['621', 'Arrendamientos y cánones'], ['622', 'Reparaciones y conservación'], ['623', 'Servicios de profesionales independientes'], ['624', 'Transportes'], ['625', 'Primas de seguros'], ['626', 'Servicios bancarios y similares'], ['627', 'Publicidad, propaganda y relaciones públicas'], ['628', 'Suministros'], ['629', 'Otros servicios']] },
       { codigo: '63', nombre: 'Tributos', cuentas: [['631', 'Otros tributos']] },
       { codigo: '64', nombre: 'Gastos de personal', cuentas: [['640', 'Sueldos y salarios'], ['642', 'Seguridad Social a cargo de la empresa']] },
       { codigo: '66', nombre: 'Gastos financieros', cuentas: [['662', 'Intereses de deudas']] },
@@ -210,6 +211,9 @@ const CUADRO_PGC = [
 
 const CUENTAS = {};
 CUADRO_PGC.forEach((g) => g.subgrupos.forEach((s) => s.cuentas.forEach(([codigo, nombre]) => { CUENTAS[codigo] = nombre; })));
+
+// Etiquetas genéricas usadas en ejemplos (no son cuentas del PGC)
+CUENTAS['6xx'] = 'Cuenta de gasto (621, 623, 627…)';
 
 const nombreCuenta = (codigo) => CUENTAS[codigo] || `Cuenta ${codigo}`;
 const grupoPGC = (numero) => CUADRO_PGC.find((g) => g.grupo === Number(numero));
@@ -240,6 +244,8 @@ const ESTILO_DESTINO = {
 const ICONOS = {
   balanza: 'M12 3v18M8 21h8M5 7h14M5 7l-3 7a3 3 0 006 0L5 7zm14 0l-3 7a3 3 0 006 0l-3-7z',
   factura: 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6',
+  ventas: 'M6 7h12l-1 13H7L6 7zM9 7a3 3 0 016 0',
+  nominas: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0',
   banco: 'M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 21h18',
   impuestos: 'M19 5L5 19M7 9a2 2 0 100-4 2 2 0 000 4zm10 10a2 2 0 100-4 2 2 0 000 4z',
   cierre: 'M7 3v3M17 3v3M4 8h16M5 5h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1zM9 14l2 2 4-4',
@@ -751,6 +757,910 @@ const CONTENIDO_B0 = {
   ],
 };
 
+/* ---------- Bloque 1: Compras y Acreedores (gestoría) ---------- */
+
+// Documento de ejemplo para la «anatomía de una factura»
+const FACTURA_EJEMPLO_B1 = {
+  tipo: 'factura',
+  color: '#0d8a6c',
+  emisor: { nombre: 'Papelería Técnica Levante, S.L.', nif: 'B98123456', direccion: ['C/ Colón, 24 · 46004 Valencia'] },
+  receptor: { nombre: 'Moda Valentina, S.L.', nif: 'B98765432', direccion: ['Av. del Puerto, 112 · 46023 Valencia'] },
+  numero: 'A-2026/0587',
+  fecha: '14/10/2026',
+  vencimiento: '13/11/2026',
+  formaPago: 'Transferencia a 30 días',
+  lineas: [
+    { concepto: 'Papel A4 80 g (caja de 5 paquetes)', cantidad: 4, precio: 18, iva: 21 },
+    { concepto: 'Tóner para impresora láser', cantidad: 1, precio: 58, iva: 21 },
+  ],
+};
+
+const CONTENIDO_B1 = {
+  teoria: [
+    {
+      id: 'circuito',
+      titulo: 'El viaje de una factura en la gestoría',
+      resumen: 'Del correo del cliente a las declaraciones.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>En una gestoría no registras «una factura»: registras cientos al trimestre, de clientes muy distintos. Lo que te da seguridad es seguir <strong>siempre el mismo circuito</strong>, sea una factura de 30 € o de 30.000 €.</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Recibir y ordenar', texto: 'Llegan por correo, por el portal del cliente o en papel. Ordénalas por cliente y trimestre nada más recibirlas.' },
+            { titulo: 'Validar', texto: '¿Va a nombre del cliente? ¿Cumple los requisitos? ¿Es una factura y no un albarán o una proforma? ¿Ya está registrada? Si algo falla, se pide al proveedor <em>antes</em> de contabilizar.' },
+            { titulo: 'Clasificar', texto: '¿Gasto o inversión? ¿Proveedor, acreedor o proveedor de inmovilizado? ¿Lleva IVA deducible, retención o suplidos?' },
+            { titulo: 'Registrar', texto: 'Asiento y libro registro de facturas recibidas. De aquí salen las cifras del 303, 111, 115, 349 y 347 del cliente.' },
+            { titulo: 'Pagar y archivar', texto: 'El pago se puntea con el banco (Bloque 3). La factura se conserva al menos 6 años.' },
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Antes de tocar las facturas de un cliente nuevo, mira su ficha: <strong>actividad</strong> (¿tiene derecho a deducir el IVA o es una actividad exenta, como una clínica?), <strong>forma jurídica</strong> y cómo tiene montadas sus <strong>subcuentas</strong> (muchos usan 62900001 Material de oficina, 62900002 Limpieza…). Te ahorrará rehacer trimestres.',
+        },
+      ],
+    },
+    {
+      id: 'validar',
+      titulo: 'Validar: factura completa, ticket y errores típicos',
+      resumen: 'Qué revisar antes de contabilizar nada.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Una factura defectuosa puede costarle al cliente el IVA deducido y el gasto en una inspección. Toca cada requisito para ver dónde está en la factura y qué tienes que comprobar.</p>',
+        },
+        {
+          tipo: 'anatomia-factura',
+          documento: FACTURA_EJEMPLO_B1,
+          requisitos: [
+            { campo: 'numero', titulo: 'Número y serie', texto: 'Correlativo dentro de cada serie. Te sirve para detectar duplicados: el mismo proveedor y el mismo número no se registran dos veces.' },
+            { campo: 'fecha', titulo: 'Fecha de expedición', texto: 'Determina en qué trimestre se registra. Si la operación se hizo en otra fecha, la factura debe indicarlo.' },
+            { campo: 'emisor', titulo: 'Datos del emisor', texto: 'Nombre o razón social, NIF y domicilio del proveedor. Con el NIF localizas o das de alta su subcuenta.' },
+            { campo: 'receptor', titulo: 'Datos del cliente', texto: 'Nombre, NIF y domicilio de tu cliente. Es el error más frecuente: facturas a nombre del socio, de otra empresa del grupo o con el NIF mal escrito. Sin esto no se deduce el IVA.' },
+            { campo: 'descripcion', titulo: 'Descripción', texto: 'Qué se compra y cuánto. Es lo que te dice la cuenta: mercaderías (600), un servicio (62x) o un bien de inversión (21x).' },
+            { campo: 'base', titulo: 'Base imponible', texto: 'El importe sin impuestos. Es lo que va a la cuenta de gasto o de inmovilizado, y sobre lo que se calculan IVA y retención.' },
+            { campo: 'iva', titulo: 'Tipo y cuota de IVA', texto: 'El tipo aplicado (21, 10 o 4 %) y la cuota en euros, por separado. Si hay varios tipos, deben aparecer desglosados.' },
+            { campo: 'total', titulo: 'Total', texto: 'No es un requisito en sí, pero compruébalo: base + IVA − retención + suplidos debe dar el total. Si no cuadra, algo está mal.' },
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Factura completa y factura simplificada (ticket)',
+          columnas: ['', 'Factura completa', 'Factura simplificada'],
+          filas: [
+            ['Datos del cliente', 'Siempre: nombre, NIF y domicilio', 'Normalmente no aparecen'],
+            ['Importe máximo', 'Sin límite', '400 € IVA incluido (3.000 € en comercio minorista, hostelería y otros sectores)'],
+            ['IVA', 'Base, tipo y cuota separados', 'Puede indicar solo «IVA incluido»'],
+            ['¿Permite deducir el IVA?', 'Sí, si cumple los requisitos', 'Solo si incluye NIF y domicilio de la empresa y la cuota desglosada'],
+          ],
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Ticket que no permite deducir:</strong> todo el importe, IVA incluido, va a la cuenta de gasto. Si el cliente tiene muchos tickets de un mismo proveedor (gasolinera, ferretería), dile que pida la factura con su NIF: recuperará ese IVA.',
+        },
+        {
+          tipo: 'gestoria',
+          html: '<strong>No son facturas</strong> y no se contabilizan: el albarán (justifica la entrega), la factura proforma (es un presupuesto) ni el resguardo de pago con tarjeta. Pide siempre la factura.',
+        },
+      ],
+    },
+    {
+      id: 'cuentas',
+      titulo: '¿Qué cuenta uso?',
+      resumen: '400, 410, 523 y las cuentas de gasto de cada día.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Cada factura recibida tiene dos decisiones: <strong>a quién se le debe</strong> (cuenta del grupo 4 o 5) y <strong>qué se ha comprado</strong> (cuenta del grupo 6 o 2).</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'A quién se le debe',
+          columnas: ['Cuenta', 'Cuándo se usa'],
+          filas: [
+            ['400 Proveedores', 'Quien vende lo que el cliente revende o consume en su actividad: mercaderías, materias primas, envases.'],
+            ['410 Acreedores por prestaciones de servicios', 'Quien presta un servicio: gestoría, abogado, alquiler, limpieza, luz, teléfono, publicidad, reparaciones.'],
+            ['523 Proveedores de inmovilizado a corto plazo', 'Quien vende un bien de inversión (ordenador, maquinaria, mobiliario, vehículo) y cobra en menos de un año.'],
+            ['173 Proveedores de inmovilizado a largo plazo', 'Lo mismo, con pago a más de un año.'],
+          ],
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Las cuentas de gasto que más vas a usar',
+          columnas: ['Cuenta', 'Ejemplos'],
+          filas: [
+            ['600 Compras de mercaderías', 'Ropa para una tienda, recambios que instala un taller, comida y bebida de un bar'],
+            ['602 Otros aprovisionamientos', 'Envases, embalajes, material de consumo para la actividad'],
+            ['621 Arrendamientos y cánones', 'Alquiler del local, renting de vehículos o fotocopiadora'],
+            ['622 Reparaciones y conservación', 'Fontanero, mantenimiento del aire acondicionado, pequeño material de reparación'],
+            ['623 Servicios de profesionales independientes', 'Gestoría, abogado, notario, arquitecto, diseñador'],
+            ['624 Transportes', 'Mensajería y portes de ventas (los de compras suman al coste de la compra)'],
+            ['625 Primas de seguros', 'Seguro del local, de responsabilidad civil, del vehículo'],
+            ['626 Servicios bancarios y similares', 'Comisiones de mantenimiento, de transferencias, del TPV'],
+            ['627 Publicidad, propaganda y relaciones públicas', 'Anuncios en redes sociales, buscadores, folletos, atenciones a clientes'],
+            ['628 Suministros', 'Luz, agua, gas'],
+            ['629 Otros servicios', 'Teléfono e internet, material de oficina, limpieza, viajes'],
+            ['631 Otros tributos', 'IBI, impuesto de vehículos, tasas municipales'],
+          ],
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>¿Gasto o inversión?</strong> Si el bien se va a usar <strong>más de un año</strong> (un ordenador, una máquina, una mesa), es inmovilizado aunque sea barato: 213 Maquinaria, 216 Mobiliario, 217 Equipos informáticos. Su coste incluye el <strong>transporte y la instalación</strong> hasta que funciona.',
+        },
+      ],
+    },
+    {
+      id: 'iva',
+      titulo: 'IVA soportado: tipos, exentas y no deducible',
+      resumen: 'No todo el IVA que paga el cliente va a la 472.',
+      piezas: [
+        {
+          tipo: 'tabla',
+          titulo: 'Tipos de IVA que verás en las facturas',
+          columnas: ['Tipo', 'Ejemplos habituales'],
+          filas: [
+            ['21 % · general', 'La mayoría: ropa, electrónica, servicios profesionales, alquiler de locales, publicidad, reparaciones'],
+            ['10 % · reducido', 'Hostelería, carne y pescado, transporte de viajeros, obras de renovación de vivienda'],
+            ['4 % · superreducido', 'Pan, leche, huevos, frutas, verduras, tubérculos, libros, medicamentos'],
+            ['Exento · sin IVA', 'Seguros, la mayoría de servicios bancarios, sanidad, enseñanza reglada, alquiler de vivienda'],
+          ],
+        },
+        {
+          tipo: 'html',
+          html: '<p>Si una factura tiene <strong>varios tipos</strong>, aparece una base y una cuota por cada tipo. En el asiento basta <strong>una sola 472</strong> con la suma de las cuotas; el desglose por tipos lo recoge el libro registro de IVA.</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Cuándo el IVA NO se puede deducir',
+          columnas: ['Situación', 'Qué pasa con el IVA'],
+          filas: [
+            ['Atenciones a clientes (comidas, regalos)', 'No deducible aunque la factura esté perfecta'],
+            ['Turismo de uso mixto (empresa y privado)', 'Se presume un 50 % de uso empresarial: se deduce el 50 %'],
+            ['Cliente con actividad exenta (clínica, aseguradora, enseñanza reglada)', 'No deduce; si combina actividades exentas y no exentas, aplica la prorrata'],
+            ['Factura sin requisitos o a nombre de otro', 'No deducible hasta que se corrija'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Comida con un cliente por 110 € (100 + 10 % de IVA), pagada con tarjeta',
+          subtitulo: 'Atenciones a clientes: el IVA no se deduce y se suma al gasto.',
+          lineas: [{ cuenta: '627', debe: 110 }, { cuenta: '572', haber: 110 }],
+          nota: 'No hay línea de 472: los 10 € de IVA son más gasto. Regla general: el IVA no deducible se suma al gasto o al valor del bien.',
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Antes de registrar el IVA de un cliente nuevo, pregunta: <strong>¿su actividad está exenta?</strong> Una clínica dental que registra el IVA de sus compras en la 472 tendrá todos sus 303 mal desde el primer trimestre.',
+        },
+      ],
+    },
+    {
+      id: 'retenciones',
+      titulo: 'Retenciones de IRPF: profesionales y alquileres',
+      resumen: 'Cuándo se retiene, cuánto y adónde va.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Cuando tu cliente paga a un profesional persona física o el alquiler de un local, <strong>no le paga todo</strong>: se queda una parte (la retención) y la ingresa a Hacienda en nombre del proveedor. Mientras no la ingresa, es una deuda con Hacienda: la cuenta <strong>4751</strong>.</p>',
+        },
+        { tipo: 'calculadora' },
+        {
+          tipo: 'tabla',
+          titulo: '¿Lleva retención?',
+          columnas: ['Proveedor', 'Retención'],
+          filas: [
+            ['Profesional persona física (abogado, gestor, arquitecto, diseñador)', '15 % sobre la base · modelo 111'],
+            ['Profesional en su año de inicio y los dos siguientes', '7 %, si lo comunica por escrito'],
+            ['Alquiler de un local (arrendador empresa o particular)', '19 % sobre la base · modelo 115'],
+            ['Sociedad (S.L., S.A., S.L.P.) que presta servicios', 'Sin retención'],
+            ['Proveedor de mercaderías o suministros', 'Sin retención'],
+          ],
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>La retención se calcula sobre la base</strong>, nunca sobre el total con IVA. Y no reduce el gasto: el gasto es la base completa; la retención solo cambia <em>a quién</em> se paga una parte.',
+        },
+      ],
+    },
+    {
+      id: 'especiales',
+      titulo: 'Suplidos, rectificativas, descuentos y anticipos',
+      resumen: 'Las facturas que no son «base + IVA».',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p><strong>Suplidos.</strong> Son gastos que el proveedor paga <em>en nombre</em> de tu cliente y luego le repercute tal cual: tasas, aranceles registrales… <strong>No llevan IVA ni retención</strong> y no forman parte de la base imponible. Se registran en su propia cuenta de gasto, como si el cliente los hubiera pagado directamente.</p>',
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Gestor: 100 € de honorarios + IVA − 15 % de retención + 30 € de tasa (suplido)',
+          subtitulo: 'Total de la factura: 100 + 21 − 15 + 30 = 136 €',
+          lineas: [
+            { cuenta: '623', debe: 100 },
+            { cuenta: '631', debe: 30 },
+            { cuenta: '472', debe: 21 },
+            { cuenta: '4751', haber: 15 },
+            { cuenta: '410', haber: 136 },
+          ],
+          nota: 'IVA y retención solo sobre los honorarios. La tasa va a la 631 Otros tributos, sin IVA.',
+        },
+        {
+          tipo: 'html',
+          html: '<p><strong>Facturas rectificativas.</strong> Corrigen una factura anterior: devoluciones, errores de precio, descuentos posteriores. Indican qué factura rectifican y suelen llevar importes negativos. En el asiento se registran con <strong>importes positivos en el lado contrario</strong> al de la factura original.</p>',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Descuentos y devoluciones',
+          columnas: ['Situación', 'Cómo se registra'],
+          filas: [
+            ['Descuento dentro de la propia factura', 'No se contabiliza aparte: la compra va por el importe neto'],
+            ['Devolución de mercancía', '608 Devoluciones de compras (con factura rectificativa)'],
+            ['Rappel por volumen de compras', '609 Rappels por compras'],
+            ['Descuento por pronto pago posterior', '606 Descuentos sobre compras por pronto pago'],
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Anticipo de 1.000 € + IVA a un proveedor, por transferencia',
+          subtitulo: 'El anticipo también devenga IVA: el proveedor emite factura del anticipo.',
+          lineas: [{ cuenta: '407', debe: 1000 }, { cuenta: '472', debe: 210 }, { cuenta: '572', haber: 1210 }],
+          nota: 'Cuando llegue la factura final, se cancela la 407 y solo se registra el IVA de la parte pendiente.',
+        },
+      ],
+    },
+    {
+      id: 'isp',
+      titulo: 'El gran reto: la inversión del sujeto pasivo',
+      resumen: 'Facturas sin IVA de Google, Meta, Microsoft…',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>Casi todos tus clientes pagan servicios a empresas de otros países de la UE: anuncios en buscadores y redes sociales, licencias de software, plataformas de diseño. Muchas de esas empresas facturan desde Irlanda <strong>sin IVA</strong> y con la mención <em>«reverse charge»</em>. Eso no significa que no haya IVA: <strong>lo declara tu cliente en lugar del proveedor</strong>. Es la inversión del sujeto pasivo (ISP).</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Detectar', texto: 'Proveedor de otro país de la UE, factura sin IVA y mención «reverse charge» o «inversión del sujeto pasivo».' },
+            { titulo: 'Comprobar el NIF-IVA', texto: 'El cliente debe estar dado de alta en el Registro de Operadores Intracomunitarios (ROI) y su NIF con prefijo ES debe aparecer en la factura. Se verifica en el VIES.' },
+            { titulo: 'Registrar el gasto', texto: 'La cuenta de gasto por la base, y la deuda con el proveedor (410) por lo que de verdad se le paga: la base.' },
+            { titulo: 'Autorrepercutir el IVA', texto: '472 al Debe y 477 al Haber por el 21 % de la base. El asiento cuadra y, si el cliente deduce todo su IVA, el coste es cero.' },
+            { titulo: 'Declarar', texto: 'En el 303 aparece dos veces, como IVA devengado (casillas 10 y 11) y deducible (casillas 36 y 37), y en el modelo 349 con la clave I.' },
+          ],
+        },
+        {
+          tipo: 'asiento',
+          titulo: 'Anuncios en una red social por 500 €, factura desde Irlanda sin IVA',
+          subtitulo: 'Cliente con derecho a deducir todo el IVA.',
+          lineas: [
+            { cuenta: '627', debe: 500 },
+            { cuenta: '472', debe: 105 },
+            { cuenta: '477', haber: 105 },
+            { cuenta: '410', haber: 500 },
+          ],
+          nota: 'Al proveedor se le deben 500 €. El IVA (105 €) se repercute y se soporta a la vez: no se paga a nadie.',
+        },
+        {
+          tipo: 'tabla',
+          titulo: 'Otros casos de inversión del sujeto pasivo',
+          columnas: ['Situación', 'Qué hacer'],
+          filas: [
+            ['Servicio de una empresa de fuera de la UE (EE. UU., Reino Unido…)', 'También se autorrepercute (472/477), pero no va al 349'],
+            ['Ciertas obras de construcción o rehabilitación subcontratadas entre empresarios', 'El subcontratista factura sin IVA y el cliente lo autorrepercute'],
+            ['Proveedor de la UE que cobra IVA de su país', 'Ese IVA no se deduce en el 303: revisa el alta del cliente en el ROI'],
+          ],
+        },
+        {
+          tipo: 'gestoria',
+          html: 'Revisa los <strong>cargos de tarjeta</strong> de cada cliente: anuncios, software y suscripciones suelen cobrarse por tarjeta y la factura no llega sola. Pídele que la descargue del panel de facturación de cada plataforma. Es de lo primero que mira una revisión de IVA.',
+        },
+      ],
+    },
+    {
+      id: 'factura-electronica',
+      titulo: 'Lo que viene: factura electrónica y VeriFactu',
+      resumen: 'Cambios que afectarán a tus clientes.',
+      piezas: [
+        {
+          tipo: 'html',
+          html: '<p>La facturación en papel o PDF tiene fecha de caducidad entre empresas. Para quien lleva compras, el cambio clave es que <strong>el cliente tendrá que comunicar el estado de cada factura recibida</strong>: si la acepta o la rechaza y la fecha en que la paga. Así Hacienda verá si se respeta el plazo legal de pago (máximo 60 días).</p>',
+        },
+        {
+          tipo: 'pasos',
+          pasos: [
+            { titulo: 'Marzo 2026 · aprobada', texto: 'El Real Decreto 238/2026 (BOE de 31/03/2026) regula la factura electrónica obligatoria entre empresarios y profesionales.' },
+            { titulo: 'Octubre 2027 · previsto', texto: 'Empresas con más de 8 millones de euros de volumen de operaciones (12 meses desde la orden técnica).' },
+            { titulo: 'Octubre 2028 · previsto', texto: 'Resto de empresas y autónomos (24 meses desde la orden técnica).' },
+          ],
+        },
+        {
+          tipo: 'html',
+          html: '<p><strong>VeriFactu</strong> es otra cosa: afecta al <strong>software con el que se emiten</strong> las facturas, que debe garantizar que no se alteran y poder enviarlas a Hacienda. Las fechas legales vigentes son el 1/1/2027 para sociedades y el 1/7/2027 para el resto, pero Hacienda anunció en octubre de 2026 su intención de aplazarlo a octubre de 2028, pendiente de publicarse en el BOE.</p>',
+        },
+        {
+          tipo: 'consejo',
+          html: '<strong>Datos a octubre de 2026.</strong> Son normas en movimiento: antes de asesorar a un cliente sobre fechas, comprueba en la web de la AEAT si han cambiado.',
+        },
+      ],
+    },
+  ],
+
+  configTest: { preguntasPorIntento: 10, aprobado: 8 },
+
+  test: [
+    /* --- Validación de facturas --- */
+    {
+      id: 'b1-q01',
+      pregunta: 'Un cliente te entrega un ticket de 48 € de una ferretería, sin su NIF y con el IVA solo como «IVA incluido». ¿Puede deducirse ese IVA?',
+      correcta: 'No: le faltan el NIF del cliente y la cuota desglosada',
+      incorrectas: ['Sí, porque el ticket demuestra que se pagó', 'Sí, porque el importe es inferior a 400 €'],
+      explicacion: 'Una factura simplificada solo permite deducir si incluye el NIF y el domicilio del destinatario y la cuota de IVA por separado. Sin eso, todo el importe va al gasto.',
+    },
+    {
+      id: 'b1-q02',
+      pregunta: '¿Cuál de estos datos es obligatorio en una factura completa?',
+      correcta: 'El NIF del emisor y el del destinatario',
+      incorrectas: ['El número de cuenta bancaria del emisor', 'La fecha de vencimiento del pago'],
+      explicacion: 'Son obligatorios, entre otros, número y serie, fecha, nombre, NIF y domicilio de emisor y destinatario, descripción, base, tipo y cuota. La cuenta bancaria y el vencimiento son habituales, pero no obligatorios.',
+    },
+    {
+      id: 'b1-q03',
+      pregunta: 'En general, ¿hasta qué importe puede emitirse una factura simplificada?',
+      correcta: '400 € IVA incluido (3.000 € en sectores como hostelería o comercio minorista)',
+      incorrectas: ['1.000 € sin IVA en todos los casos', 'No hay límite si el cliente lo acepta'],
+      explicacion: 'El límite general es de 400 € IVA incluido. En ciertos sectores (comercio minorista, hostelería, transporte de personas, entre otros) llega a 3.000 €. Por encima, hay que emitir factura completa.',
+    },
+    {
+      id: 'b1-q04',
+      pregunta: 'La factura de un portátil llega a nombre del socio, persona física, y no de la sociedad cliente. ¿Qué haces?',
+      correcta: 'Pedir al proveedor una factura rectificativa a nombre de la sociedad',
+      incorrectas: ['Registrarla en la sociedad: el gasto es real', 'Deducir solo el 50 % del IVA'],
+      explicacion: 'El derecho a deducir el IVA corresponde al destinatario de la factura. Si no va a nombre de la sociedad, esta no puede deducirlo y el gasto puede ser cuestionado. La solución es una rectificativa con los datos correctos.',
+    },
+    {
+      id: 'b1-q05',
+      pregunta: 'Un cliente te reenvía una factura que ya tenías: mismo proveedor, mismo número y misma fecha. ¿Qué haces?',
+      correcta: 'Comprobar que ya está registrada y no volver a contabilizarla',
+      incorrectas: ['Registrarla de nuevo: cada documento recibido se contabiliza', 'Registrarla solo si el importe es distinto'],
+      explicacion: 'Registrar dos veces una factura duplica el gasto, el IVA deducido y la deuda con el proveedor. La combinación proveedor + número de factura es la que identifica cada documento.',
+    },
+    {
+      id: 'b1-q06',
+      pregunta: 'Aparece en enero una factura de compra de marzo del año pasado que el cliente olvidó entregar. ¿Puede deducir su IVA?',
+      correcta: 'Sí, en el periodo en que se registra, dentro del plazo de 4 años',
+      incorrectas: ['No: solo podía deducirse en el trimestre de su fecha', 'Solo si se presenta una complementaria del trimestre de marzo'],
+      explicacion: 'El IVA soportado puede deducirse en la declaración del periodo en que se recibe la factura o en las siguientes, mientras no pasen 4 años desde el devengo.',
+    },
+    {
+      id: 'b1-q07',
+      pregunta: 'El proveedor manda un albarán y una factura proforma, pero aún no la factura. ¿Qué contabilizas?',
+      correcta: 'Nada todavía: ni el albarán ni la proforma son facturas',
+      incorrectas: ['La proforma, que tiene los mismos importes', 'El albarán, porque demuestra la entrega'],
+      explicacion: 'El albarán justifica la entrega y la proforma es un presupuesto. Ninguno da derecho a deducir el IVA. Se espera a la factura (o se reclama).',
+    },
+
+    /* --- Cuentas --- */
+    {
+      id: 'b1-q08',
+      pregunta: 'Una tienda de ropa compra camisetas a su fabricante para revenderlas. ¿Qué cuentas usas?',
+      correcta: '600 Compras de mercaderías y 400 Proveedores',
+      incorrectas: ['602 Otros aprovisionamientos y 410 Acreedores', '300 Mercaderías y 400 Proveedores'],
+      explicacion: 'Lo que se compra para revender son mercaderías (600) y quien las vende es un proveedor (400). La 300 solo se ajusta al cierre con el inventario.',
+    },
+    {
+      id: 'b1-q09',
+      pregunta: 'Un taller recibe la factura mensual de la empresa que limpia el local. ¿En qué cuenta registras la deuda?',
+      correcta: '410 Acreedores por prestaciones de servicios',
+      incorrectas: ['400 Proveedores', '523 Proveedores de inmovilizado a corto plazo'],
+      explicacion: 'Quien presta un servicio es un acreedor (410). La 400 se reserva para quien vende mercaderías o aprovisionamientos, y la 523 para bienes de inversión.',
+    },
+    {
+      id: 'b1-q10',
+      pregunta: 'Una panadería compra un horno industrial que pagará en 6 meses. ¿Qué cuentas usas (sin contar el IVA)?',
+      correcta: '213 Maquinaria al Debe y 523 al Haber',
+      incorrectas: ['600 Compras al Debe y 400 Proveedores al Haber', '213 Maquinaria al Debe y 173 al Haber'],
+      explicacion: 'El horno se usará varios años: es inmovilizado (213). La deuda vence en menos de un año, así que va a la 523. La 173 sería para pagos a más de un año.',
+    },
+    {
+      id: 'b1-q11',
+      pregunta: 'Un cliente compra un ordenador de 700 € para la oficina. ¿Gasto o inmovilizado?',
+      correcta: 'Inmovilizado (217), porque se usará varios años',
+      incorrectas: ['Gasto (629), porque cuesta menos de 1.000 €', 'Existencias (300)'],
+      explicacion: 'El criterio es la duración del uso, no el precio: si se usará más de un año, es inmovilizado y se amortiza. Solo los elementos de muy poco valor se suelen llevar a gasto por importancia relativa.',
+    },
+    {
+      id: 'b1-q12',
+      pregunta: 'La factura del técnico que ha reparado la caldera del local. ¿Qué cuenta de gasto usas?',
+      correcta: '622 Reparaciones y conservación',
+      incorrectas: ['628 Suministros', '213 Maquinaria'],
+      explicacion: 'Las reparaciones y el mantenimiento que conservan el bien en funcionamiento van a la 622. Solo si la intervención aumentara su capacidad o vida útil se sumaría al inmovilizado.',
+    },
+    {
+      id: 'b1-q13',
+      pregunta: 'Llega el recibo de la prima anual del seguro del local. ¿Cómo lo registras?',
+      correcta: '625 Primas de seguros, sin IVA porque es una operación exenta',
+      incorrectas: ['625 Primas de seguros con un 21 % de IVA en la 472', '621 Arrendamientos y cánones'],
+      explicacion: 'Los seguros están exentos de IVA: no hay línea de 472. Si el recibo incluye el impuesto sobre primas de seguros, forma parte del gasto.',
+    },
+    {
+      id: 'b1-q14',
+      pregunta: 'Una factura por anuncios patrocinados en una red social. ¿Qué cuenta de gasto usas?',
+      correcta: '627 Publicidad, propaganda y relaciones públicas',
+      incorrectas: ['623 Servicios de profesionales independientes', '602 Otros aprovisionamientos'],
+      explicacion: 'La publicidad en cualquier medio, también en internet, va a la 627. Si el proveedor es de otro país de la UE, recuerda además la inversión del sujeto pasivo.',
+    },
+    {
+      id: 'b1-q15',
+      pregunta: 'Un cliente adelanta 1.000 € + IVA a un proveedor antes de recibir la mercancía. ¿Qué cuenta recoge el anticipo?',
+      correcta: '407 Anticipos a proveedores',
+      incorrectas: ['600 Compras de mercaderías', '400 Proveedores al Haber'],
+      explicacion: 'El anticipo es un derecho frente al proveedor (407, al Debe). Devenga IVA, así que también se registra la 472. Al llegar la factura final se cancela la 407.',
+    },
+    {
+      id: 'b1-q16',
+      pregunta: 'Un proveedor concede a final de año un rappel por volumen de compras, en factura aparte. ¿Qué cuenta usas?',
+      correcta: '609 Rappels por compras',
+      incorrectas: ['608 Devoluciones de compras', '759 Ingresos por servicios diversos'],
+      explicacion: 'Los descuentos por volumen de compras van a la 609, al Haber, reduciendo el coste de las compras. Las devoluciones de mercancía van a la 608.',
+    },
+    {
+      id: 'b1-q17',
+      pregunta: 'Devuelves mercancía defectuosa y el proveedor emite una factura rectificativa. ¿Cómo queda el asiento?',
+      correcta: '400 al Debe; 608 Devoluciones de compras y 472 al Haber',
+      incorrectas: ['608 y 472 al Debe; 400 al Haber', 'No se contabiliza: se anula la factura original'],
+      explicacion: 'La rectificativa reduce la deuda con el proveedor (400 al Debe), el coste de las compras (608 al Haber) y el IVA soportado (472 al Haber). La factura original no se borra.',
+    },
+    {
+      id: 'b1-q18',
+      pregunta: 'El proveedor concede un descuento por pagar antes del vencimiento, después de emitir la factura. ¿Qué cuenta usas?',
+      correcta: '606 Descuentos sobre compras por pronto pago',
+      incorrectas: ['626 Servicios bancarios y similares', '769 Otros ingresos financieros'],
+      explicacion: 'El descuento por pronto pago que no figura en la factura se registra en la 606, al Haber. Si el descuento ya viene restado dentro de la factura, no se contabiliza aparte.',
+    },
+
+    /* --- IVA --- */
+    {
+      id: 'b1-q19',
+      pregunta: 'Factura de un mayorista a un restaurante con carne y huevos. ¿Qué tipos de IVA esperas encontrar?',
+      correcta: '10 % la carne y 4 % los huevos',
+      incorrectas: ['21 % para todo', '10 % para todo'],
+      explicacion: 'La carne y el pescado tributan al 10 %. Pan, leche, huevos, frutas, verduras y tubérculos van al 4 %. Una misma factura puede tener varios tipos.',
+    },
+    {
+      id: 'b1-q20',
+      pregunta: 'En una factura con bases al 10 % y al 4 %, ¿cómo registras el IVA en el asiento?',
+      correcta: 'Una sola 472 con la suma de las cuotas',
+      incorrectas: ['Solo la cuota del tipo más alto', 'Cada cuota en una cuenta de gasto distinta'],
+      explicacion: 'En el asiento basta una línea de 472 con el total de las cuotas. El desglose por tipos queda en el libro registro de facturas recibidas, que es el que alimenta el 303.',
+    },
+    {
+      id: 'b1-q21',
+      pregunta: 'El banco cobra una comisión de mantenimiento de la cuenta. ¿Cómo la registras?',
+      correcta: '626 Servicios bancarios, sin IVA porque está exenta',
+      incorrectas: ['626 Servicios bancarios con un 21 % de IVA', '662 Intereses de deudas'],
+      explicacion: 'La mayoría de servicios financieros están exentos de IVA. La comisión va entera a la 626. Los intereses de un préstamo son otra cosa: gasto financiero en la 662.',
+    },
+    {
+      id: 'b1-q22',
+      pregunta: 'Llevas una clínica dental, cuya actividad sanitaria está exenta de IVA. ¿Qué pasa con el IVA de sus facturas de compra?',
+      correcta: 'No es deducible: se suma al gasto o al valor del bien',
+      incorrectas: ['Se deduce en el 303 como cualquier otra empresa', 'Se deduce siempre al 50 %'],
+      explicacion: 'Quien solo realiza operaciones exentas no tiene derecho a deducir. Si combinara actividades exentas y no exentas, se aplicaría la prorrata.',
+    },
+    {
+      id: 'b1-q23',
+      pregunta: 'Factura de un restaurante, con el NIF de la empresa, por una comida con un cliente. ¿El IVA es deducible?',
+      correcta: 'No: el IVA de las atenciones a clientes no es deducible',
+      incorrectas: ['Sí, porque la factura cumple todos los requisitos', 'Sí, pero solo el 50 %'],
+      explicacion: 'La ley excluye expresamente de la deducción el IVA de las atenciones a clientes, asalariados o terceros. Aunque la factura sea perfecta, el IVA se suma al gasto.',
+    },
+    {
+      id: 'b1-q24',
+      pregunta: 'La empresa compra un turismo que el gerente usa también para fines personales. ¿Cuánto IVA puede deducir?',
+      correcta: 'En general el 50 %, salvo que se pruebe otro porcentaje de uso',
+      incorrectas: ['El 100 %, porque está a nombre de la empresa', 'Nada, porque es un turismo'],
+      explicacion: 'Para los turismos se presume una afectación del 50 % a la actividad. Vehículos como los de mensajería, taxis o comerciales pueden deducir el 100 % si se acredita.',
+    },
+    {
+      id: 'b1-q25',
+      pregunta: '¿Qué se hace con el IVA soportado que no se puede deducir?',
+      correcta: 'Se suma a la cuenta de gasto o al valor del bien',
+      incorrectas: ['Se registra en la 472 igualmente', 'No se contabiliza en ningún sitio'],
+      explicacion: 'El IVA no deducible es un coste más para el cliente: aumenta el gasto (o el valor del inmovilizado, que luego se amortiza por ese importe).',
+    },
+
+    /* --- Retenciones --- */
+    {
+      id: 'b1-q26',
+      pregunta: 'Una abogada (persona física, ejerce desde hace 10 años) factura 1.000 € + IVA. ¿Qué retención se le practica?',
+      correcta: '150 €, el 15 % de la base',
+      incorrectas: ['181,50 €, el 15 % del total con IVA', 'Ninguna, porque emite factura con IVA'],
+      explicacion: 'La retención de profesionales es del 15 % sobre la base imponible. A la abogada se le pagan 1.000 + 210 − 150 = 1.060 €.',
+    },
+    {
+      id: 'b1-q27',
+      pregunta: 'Un despacho de abogados que factura como S.L. presta un servicio a tu cliente. ¿Se le practica retención?',
+      correcta: 'No: la retención del 15 % se aplica a profesionales personas físicas',
+      incorrectas: ['Sí, siempre del 15 %', 'Sí, del 19 %'],
+      explicacion: 'Las sociedades que prestan servicios profesionales no soportan retención de IRPF. Fíjate siempre en quién emite la factura: persona física o sociedad.',
+    },
+    {
+      id: 'b1-q28',
+      pregunta: 'Un diseñador que empezó como autónomo este año pide que le apliques la retención reducida. ¿Cuál es?',
+      correcta: '7 % el año de inicio y los dos siguientes, si lo comunica por escrito',
+      incorrectas: ['Ninguna durante el primer año', '10 % durante los tres primeros años'],
+      explicacion: 'Los nuevos profesionales pueden aplicar un 7 % en el año de inicio y los dos siguientes, siempre que no hayan ejercido una actividad profesional en el año anterior y lo comuniquen al pagador.',
+    },
+    {
+      id: 'b1-q29',
+      pregunta: 'El alquiler mensual del local de un cliente es de 1.000 € de base. ¿Qué retención y qué modelo corresponden?',
+      correcta: '190 € (19 %), que se declaran en el modelo 115',
+      incorrectas: ['150 € (15 %), en el modelo 111', '190 € (19 %), en el modelo 303'],
+      explicacion: 'Los alquileres de inmuebles urbanos llevan una retención del 19 % sobre la base, que se ingresa con el modelo 115. El 111 es para profesionales y trabajadores.',
+    },
+    {
+      id: 'b1-q30',
+      pregunta: '¿En qué cuenta registras la retención que tu cliente practica a un profesional?',
+      correcta: '4751 Hacienda Pública, acreedora por retenciones practicadas',
+      incorrectas: ['473 Hacienda Pública, retenciones y pagos a cuenta', '472 Hacienda Pública, IVA soportado'],
+      explicacion: 'La retención practicada es una deuda con Hacienda: 4751, al Haber. La 473 es justo lo contrario: las retenciones que le practican al cliente (por ejemplo, en sus intereses).',
+    },
+    {
+      id: 'b1-q31',
+      pregunta: '¿Con qué modelo ingresa tu cliente las retenciones practicadas a profesionales?',
+      correcta: 'Con el modelo 111, normalmente trimestral',
+      incorrectas: ['Con el modelo 115', 'Con el modelo 303, junto al IVA'],
+      explicacion: 'El 111 recoge las retenciones de trabajadores y profesionales; el 115, las de alquileres. La mayoría de pymes los presentan cada trimestre (las grandes empresas, cada mes).',
+    },
+    {
+      id: 'b1-q32',
+      pregunta: 'La factura del gestor incluye 45 € de una tasa municipal que pagó en nombre del cliente (suplido). ¿Cómo tributa ese importe?',
+      correcta: 'Sin IVA ni retención: no forma parte de la base imponible',
+      incorrectas: ['Con un 21 % de IVA, como los honorarios', 'Con IVA y con la retención del 15 %'],
+      explicacion: 'Los suplidos son pagos hechos en nombre y por cuenta del cliente. Se excluyen de la base imponible, así que no llevan IVA ni retención.',
+    },
+    {
+      id: 'b1-q33',
+      pregunta: '¿Dónde registras ese suplido de una tasa municipal?',
+      correcta: 'En su propia cuenta de gasto: 631 Otros tributos',
+      incorrectas: ['En la 623, junto a los honorarios del gestor', 'En la 472, porque es un impuesto'],
+      explicacion: 'El suplido se registra como si el cliente hubiera pagado la tasa directamente: en la cuenta que corresponde a su naturaleza (631 Otros tributos).',
+    },
+
+    /* --- Inversión del sujeto pasivo --- */
+    {
+      id: 'b1-q34',
+      pregunta: 'Llega una factura de una plataforma de anuncios con sede en Irlanda, sin IVA y con la mención «reverse charge». ¿Qué haces?',
+      correcta: 'Autorrepercutir el IVA: 472 al Debe y 477 al Haber por el 21 % de la base',
+      incorrectas: ['Registrarla sin IVA y olvidarte del impuesto', 'Pedir al proveedor que añada el IVA irlandés'],
+      explicacion: 'Es inversión del sujeto pasivo: el cliente declara el IVA en lugar del proveedor. Lo repercute (477) y lo soporta (472) a la vez.',
+    },
+    {
+      id: 'b1-q35',
+      pregunta: 'Para un cliente que deduce todo su IVA, ¿cuánto le cuesta autorrepercutir el IVA de una factura intracomunitaria?',
+      correcta: 'Nada: la cuota se devenga y se deduce en la misma declaración',
+      incorrectas: ['Un 21 % más del importe de la factura', 'La mitad de la cuota'],
+      explicacion: 'La misma cuota aparece en el IVA devengado y en el deducible del 303, así que se compensa. Solo tendría coste para un cliente sin derecho a deducir (por ejemplo, una clínica).',
+    },
+    {
+      id: 'b1-q36',
+      pregunta: '¿Qué necesita el cliente para que un proveedor de otro país de la UE le facture sin IVA?',
+      correcta: 'Un NIF-IVA válido: estar de alta en el Registro de Operadores Intracomunitarios',
+      incorrectas: ['Facturar más de 8 millones de euros al año', 'Tener un certificado digital de representante'],
+      explicacion: 'El alta en el ROI se pide con el modelo 036 y se comprueba en el VIES. Si el cliente no está dado de alta, el proveedor le cobrará el IVA de su país, que no se puede deducir en el 303.',
+    },
+    {
+      id: 'b1-q37',
+      pregunta: 'Además del 303, ¿qué declaración recoge una compra intracomunitaria de servicios?',
+      correcta: 'El modelo 349, con la clave I',
+      incorrectas: ['El modelo 347 de operaciones con terceros', 'El modelo 111 de retenciones'],
+      explicacion: 'El 349 es la declaración recapitulativa de operaciones intracomunitarias; la clave I corresponde a las adquisiciones de servicios. Estas operaciones no se incluyen en el 347.',
+    },
+    {
+      id: 'b1-q38',
+      pregunta: 'Factura sin IVA de una empresa de software de Estados Unidos (fuera de la UE). ¿Qué haces?',
+      correcta: 'Autorrepercutir el IVA igualmente, pero sin incluirla en el 349',
+      incorrectas: ['Nada: los servicios de fuera de la UE no llevan IVA', 'Incluirla en el 349 como una operación de la UE'],
+      explicacion: 'Los servicios que una empresa española recibe de fuera de la UE también tributan en España por inversión del sujeto pasivo. Se autorrepercuten en el 303, pero el 349 es solo para operaciones dentro de la UE.',
+    },
+
+    /* --- Factura electrónica --- */
+    {
+      id: 'b1-q39',
+      pregunta: 'Con la factura electrónica obligatoria entre empresas (Real Decreto 238/2026), ¿qué tendrá que hacer quien recibe la factura?',
+      correcta: 'Comunicar si la acepta o la rechaza y la fecha en que la paga',
+      incorrectas: ['Nada distinto: solo cambia el formato del archivo', 'Firmarla digitalmente y reenviarla a Hacienda'],
+      explicacion: 'El destinatario deberá informar del estado de cada factura: aceptación o rechazo y pago efectivo con su fecha. Así se podrá controlar el cumplimiento de los plazos de pago.',
+    },
+    {
+      id: 'b1-q40',
+      pregunta: 'Según el calendario previsto, ¿cuándo será obligatoria la factura electrónica para una pyme con menos de 8 millones de volumen de operaciones?',
+      correcta: 'Hacia octubre de 2028: 24 meses después de la orden técnica',
+      incorrectas: ['Ya es obligatoria desde enero de 2026', 'Nunca: solo afecta a empresas de más de 8 millones'],
+      explicacion: 'Las empresas de más de 8 millones tienen 12 meses desde la orden técnica (previsto octubre de 2027) y el resto 24 meses (previsto octubre de 2028). Conviene comprobar las fechas en la AEAT, porque pueden cambiar.',
+    },
+  ],
+
+  casos: [
+    {
+      id: 'b1-mercaderias',
+      tipo: 'asiento',
+      cliente: { nombre: 'Moda Valentina, S.L.', actividad: 'Tienda de ropa' },
+      titulo: 'Compra de mercaderías',
+      enunciado: 'El cliente te entrega esta factura de su proveedor habitual de ropa. Revisa la factura y registra el asiento de la compra.',
+      documento: {
+        tipo: 'factura',
+        color: '#6d28d9',
+        emisor: { nombre: 'Textiles Albufera, S.L.', nif: 'B46112233', direccion: ['Pol. Ind. Sur, nave 14 · 46470 Catarroja (Valencia)'] },
+        receptor: { nombre: 'Moda Valentina, S.L.', nif: 'B98765432', direccion: ['Av. del Puerto, 112 · 46023 Valencia'] },
+        numero: 'FV-2026/1184',
+        fecha: '06/10/2026',
+        vencimiento: '05/11/2026',
+        formaPago: 'Transferencia a 30 días',
+        lineas: [
+          { concepto: 'Pantalón vaquero mujer ref. 2201', cantidad: 20, precio: 35, iva: 21 },
+          { concepto: 'Camiseta algodón básica ref. 1104', cantidad: 25, precio: 22, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['600', '602', '300', '472', '477', '400', '410', '572'],
+      solucion: [{ cuenta: '600', debe: 1250 }, { cuenta: '472', debe: 262.5 }, { cuenta: '400', haber: 1512.5 }],
+      pista: 'Tres líneas: qué se compra (sin IVA), el IVA soportado y a quién se le debe el total. Es ropa para revender.',
+      explicacion: 'La ropa para revender son mercaderías: 600 por la base (1.250 €). El IVA soportado (262,50 €) va a la 472. La deuda total con el fabricante, 1.512,50 €, a la 400 Proveedores.',
+    },
+    {
+      id: 'b1-varios-tipos',
+      tipo: 'asiento',
+      cliente: { nombre: 'Mesón La Encina, S.L.', actividad: 'Restaurante' },
+      titulo: 'Factura con dos tipos de IVA',
+      enunciado: 'El restaurante recibe la factura semanal de su mayorista de alimentación. Fíjate bien en los tipos de IVA y registra la compra.',
+      documento: {
+        tipo: 'factura',
+        color: '#b45309',
+        emisor: { nombre: 'Distribuciones Alimentarias del Turia, S.L.', nif: 'B46334455', direccion: ['Camino de Moncada, 120 · 46025 Valencia'] },
+        receptor: { nombre: 'Mesón La Encina, S.L.', nif: 'B98556677', direccion: ['C/ Mayor, 8 · 46900 Torrent (Valencia)'] },
+        numero: '2026-A-03317',
+        fecha: '09/10/2026',
+        vencimiento: '08/11/2026',
+        formaPago: 'Recibo domiciliado a 30 días',
+        lineas: [
+          { concepto: 'Solomillo de ternera (kg)', cantidad: 8, precio: 30, iva: 10 },
+          { concepto: 'Pechuga de pollo (kg)', cantidad: 20, precio: 8, iva: 10 },
+          { concepto: 'Huevos camperos (docena)', cantidad: 30, precio: 3.5, iva: 4 },
+          { concepto: 'Patata (saco de 25 kg)', cantidad: 6, precio: 12.5, iva: 4 },
+        ],
+      },
+      cuentasDisponibles: ['600', '602', '627', '472', '477', '400', '410', '572'],
+      solucion: [{ cuenta: '600', debe: 580 }, { cuenta: '472', debe: 47.2 }, { cuenta: '400', haber: 627.2 }],
+      alternativas: [[{ cuenta: '602', debe: 580 }, { cuenta: '472', debe: 47.2 }, { cuenta: '400', haber: 627.2 }]],
+      pista: 'Suma las dos bases para el gasto y las dos cuotas para el IVA. En el asiento basta una línea por cuenta.',
+      explicacion: 'Gasto por la suma de bases (400 + 180 = 580 €), una sola 472 con la suma de cuotas (40 + 7,20 = 47,20 €) y 627,20 € a la 400. En hostelería, la comida y bebida que se sirve se suele llevar a la 600 (algunas gestorías usan la 602).',
+    },
+    {
+      id: 'b1-ticket',
+      tipo: 'asiento',
+      cliente: { nombre: 'Cafetería Plaza Mayor, S.L.', actividad: 'Cafetería' },
+      titulo: 'Un ticket de ferretería',
+      enunciado: 'El encargado compró material para arreglar un grifo del local y lo pagó con dinero de la caja. Te entrega este ticket. Decide si el IVA es deducible y registra el gasto.',
+      documento: {
+        tipo: 'ticket',
+        emisor: { nombre: 'FERRETERÍA EL CLAVO', nif: 'B46778899', direccion: ['C/ Pintor Sorolla, 3', '46002 Valencia'] },
+        numero: 'T-0045-118734',
+        fecha: '15/10/2026 10:42',
+        ivaIncluido: 21,
+        formaPago: 'EFECTIVO',
+        lineas: [
+          { concepto: 'Tornillería surtida', cantidad: 1, precio: 4.84 },
+          { concepto: 'Silicona sanitaria', cantidad: 1, precio: 7.26 },
+          { concepto: 'Grifo monomando', cantidad: 1, precio: 24.2 },
+        ],
+      },
+      cuentasDisponibles: ['622', '629', '213', '472', '570', '572', '410'],
+      solucion: [{ cuenta: '622', debe: 36.3 }, { cuenta: '570', haber: 36.3 }],
+      alternativas: [[{ cuenta: '629', debe: 36.3 }, { cuenta: '570', haber: 36.3 }]],
+      pista: '¿Aparece el NIF de la cafetería en el ticket? Si no se puede deducir el IVA, ¿dónde va?',
+      explicacion: 'El ticket no incluye los datos de la cafetería, así que el IVA no es deducible: el gasto es el total, 36,30 €, en la 622 Reparaciones y conservación (algunas gestorías usan la 629). Se pagó con efectivo: abono a la 570 Caja.',
+    },
+    {
+      id: 'b1-deducible',
+      tipo: 'clasificar',
+      titulo: '¿Se puede deducir el IVA?',
+      enunciado: 'Revisas la documentación del trimestre de varios clientes. Indica para cada documento si su IVA se puede deducir.',
+      rejilla: 'grid-cols-3',
+      opciones: [
+        { valor: 'si', etiqueta: 'Sí' },
+        { valor: 'parcial', etiqueta: 'En parte' },
+        { valor: 'no', etiqueta: 'No' },
+      ],
+      cuentas: [
+        { id: 'luz', texto: 'Factura completa de la luz del local, a nombre de la sociedad', correcta: 'si', pista: 'Tiene todos los requisitos y el gasto es de la actividad.', explicacion: 'Factura completa y gasto afecto a la actividad.' },
+        { id: 'gasolinera', texto: 'Ticket de gasolinera sin datos de la empresa', correcta: 'no', pista: '¿Qué le falta a un ticket para permitir la deducción?', explicacion: 'Sin NIF de la empresa ni cuota desglosada, no se deduce.' },
+        { id: 'comida', texto: 'Factura de restaurante con el NIF de la empresa, por una comida con un cliente', correcta: 'no', pista: 'La factura es correcta, pero hay gastos cuyo IVA la ley excluye siempre.', explicacion: 'Atenciones a clientes: IVA excluido de la deducción.' },
+        { id: 'simplificada', texto: 'Factura simplificada de material de oficina con NIF y domicilio de la empresa y la cuota desglosada', correcta: 'si', pista: 'Una factura simplificada puede permitir deducir si incluye ciertos datos. ¿Los tiene?', explicacion: 'Simplificada con los datos del destinatario y la cuota separada.' },
+        { id: 'turismo', texto: 'Compra de un turismo que el gerente usa también en su vida privada', correcta: 'parcial', pista: 'Para los turismos, la ley presume un porcentaje de uso empresarial.', explicacion: 'Se presume un 50 % de afectación.' },
+        { id: 'socio', texto: 'Factura de un portátil emitida a nombre del socio, no de la sociedad', correcta: 'no', pista: '¿Quién tiene derecho a deducir el IVA de una factura?', explicacion: 'Solo deduce el destinatario: hay que pedir una rectificativa.' },
+        { id: 'clinica', texto: 'Factura de material médico de una clínica dental (actividad exenta)', correcta: 'no', pista: '¿Puede deducir IVA quien solo realiza operaciones exentas?', explicacion: 'Actividad exenta sin derecho a deducción.' },
+      ],
+      resumenOk: 'Esta revisión es la que hace un buen gestor antes de presentar el 303: el IVA que no es deducible nunca debería llegar a la 472.',
+    },
+    {
+      id: 'b1-inmovilizado',
+      tipo: 'asiento',
+      cliente: { nombre: 'Horno San Blas, S.L.', actividad: 'Panadería' },
+      titulo: 'Compra de un horno industrial',
+      enunciado: 'La panadería ha comprado un horno nuevo. La factura incluye el transporte y la instalación. Registra la compra.',
+      documento: {
+        tipo: 'factura',
+        color: '#0f766e',
+        emisor: { nombre: 'Maquinaria Hostelera del Mediterráneo, S.A.', nif: 'A46990011', direccion: ['Av. de la Industria, 45 · 46980 Paterna (Valencia)'] },
+        receptor: { nombre: 'Horno San Blas, S.L.', nif: 'B98221133', direccion: ['C/ San Vicente, 77 · 46007 Valencia'] },
+        numero: 'MHM-26-00912',
+        fecha: '12/10/2026',
+        vencimiento: '10/01/2027',
+        formaPago: 'Transferencia a 90 días',
+        lineas: [
+          { concepto: 'Horno de convección eléctrico, 10 bandejas', cantidad: 1, precio: 4500, iva: 21 },
+          { concepto: 'Transporte e instalación', cantidad: 1, precio: 300, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['213', '600', '622', '624', '472', '400', '523', '173'],
+      solucion: [{ cuenta: '213', debe: 4800 }, { cuenta: '472', debe: 1008 }, { cuenta: '523', haber: 5808 }],
+      pista: 'El horno se usará muchos años. Lo que cuesta ponerlo en marcha forma parte de su valor. ¿Cuándo se paga?',
+      explicacion: 'El horno es inmovilizado (213 Maquinaria) y su valor incluye el transporte y la instalación: 4.800 €. IVA en la 472 (1.008 €). La deuda vence a 90 días: 523 Proveedores de inmovilizado a corto plazo por 5.808 €. No es la 400 (no son mercaderías) ni la 624 (el transporte suma al valor del bien).',
+    },
+    {
+      id: 'b1-quien',
+      tipo: 'clasificar',
+      titulo: '¿Proveedor, acreedor o proveedor de inmovilizado?',
+      enunciado: 'Tienes que dar de alta la subcuenta de varios terceros de distintos clientes. Elige la cuenta que corresponde a cada uno.',
+      rejilla: 'grid-cols-2 sm:grid-cols-4',
+      opciones: [
+        { valor: '400', etiqueta: '400', detalle: 'Proveedores' },
+        { valor: '410', etiqueta: '410', detalle: 'Acreedores' },
+        { valor: '523', etiqueta: '523', detalle: 'Inmov. corto plazo' },
+        { valor: '173', etiqueta: '173', detalle: 'Inmov. largo plazo' },
+      ],
+      cuentas: [
+        { id: 'fabricante', texto: 'Una tienda compra 200 camisetas a su fabricante, a 60 días', correcta: '400', pista: 'Son prendas para revender.', explicacion: 'Mercaderías: proveedor.' },
+        { id: 'asesoria', texto: 'Un restaurante recibe la factura mensual de su asesoría laboral', correcta: '410', pista: '¿Vende un producto o presta un servicio?', explicacion: 'Servicio profesional: acreedor.' },
+        { id: 'cafetera', texto: 'Un bar compra una cafetera industrial que pagará en 3 meses', correcta: '523', pista: 'La cafetera se usará varios años. ¿Y el plazo de pago?', explicacion: 'Bien de inversión pagadero en menos de un año.' },
+        { id: 'alquiler', texto: 'Una academia recibe la factura del alquiler de su local', correcta: '410', pista: 'El alquiler es un servicio.', explicacion: 'Arrendador: acreedor por prestación de servicios.' },
+        { id: 'recambios', texto: 'Un taller compra recambios que instalará en los coches de sus clientes', correcta: '400', pista: 'Los recambios se repercuten al cliente en la reparación.', explicacion: 'Aprovisionamientos de la actividad: proveedor.' },
+        { id: 'furgoneta', texto: 'Una empresa compra una furgoneta que pagará de una vez dentro de 18 meses', correcta: '173', pista: 'Bien de inversión. ¿El pago vence antes o después de un año?', explicacion: 'Bien de inversión pagadero a más de un año.' },
+        { id: 'limpieza', texto: 'Una clínica recibe la factura de la empresa de limpieza', correcta: '410', pista: 'La limpieza es un servicio.', explicacion: 'Servicio: acreedor.' },
+      ],
+      resumenOk: 'Elegir bien la cuenta del tercero al darlo de alta evita reclasificaciones al cierre y que el balance mezcle deudas comerciales con deudas por inversiones.',
+    },
+    {
+      id: 'b1-profesional',
+      tipo: 'asiento',
+      cliente: { nombre: 'Reformas Integrales Turia, S.L.', actividad: 'Empresa de reformas' },
+      titulo: 'Factura de una abogada',
+      enunciado: 'El cliente ha encargado a una abogada la revisión de un contrato de obra. Te reenvía su factura. Registra el asiento.',
+      documento: {
+        tipo: 'factura',
+        color: '#1e3a8a',
+        emisor: { nombre: 'Laura Méndez Ruiz · Abogada', nif: '12345678Z', direccion: ['C/ Jorge Juan, 9, 3.º · 46004 Valencia'] },
+        receptor: { nombre: 'Reformas Integrales Turia, S.L.', nif: 'B98443322', direccion: ['C/ Músico Ginés, 31 · 46022 Valencia'] },
+        numero: '2026/047',
+        fecha: '16/10/2026',
+        formaPago: 'Transferencia a la recepción',
+        retencion: 15,
+        lineas: [
+          { concepto: 'Honorarios: redacción y revisión de contrato de obra', cantidad: 1, precio: 600, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['623', '621', '472', '473', '4751', '400', '410', '572'],
+      solucion: [{ cuenta: '623', debe: 600 }, { cuenta: '472', debe: 126 }, { cuenta: '4751', haber: 90 }, { cuenta: '410', haber: 636 }],
+      pista: 'Cuatro líneas. La retención no reduce el gasto: es dinero que el cliente debe ingresar a Hacienda.',
+      explicacion: 'Gasto por la base en la 623 (600 €) e IVA en la 472 (126 €). La retención del 15 % (90 €) es una deuda con Hacienda: 4751. A la abogada se le debe el total de la factura, 636 €: 410 Acreedores. La 473 es para las retenciones que le practican al cliente, no las que practica él.',
+    },
+    {
+      id: 'b1-alquiler',
+      tipo: 'asiento',
+      cliente: { nombre: 'Academia de Idiomas Norte, S.L.', actividad: 'Academia de idiomas (no reglada)' },
+      titulo: 'Alquiler del local',
+      enunciado: 'Llega la factura mensual del alquiler del local donde la academia da sus clases. Registra el asiento.',
+      documento: {
+        tipo: 'factura',
+        color: '#be123c',
+        emisor: { nombre: 'Inmuebles Ribera, S.L.', nif: 'B98667788', direccion: ['Gran Vía Marqués del Turia, 50 · 46005 Valencia'] },
+        receptor: { nombre: 'Academia de Idiomas Norte, S.L.', nif: 'B98112299', direccion: ['C/ Alboraya, 14, bajo · 46010 Valencia'] },
+        numero: 'ALQ-2026-10',
+        fecha: '01/10/2026',
+        formaPago: 'Recibo domiciliado del 1 al 5 de cada mes',
+        retencion: 19,
+        menciones: ['Retención IRPF/IS del 19 % por arrendamiento de inmueble urbano.'],
+        lineas: [
+          { concepto: 'Alquiler del local C/ Alboraya, 14, bajo · octubre 2026', cantidad: 1, precio: 1000, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['621', '623', '472', '473', '4751', '400', '410', '572'],
+      solucion: [{ cuenta: '621', debe: 1000 }, { cuenta: '472', debe: 210 }, { cuenta: '4751', haber: 190 }, { cuenta: '410', haber: 1020 }],
+      pista: 'Mismo esquema que un profesional, pero con otro porcentaje de retención. ¿Y la cuenta de gasto?',
+      explicacion: 'Alquiler a la 621 por la base (1.000 €) e IVA a la 472 (210 €). La retención del 19 % (190 €) a la 4751: se ingresará con el modelo 115. Al arrendador se le pagan 1.020 €: 410. Como la academia no imparte enseñanza reglada, su actividad no está exenta y deduce el IVA.',
+    },
+    {
+      id: 'b1-suplidos',
+      tipo: 'asiento',
+      cliente: { nombre: 'Floristería Azahar, S.L.', actividad: 'Floristería' },
+      titulo: 'Factura del gestor con suplidos',
+      enunciado: 'Un gestor administrativo tramitó la licencia de actividad de la floristería y pagó la tasa municipal por ella. Te llega su factura. Registra el asiento.',
+      documento: {
+        tipo: 'factura',
+        color: '#4d7c0f',
+        emisor: { nombre: 'Javier Ortiz Lago · Gestor Administrativo', nif: '87654321X', direccion: ['C/ Ruzafa, 40, 1.º · 46006 Valencia'] },
+        receptor: { nombre: 'Floristería Azahar, S.L.', nif: 'B98334411', direccion: ['C/ Cádiz, 18 · 46006 Valencia'] },
+        numero: 'G-2026-118',
+        fecha: '19/10/2026',
+        formaPago: 'Transferencia a 15 días',
+        retencion: 15,
+        lineas: [
+          { concepto: 'Honorarios: tramitación de licencia de actividad', cantidad: 1, precio: 150, iva: 21 },
+        ],
+        suplidos: [
+          { concepto: 'Tasa municipal por licencia de actividad (suplido)', importe: 45 },
+        ],
+      },
+      cuentasDisponibles: ['623', '629', '631', '472', '477', '4751', '410', '572'],
+      solucion: [{ cuenta: '623', debe: 150 }, { cuenta: '631', debe: 45 }, { cuenta: '472', debe: 31.5 }, { cuenta: '4751', haber: 22.5 }, { cuenta: '410', haber: 204 }],
+      pista: 'Cinco líneas. El IVA y la retención se calculan solo sobre los honorarios. ¿Qué tipo de gasto es la tasa?',
+      explicacion: 'Honorarios a la 623 (150 €) con su IVA en la 472 (31,50 €) y su retención en la 4751 (22,50 €). La tasa es un suplido: va a la 631 Otros tributos por 45 €, sin IVA ni retención. Al gestor se le debe el total: 150 + 31,50 − 22,50 + 45 = 204 €.',
+    },
+    {
+      id: 'b1-rectificativa',
+      tipo: 'asiento',
+      cliente: { nombre: 'Calzados Sierra, S.L.', actividad: 'Zapatería' },
+      titulo: 'Factura rectificativa por devolución',
+      enunciado: 'La zapatería devolvió unos botines defectuosos y el proveedor ha emitido esta factura rectificativa. La factura original ya estaba contabilizada. Registra la rectificativa.',
+      documento: {
+        tipo: 'factura',
+        titulo: 'FACTURA RECTIFICATIVA',
+        color: '#c2410c',
+        emisor: { nombre: 'Calzados del Vinalopó, S.L.', nif: 'B03556622', direccion: ['C/ Elche, 120 · 03600 Elda (Alicante)'] },
+        receptor: { nombre: 'Calzados Sierra, S.L.', nif: 'B98778811', direccion: ['C/ Sueca, 52 · 46006 Valencia'] },
+        numero: 'R-2026-014',
+        fecha: '20/10/2026',
+        rectifica: 'Rectifica la factura F-2026-0311 de 02/10/2026. Motivo: devolución de mercancía defectuosa.',
+        formaPago: 'Se compensará en el próximo pago',
+        lineas: [
+          { concepto: 'Devolución: botines piel ref. 330 (defecto de fabricación)', cantidad: -5, precio: 40, iva: 21 },
+        ],
+      },
+      cuentasDisponibles: ['600', '608', '609', '472', '477', '400', '410', '572'],
+      solucion: [{ cuenta: '400', debe: 242 }, { cuenta: '608', haber: 200 }, { cuenta: '472', haber: 42 }],
+      alternativas: [[{ cuenta: '400', debe: 242 }, { cuenta: '600', haber: 200 }, { cuenta: '472', haber: 42 }]],
+      pista: 'Los importes son negativos: registra cantidades positivas en el lado contrario al de una compra normal.',
+      explicacion: 'La rectificativa deshace parte de la compra: baja la deuda con el proveedor (400 al Debe, 242 €), bajan las compras (608 Devoluciones de compras al Haber, 200 €; también es válido abonar directamente la 600) y baja el IVA soportado (472 al Haber, 42 €).',
+    },
+    {
+      id: 'b1-isp',
+      tipo: 'asiento',
+      cliente: { nombre: 'Estudio Creativo Píxel, S.L.', actividad: 'Agencia de diseño' },
+      titulo: 'El gran reto: anuncios facturados desde Irlanda',
+      enunciado: 'El estudio paga con tarjeta campañas de anuncios en internet. Has descargado esta factura del panel de la plataforma. Registra el asiento completo, IVA incluido.',
+      documento: {
+        tipo: 'factura',
+        idioma: 'en',
+        titulo: 'INVOICE',
+        color: '#2563eb',
+        emisor: { nombre: 'AdStream Ireland Ltd.', nif: 'IE1234567AB', direccion: ['1 Example Quay, Dublin 2', 'D02 X000, Ireland'] },
+        receptor: { nombre: 'Estudio Creativo Píxel, S.L.', nif: 'ESB98445566', direccion: ['C/ Literato Azorín, 11 · 46006 Valencia, Spain'] },
+        numero: 'ADS-2026-7781943',
+        fecha: '31/10/2026',
+        formaPago: 'Paid by card',
+        menciones: ['Reverse charge: VAT to be accounted for by the recipient (Art. 196, Council Directive 2006/112/EC).'],
+        lineas: [
+          { concepto: 'Online advertising services · October 2026', cantidad: 1, precio: 800, iva: 0 },
+        ],
+      },
+      cuentasDisponibles: ['627', '623', '472', '477', '4751', '400', '410', '572'],
+      solucion: [{ cuenta: '627', debe: 800 }, { cuenta: '472', debe: 168 }, { cuenta: '477', haber: 168 }, { cuenta: '410', haber: 800 }],
+      pista: 'La factura no trae IVA, pero en España sí se devenga: tu cliente lo repercute y lo soporta a la vez, al 21 % de la base.',
+      explicacion: 'Gasto de publicidad a la 627 (800 €) y deuda con la plataforma a la 410 por lo que realmente se le paga (800 €). Además, autorrepercusión del 21 %: 472 al Debe y 477 al Haber por 168 €. En el 303 aparecerá como IVA devengado y deducible, y la operación irá al modelo 349 con la clave I.',
+    },
+  ],
+};
+
 const BLOQUES = [
   {
     id: 0,
@@ -768,54 +1678,65 @@ const BLOQUES = [
     codigo: 'B1',
     titulo: 'Compras y Acreedores',
     tituloLargo: 'Gestión de Compras y Acreedores',
-    descripcion: 'El núcleo del puesto: registrar facturas recibidas, separar proveedores de acreedores, aplicar el IVA soportado, las retenciones de IRPF a profesionales y tratar correctamente los suplidos.',
+    descripcion: 'El núcleo del trabajo en una gestoría: validar cada factura o ticket que entrega el cliente, elegir la cuenta correcta, aplicar el IVA y las retenciones, y resolver los casos que más errores provocan, como los suplidos o la inversión del sujeto pasivo.',
     distintivo: 'Núcleo',
     icono: ICONOS.factura,
-    temas: ['Factura recibida (6xx / 472 / 400)', 'Proveedores (400) vs Acreedores (410)', 'Retenciones IRPF (4751)', 'Suplidos', 'Devoluciones y rappels (608 / 609)'],
-    contenido: { teoria: [], test: [], casos: [] },
+    temas: ['Validar facturas y tickets', '400 · 410 · 523', 'IVA soportado y no deducible', 'Retenciones 15 % y 19 %', 'Suplidos y rectificativas', 'Inversión del sujeto pasivo', 'Factura electrónica'],
+    contenido: CONTENIDO_B1,
   },
   {
     id: 2,
     codigo: 'B2',
-    titulo: 'Tesorería y Bancos',
-    tituloLargo: 'Tesorería y Conciliación Bancaria',
-    descripcion: 'El día a día con el banco: puntear el extracto contra la contabilidad, registrar comisiones y gastos bancarios, y contabilizar cobros de clientes y pagos a proveedores.',
+    titulo: 'Ventas y Clientes',
+    tituloLargo: 'Ventas, Clientes y Cobros',
+    descripcion: 'El otro lado del IVA: facturas emitidas, clientes, abonos y rectificativas emitidas, y qué hacer cuando un cliente no paga.',
     distintivo: null,
-    icono: ICONOS.banco,
-    temas: ['Bancos (572)', 'Punteo de extractos', 'Conciliación bancaria', 'Comisiones (626)', 'Cobros (430) y pagos (400/410)'],
+    icono: ICONOS.ventas,
+    temas: ['Factura emitida (430 / 700 / 705 / 477)', 'Cobros de clientes', 'Abonos y rectificativas emitidas', 'Impagados (436)'],
     contenido: { teoria: [], test: [], casos: [] },
   },
   {
     id: 3,
     codigo: 'B3',
-    titulo: 'Impuestos y Liquidaciones',
-    tituloLargo: 'Ciclo de Impuestos y Liquidaciones',
-    descripcion: 'Qué se declara en cada modelo, de dónde salen las cifras y cómo se contabiliza la liquidación: IVA trimestral, retenciones de trabajo y profesionales, y retenciones de alquileres.',
+    titulo: 'Tesorería y Bancos',
+    tituloLargo: 'Tesorería y Conciliación Bancaria',
+    descripcion: 'El día a día con el banco: puntear el extracto, registrar cobros, pagos y comisiones, y contabilizar las cuotas de préstamos, leasing y renting.',
     distintivo: null,
-    icono: ICONOS.impuestos,
-    temas: ['Modelo 303 (IVA)', 'Modelo 111 (retenciones)', 'Modelo 115 (alquileres)', 'Asiento de liquidación (472 / 477 / 4750 / 4700)', 'Calendario trimestral'],
+    icono: ICONOS.banco,
+    temas: ['Bancos (572)', 'Punteo y conciliación', 'Comisiones (626)', 'Préstamos (520 / 170 / 662)', 'Leasing y renting', 'Partidas pendientes (555)'],
     contenido: { teoria: [], test: [], casos: [] },
   },
   {
     id: 4,
     codigo: 'B4',
-    titulo: 'Cierre y Periodificación',
-    tituloLargo: 'Operaciones de Cierre y Periodificación',
-    descripcion: 'El soporte al cierre: amortizar el inmovilizado, imputar cada gasto e ingreso a su ejercicio y reconocer el riesgo de los clientes morosos.',
+    titulo: 'Nóminas e Impuestos',
+    tituloLargo: 'Nóminas, Impuestos y Calendario Fiscal',
+    descripcion: 'Del asiento de la nómina a las declaraciones del cliente: de dónde sale cada cifra de los modelos trimestrales y anuales y cómo se contabiliza cada liquidación.',
     distintivo: null,
-    icono: ICONOS.cierre,
-    temas: ['Amortizaciones (681 / 281)', 'Gastos anticipados (480)', 'Ingresos anticipados (485)', 'Clientes dudoso cobro (436)', 'Deterioro de créditos (694 / 490)'],
+    icono: ICONOS.impuestos,
+    temas: ['Asiento de nómina (640 / 642 / 476 / 4751)', 'Seguros sociales', 'Modelo 303 (IVA)', 'Modelos 111 y 115', 'Modelos 349 y 347', 'Resúmenes 390 / 190 / 180'],
     contenido: { teoria: [], test: [], casos: [] },
   },
   {
     id: 5,
     codigo: 'B5',
-    titulo: 'Análisis y Visión Senior',
-    tituloLargo: 'Análisis Financiero y Visión Senior',
-    descripcion: 'Leer lo que cuentan los números: interpretar el Balance y la Cuenta de Pérdidas y Ganancias, detectar descuadres y entender la salud financiera de la empresa.',
+    titulo: 'Cierre y Periodificación',
+    tituloLargo: 'Operaciones de Cierre y Periodificación',
+    descripcion: 'El soporte al cierre: amortizar, imputar cada gasto e ingreso a su ejercicio, reconocer el riesgo de morosos, provisionar el Impuesto sobre Sociedades y regularizar el resultado.',
+    distintivo: null,
+    icono: ICONOS.cierre,
+    temas: ['Amortizaciones (681 / 281)', 'Periodificaciones (480 / 485)', 'Variación de existencias', 'Deterioro de clientes', 'Largo a corto plazo', 'Impuesto sobre Sociedades'],
+    contenido: { teoria: [], test: [], casos: [] },
+  },
+  {
+    id: 6,
+    codigo: 'B6',
+    titulo: 'Revisión y Análisis',
+    tituloLargo: 'Revisión, Cuadres y Análisis',
+    descripcion: 'La visión senior: revisar tu propio trabajo antes de que lo haga otro, cuadrar la contabilidad con los impuestos y leer lo que cuentan el balance y la cuenta de resultados.',
     distintivo: null,
     icono: ICONOS.analisis,
-    temas: ['Balance de situación', 'Cuenta de Pérdidas y Ganancias', 'Fondo de maniobra', 'Ratios de liquidez', 'Endeudamiento'],
+    temas: ['Balance de sumas y saldos', 'Saldos anómalos', 'Cuadre de IVA y retenciones', 'Balance y PyG', 'Ratios básicos'],
     contenido: { teoria: [], test: [], casos: [] },
   },
 ];
@@ -1197,10 +2118,183 @@ const claseBoton = {
 };
 
 /* =====================================================================
+   DOCUMENTOS VISUALES: facturas y tickets maquetados
+   ---------------------------------------------------------------------
+   Los importes (base, cuotas, retención, total) se calculan a partir de
+   las líneas, así el documento y la solución nunca se contradicen.
+   ===================================================================== */
+const r2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
+
+function calcularDocumento(doc) {
+  const lineas = doc.lineas.map((l) => ({ ...l, importe: r2(l.cantidad * l.precio) }));
+  if (doc.tipo === 'ticket') {
+    const total = r2(lineas.reduce((s, l) => s + l.importe, 0));
+    const base = r2(total / (1 + doc.ivaIncluido / 100));
+    return { lineas, total, desglose: [{ pct: doc.ivaIncluido, base, cuota: r2(total - base) }] };
+  }
+  const porTipo = {};
+  lineas.forEach((l) => { porTipo[l.iva] = r2((porTipo[l.iva] || 0) + l.importe); });
+  const desglose = Object.keys(porTipo).map(Number).sort((a, b) => b - a)
+    .map((pct) => ({ pct, base: porTipo[pct], cuota: r2(porTipo[pct] * pct / 100) }));
+  const base = r2(desglose.reduce((s, d) => s + d.base, 0));
+  const cuota = r2(desglose.reduce((s, d) => s + d.cuota, 0));
+  const retencion = doc.retencion ? r2(base * doc.retencion / 100) : 0;
+  const suplidos = r2((doc.suplidos || []).reduce((s, x) => s + x.importe, 0));
+  return { lineas, desglose, base, cuota, retencion, suplidos, total: r2(base + cuota - retencion + suplidos) };
+}
+
+const TEXTOS_DOC = {
+  es: { factura: 'FACTURA', nif: 'NIF', numero: 'Nº', fecha: 'Fecha', cliente: 'Cliente', concepto: 'Concepto', importe: 'Importe', base: 'Base imponible', iva: 'IVA', retencion: 'Retención IRPF', suplidos: 'Suplidos', total: 'TOTAL', pago: 'Forma de pago', vence: 'Vencimiento', suplidosTit: 'Suplidos (pagados en nombre del cliente, sin IVA)' },
+  en: { factura: 'INVOICE', nif: 'VAT No.', numero: 'No.', fecha: 'Date', cliente: 'Bill to', concepto: 'Description', importe: 'Amount', base: 'Subtotal', iva: 'VAT', retencion: 'Withholding', suplidos: 'Disbursements', total: 'TOTAL', pago: 'Payment', vence: 'Due date', suplidosTit: 'Disbursements' },
+};
+
+function formatoDoc(n, idioma) {
+  if (idioma !== 'en') return formatoEuros(n);
+  const [e, d] = Math.abs(n).toFixed(2).split('.');
+  return `${n < 0 ? '−' : ''}€${e.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}.${d}`;
+}
+
+const formatoCantidad = (n) => (Number.isInteger(n) ? String(n) : String(n).replace('.', ',')).replace('-', '−');
+
+// data-campo + resaltado (para la «anatomía de la factura»)
+function campoDoc(campo, resaltar) {
+  const activo = resaltar === campo;
+  return `data-campo="${campo}" class="rounded-md transition ${activo ? 'bg-amber-100 ring-2 ring-amber-400 ring-offset-2 ring-offset-white' : ''}"`;
+}
+
+function htmlDocumento(doc, { resaltar = null } = {}) {
+  return doc.tipo === 'ticket' ? htmlTicket(doc) : htmlFactura(doc, resaltar);
+}
+
+function htmlFactura(doc, resaltar) {
+  const t = TEXTOS_DOC[doc.idioma === 'en' ? 'en' : 'es'];
+  const f = (n) => formatoDoc(n, doc.idioma);
+  const c = calcularDocumento(doc);
+  const color = doc.color || '#17263d';
+  const titulo = doc.titulo || t.factura;
+
+  const filas = c.lineas.map((l) => `
+    <tr class="border-b border-slate-200 align-top">
+      <td class="py-2 pr-2">
+        <span class="block font-medium text-slate-900">${escaparHTML(l.concepto)}</span>
+        <span class="block text-[11px] text-slate-500">${formatoCantidad(l.cantidad)} × ${f(l.precio)}${c.desglose && c.desglose.length > 1 ? ` · ${t.iva} ${l.iva} %` : ''}</span>
+      </td>
+      <td class="whitespace-nowrap py-2 text-right font-medium tabular-nums text-slate-900">${f(l.importe)}</td>
+    </tr>`).join('');
+
+  const suplidos = (doc.suplidos || []).length ? `
+    <div class="mt-3 rounded-md border border-dashed border-slate-300 p-2.5">
+      <p class="mb-1 text-[10.5px] font-semibold uppercase tracking-wider text-slate-500">${t.suplidosTit}</p>
+      ${doc.suplidos.map((x) => `
+        <div class="flex justify-between gap-3"><span>${escaparHTML(x.concepto)}</span><span class="whitespace-nowrap tabular-nums">${f(x.importe)}</span></div>`).join('')}
+    </div>` : '';
+
+  const filaTotal = (etiqueta, valor, extra = '') => `
+    <div ${extra} class="flex justify-between gap-4 px-1 py-0.5"><span class="text-slate-600">${etiqueta}</span><span class="tabular-nums">${valor}</span></div>`;
+
+  const totales = `
+    <div class="mt-3 ml-auto w-full max-w-[17rem] space-y-0.5 text-[12.5px]">
+      <div ${campoDoc('base', resaltar)}>
+        ${c.desglose.map((d) => filaTotal(`${t.base}${c.desglose.length > 1 ? ` (${d.pct} %)` : ''}`, f(d.base))).join('')}
+      </div>
+      <div ${campoDoc('iva', resaltar)}>
+        ${c.desglose.map((d) => filaTotal(`${t.iva} ${d.pct} %`, f(d.cuota))).join('')}
+      </div>
+      ${c.retencion ? filaTotal(`${t.retencion} ${doc.retencion} %`, `−${f(c.retencion)}`) : ''}
+      ${c.suplidos ? filaTotal(t.suplidos, f(c.suplidos)) : ''}
+      <div ${campoDoc('total', resaltar)}>
+        <div class="mt-1 flex justify-between gap-4 rounded-md px-2 py-1.5 text-[14px] font-bold text-white" style="background:${color}">
+          <span>${t.total}</span><span class="tabular-nums">${f(c.total)}</span>
+        </div>
+      </div>
+    </div>`;
+
+  return `
+    <figure class="mx-auto w-full max-w-xl" aria-label="${escaparHTML(titulo)} ${escaparHTML(doc.numero)} de ${escaparHTML(doc.emisor.nombre)}">
+      <div class="relative overflow-hidden rounded-lg bg-white font-sans text-[12.5px] leading-snug text-slate-700 shadow-[0_1px_2px_rgba(15,27,45,.08),0_10px_30px_-12px_rgba(15,27,45,.35)] ring-1 ring-slate-900/10">
+        <div class="h-1.5" style="background:${color}"></div>
+        <div class="p-4 sm:p-6">
+          <div class="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
+            <div ${campoDoc('emisor', resaltar)}>
+              <p class="text-[15px] font-bold leading-tight text-slate-900">${escaparHTML(doc.emisor.nombre)}</p>
+              <p>${t.nif}: ${escaparHTML(doc.emisor.nif)}</p>
+              ${doc.emisor.direccion.map((d) => `<p class="text-slate-500">${escaparHTML(d)}</p>`).join('')}
+            </div>
+            <div class="flex w-full flex-wrap items-baseline gap-x-4 gap-y-0.5 border-t border-slate-200 pt-2.5 sm:block sm:w-auto sm:border-0 sm:pt-0 sm:text-right">
+              <p class="w-full font-mono text-[12px] font-bold uppercase tracking-[0.18em]" style="color:${color}">${escaparHTML(titulo)}</p>
+              <p ${campoDoc('numero', resaltar)}>${t.numero} <span class="font-semibold text-slate-900">${escaparHTML(doc.numero)}</span></p>
+              <p ${campoDoc('fecha', resaltar)}>${t.fecha}: <span class="font-semibold text-slate-900">${escaparHTML(doc.fecha)}</span></p>
+            </div>
+          </div>
+          ${doc.rectifica ? `<p class="mt-3 rounded-md bg-orange-50 px-2.5 py-2 text-[12px] font-medium text-orange-900">${escaparHTML(doc.rectifica)}</p>` : ''}
+          ${doc.receptor ? `
+            <div ${campoDoc('receptor', resaltar)}>
+              <div class="mt-3 rounded-md bg-slate-50 p-2.5">
+                <p class="text-[10.5px] font-semibold uppercase tracking-wider text-slate-500">${t.cliente}</p>
+                <p class="font-semibold text-slate-900">${escaparHTML(doc.receptor.nombre)}</p>
+                <p>${t.nif}: ${escaparHTML(doc.receptor.nif)}</p>
+                ${doc.receptor.direccion.map((d) => `<p class="text-slate-500">${escaparHTML(d)}</p>`).join('')}
+              </div>
+            </div>` : ''}
+          <div ${campoDoc('descripcion', resaltar)}>
+            <table class="mt-3 w-full border-collapse">
+              <thead>
+                <tr class="border-b-2 text-[10.5px] font-semibold uppercase tracking-wider text-slate-500" style="border-color:${color}">
+                  <th class="pb-1.5 text-left font-semibold">${t.concepto}</th><th class="pb-1.5 text-right font-semibold">${t.importe}</th>
+                </tr>
+              </thead>
+              <tbody>${filas}</tbody>
+            </table>
+          </div>
+          ${suplidos}
+          ${totales}
+          ${(doc.menciones || []).map((m) => `<p class="mt-3 text-[11.5px] font-semibold italic text-slate-700">${escaparHTML(m)}</p>`).join('')}
+          <div class="mt-4 flex flex-wrap justify-between gap-x-4 gap-y-1 border-t border-slate-200 pt-2.5 text-[11.5px] text-slate-500">
+            ${doc.formaPago ? `<span>${t.pago}: <span class="text-slate-700">${escaparHTML(doc.formaPago)}</span></span>` : ''}
+            ${doc.vencimiento ? `<span>${t.vence}: <span class="text-slate-700">${escaparHTML(doc.vencimiento)}</span></span>` : ''}
+          </div>
+        </div>
+        <p class="bg-slate-50 px-4 py-1.5 text-center text-[10px] uppercase tracking-wider text-slate-400">Documento ficticio · material de formación</p>
+      </div>
+    </figure>`;
+}
+
+function htmlTicket(doc) {
+  const c = calcularDocumento(doc);
+  const d = c.desglose[0];
+  return `
+    <figure class="mx-auto w-full max-w-[18rem]" aria-label="Ticket ${escaparHTML(doc.numero)} de ${escaparHTML(doc.emisor.nombre)}">
+      <div class="relative bg-[#fffdf6] px-4 pb-4 pt-5 font-mono text-[12px] leading-snug text-slate-800 shadow-[0_1px_2px_rgba(15,27,45,.08),0_10px_30px_-12px_rgba(15,27,45,.35)] ring-1 ring-slate-900/10"
+           style="clip-path:polygon(0 6px,4% 0,8% 6px,12% 0,16% 6px,20% 0,24% 6px,28% 0,32% 6px,36% 0,40% 6px,44% 0,48% 6px,52% 0,56% 6px,60% 0,64% 6px,68% 0,72% 6px,76% 0,80% 6px,84% 0,88% 6px,92% 0,96% 6px,100% 0,100% calc(100% - 6px),96% 100%,92% calc(100% - 6px),88% 100%,84% calc(100% - 6px),80% 100%,76% calc(100% - 6px),72% 100%,68% calc(100% - 6px),64% 100%,60% calc(100% - 6px),56% 100%,52% calc(100% - 6px),48% 100%,44% calc(100% - 6px),40% 100%,36% calc(100% - 6px),32% 100%,28% calc(100% - 6px),24% 100%,20% calc(100% - 6px),16% 100%,12% calc(100% - 6px),8% 100%,4% calc(100% - 6px),0 100%)">
+        <div class="text-center">
+          <p class="text-[14px] font-bold">${escaparHTML(doc.emisor.nombre)}</p>
+          <p>NIF ${escaparHTML(doc.emisor.nif)}</p>
+          ${doc.emisor.direccion.map((x) => `<p>${escaparHTML(x)}</p>`).join('')}
+        </div>
+        <p class="my-2 border-y border-dashed border-slate-400 py-1 text-center font-bold">FACTURA SIMPLIFICADA</p>
+        <div class="flex justify-between gap-2"><span>${escaparHTML(doc.numero)}</span><span>${escaparHTML(doc.fecha)}</span></div>
+        <div class="my-2 border-t border-dashed border-slate-400"></div>
+        ${c.lineas.map((l) => `
+          <div class="flex justify-between gap-2"><span class="min-w-0">${escaparHTML(l.concepto.toUpperCase())}</span><span class="whitespace-nowrap">${formatoEuros(l.importe)}</span></div>
+          ${l.cantidad !== 1 ? `<p class="pl-2 text-slate-500">${formatoCantidad(l.cantidad)} x ${formatoEuros(l.precio)}</p>` : ''}`).join('')}
+        <div class="my-2 border-t border-dashed border-slate-400"></div>
+        <div class="flex justify-between text-[14px] font-bold"><span>TOTAL</span><span>${formatoEuros(c.total)}</span></div>
+        <p class="mt-1 text-[11px]">IVA ${d.pct} % INCLUIDO</p>
+        <div class="mt-1 flex justify-between text-[11px]"><span>Base ${formatoEuros(d.base)}</span><span>Cuota ${formatoEuros(d.cuota)}</span></div>
+        <p class="mt-2">PAGO: ${escaparHTML(doc.formaPago)}</p>
+        <p class="mt-3 text-center">GRACIAS POR SU VISITA</p>
+        <p class="mt-3 text-center text-[9.5px] uppercase tracking-wider text-slate-400">Documento ficticio · formación</p>
+      </div>
+    </figure>`;
+}
+
+/* =====================================================================
    6. TEORÍA
    ===================================================================== */
 function estadoTeoria(idBloque) {
-  if (!ui.teoria[idBloque]) ui.teoria[idBloque] = { grupo: 1, paso: 0 };
+  if (!ui.teoria[idBloque]) {
+    ui.teoria[idBloque] = { grupo: 1, paso: 0, campo: 'receptor', calc: { base: '1000', iva: 21, ret: 15 } };
+  }
   return ui.teoria[idBloque];
 }
 
@@ -1251,6 +2345,12 @@ function renderizarPieza(pieza, bloque) {
     case 'simulador-balance': return piezaSimulador(pieza, bloque);
     case 'explorador-pgc': return piezaExplorador(bloque);
     case 'codificacion': return piezaCodificacion();
+    case 'pasos': return piezaPasos(pieza);
+    case 'tabla': return piezaTabla(pieza);
+    case 'gestoria': return piezaGestoria(pieza.html);
+    case 'anatomia-factura': return piezaAnatomia(pieza, bloque);
+    case 'calculadora': return piezaCalculadora(bloque);
+    case 'documento': return `<div class="my-5">${htmlDocumento(pieza.documento)}</div>`;
     default: return '';
   }
 }
@@ -1522,6 +2622,156 @@ function piezaExplorador(bloque) {
     </div>`;
 }
 
+const ICONO_MALETIN = 'M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M4 7h16a1 1 0 011 1v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8a1 1 0 011-1zM3 13h18';
+
+function piezaGestoria(html) {
+  return `
+    <div class="my-5 flex gap-3 rounded-xl border border-indigo-200 bg-indigo-50/70 p-4 text-sm leading-relaxed text-indigo-950">
+      <span class="mt-0.5 shrink-0 text-indigo-600">${svgIcono(ICONO_MALETIN, 'h-5 w-5')}</span>
+      <div><p class="mb-0.5 text-[11px] font-bold uppercase tracking-wider text-indigo-700">En la gestoría</p>${html}</div>
+    </div>`;
+}
+
+function piezaPasos(pieza) {
+  return `
+    <ol class="my-5 space-y-0">
+      ${pieza.pasos.map((p, i) => `
+        <li class="relative flex gap-3 pb-4 last:pb-0">
+          ${i < pieza.pasos.length - 1 ? '<span class="absolute left-[15px] top-8 h-[calc(100%-2rem)] w-0.5 bg-acento-500/25" aria-hidden="true"></span>' : ''}
+          <span class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-acento-500 font-mono text-sm font-bold text-tinta-950">${i + 1}</span>
+          <div class="min-w-0 pt-1">
+            <p class="text-sm font-bold leading-snug">${p.titulo}</p>
+            <p class="mt-0.5 text-sm leading-relaxed text-tinta-700/90">${p.texto}</p>
+          </div>
+        </li>`).join('')}
+    </ol>`;
+}
+
+// Tabla adaptable: 2 columnas en rejilla; 3 columnas como tarjetas en móvil
+function piezaTabla(pieza) {
+  const [c0, ...resto] = pieza.columnas;
+  const cabecera = pieza.titulo ? `<figcaption class="border-b border-tinta-900/10 bg-tinta-900/[0.03] px-3 py-2.5 text-[13px] font-bold sm:px-4">${pieza.titulo}</figcaption>` : '';
+  if (resto.length === 1) {
+    return `
+      <figure class="my-5 overflow-hidden rounded-xl border border-tinta-900/10 bg-white">
+        ${cabecera}
+        <dl class="divide-y divide-tinta-900/5">
+          ${pieza.filas.map(([a, b]) => `
+            <div class="grid gap-x-4 gap-y-0.5 px-3 py-2.5 sm:grid-cols-[minmax(0,13rem)_minmax(0,1fr)] sm:px-4">
+              <dt class="text-[13px] font-semibold leading-snug">${a}</dt>
+              <dd class="text-[13px] leading-snug text-tinta-700/85">${b}</dd>
+            </div>`).join('')}
+        </dl>
+      </figure>`;
+  }
+  return `
+    <figure class="my-5 overflow-hidden rounded-xl border border-tinta-900/10 bg-white">
+      ${cabecera}
+      <div class="hidden grid-cols-[minmax(0,10rem)_repeat(${resto.length},minmax(0,1fr))] gap-x-4 border-b border-tinta-900/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-tinta-700/60 sm:grid">
+        <span>${c0}</span>${resto.map((c) => `<span>${c}</span>`).join('')}
+      </div>
+      <div class="divide-y divide-tinta-900/5">
+        ${pieza.filas.map(([a, ...vals]) => `
+          <div class="px-3 py-2.5 sm:grid sm:grid-cols-[minmax(0,10rem)_repeat(${resto.length},minmax(0,1fr))] sm:gap-x-4 sm:px-4">
+            <p class="mb-1.5 text-[13px] font-semibold leading-snug sm:mb-0">${a}</p>
+            <div class="grid grid-cols-${resto.length} gap-2 sm:contents">
+              ${vals.map((v, i) => `
+                <div class="rounded-lg bg-tinta-900/[0.03] p-2 sm:rounded-none sm:bg-transparent sm:p-0">
+                  <p class="text-[10.5px] font-semibold uppercase tracking-wider text-tinta-700/50 sm:hidden">${resto[i]}</p>
+                  <p class="text-[13px] leading-snug text-tinta-700/85">${v}</p>
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </figure>`;
+}
+
+function piezaAnatomia(pieza, bloque) {
+  const st = estadoTeoria(bloque.id);
+  const req = pieza.requisitos.find((r) => r.campo === st.campo) || pieza.requisitos[0];
+  return `
+    <div class="my-6" data-widget="anatomia">
+      <p class="mb-2 text-[11px] font-semibold uppercase tracking-wider text-acento-700">Toca un requisito</p>
+      <div class="mb-3 grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+        ${pieza.requisitos.map((r, i) => {
+          const activo = r.campo === req.campo;
+          return `
+            <button type="button" data-accion="anatomia-campo" data-campo="${r.campo}" data-foco="anat-${r.campo}" aria-pressed="${activo}"
+                    class="flex min-h-[44px] items-center gap-2 rounded-lg border-2 px-2.5 py-1.5 text-left text-[13px] font-semibold leading-tight transition active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${activo ? 'border-amber-400 bg-amber-50 text-amber-950' : 'border-tinta-900/10 bg-white hover:border-tinta-900/25'}">
+              <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[11px] ${activo ? 'bg-amber-400 text-amber-950' : 'bg-tinta-900/[0.06]'}">${i + 1}</span>
+              <span class="min-w-0">${escaparHTML(r.titulo)}</span>
+            </button>`;
+        }).join('')}
+      </div>
+      <div class="${ui.animar ? 'animate-aparecer' : ''} mb-4 flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-sm leading-relaxed text-amber-950" aria-live="polite">
+        <span class="mt-0.5 shrink-0 text-amber-600">${svgIcono(ICONO_INFO, 'h-5 w-5')}</span>
+        <p><strong>${escaparHTML(req.titulo)}.</strong> ${escaparHTML(req.texto)}</p>
+      </div>
+      ${htmlDocumento(pieza.documento, { resaltar: req.campo })}
+    </div>`;
+}
+
+// Calculadora de factura con IVA y retención
+function htmlCalcResultado(calc) {
+  const base = leerImporte(calc.base);
+  if (!(base > 0)) {
+    return '<p class="rounded-lg bg-tinta-900/[0.03] p-3 text-sm text-tinta-700/70">Escribe una base imponible para ver el cálculo.</p>';
+  }
+  const cuota = r2(base * calc.iva / 100);
+  const ret = r2(base * calc.ret / 100);
+  const total = r2(base + cuota - ret);
+  const lineas = [{ cuenta: '6xx', debe: base }];
+  if (cuota) lineas.push({ cuenta: '472', debe: cuota });
+  if (ret) lineas.push({ cuenta: '4751', haber: ret });
+  lineas.push({ cuenta: '410', haber: total });
+  const fila = (a, b, fuerte = false) => `<div class="flex justify-between gap-3 ${fuerte ? 'border-t border-tinta-900/10 pt-1.5 text-[15px] font-bold' : ''}"><span>${a}</span><span class="tabular-nums">${b}</span></div>`;
+  return `
+    <div class="space-y-1 rounded-lg bg-tinta-900/[0.03] p-3 text-sm">
+      ${fila('Base imponible', formatoEuros(base))}
+      ${fila(`IVA ${calc.iva} %`, `+ ${formatoEuros(cuota)}`)}
+      ${fila(`Retención ${calc.ret} %`, ret ? `− ${formatoEuros(ret)}` : formatoEuros(0))}
+      ${fila('Total a pagar al proveedor', formatoEuros(total), true)}
+    </div>
+    <p class="mb-1.5 mt-3 text-[11px] font-semibold uppercase tracking-wider text-tinta-700/50">Asiento resultante</p>
+    ${htmlAsiento(lineas, { compacto: true })}`;
+}
+
+function piezaCalculadora(bloque) {
+  const { calc } = estadoTeoria(bloque.id);
+  const chips = (accion, valores, actual, sufijo) => valores.map((v) => `
+    <button type="button" data-accion="${accion}" data-valor="${v}" data-foco="${accion}-${v}" aria-pressed="${v === actual}"
+            class="min-h-[44px] rounded-lg border-2 text-sm font-bold transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${v === actual ? 'border-tinta-900 bg-tinta-900 text-white' : 'border-tinta-900/10 bg-white hover:border-tinta-900/25'}">
+      ${v}${sufijo}
+    </button>`).join('');
+  return `
+    <div class="my-6 overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm" data-widget="calculadora">
+      <div class="border-b border-tinta-900/10 bg-tinta-900/[0.03] px-4 py-3">
+        <p class="text-sm font-bold">Calculadora de factura recibida</p>
+        <p class="text-xs text-tinta-700/70">Cambia los datos y mira cómo queda el total y el asiento.</p>
+      </div>
+      <div class="space-y-4 p-4">
+        <div>
+          <label for="calc-base" class="mb-1.5 block text-xs font-semibold text-tinta-700/70">Base imponible</label>
+          <div class="relative">
+            <input id="calc-base" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" data-entrada="calc-base" data-foco="calc-base"
+                   value="${escaparHTML(calc.base)}" placeholder="0,00"
+                   class="h-[52px] w-full rounded-xl border-2 border-tinta-900/15 bg-white pl-4 pr-10 text-lg font-semibold tabular-nums outline-none transition focus:border-acento-500" />
+            <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 font-semibold text-tinta-700/50">€</span>
+          </div>
+        </div>
+        <div>
+          <p class="mb-1.5 text-xs font-semibold text-tinta-700/70">Tipo de IVA</p>
+          <div class="grid grid-cols-4 gap-1.5">${chips('calc-iva', [21, 10, 4, 0], calc.iva, ' %')}</div>
+        </div>
+        <div>
+          <p class="mb-1.5 text-xs font-semibold text-tinta-700/70">Retención de IRPF</p>
+          <div class="grid grid-cols-4 gap-1.5">${chips('calc-ret', [0, 7, 15, 19], calc.ret, ' %')}</div>
+        </div>
+        <div id="calc-resultado" aria-live="polite">${htmlCalcResultado(calc)}</div>
+      </div>
+    </div>`;
+}
+
 function piezaCodificacion() {
   const niveles = [
     ['4', 'Grupo', 'Acreedores y deudores por operaciones comerciales', 1],
@@ -1784,7 +3034,7 @@ function renderizarCasos(bloque) {
         <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-tinta-700/60">Circuito de ${casos.length} casos</p>
         <p class="text-xs font-semibold ${completo ? 'text-acento-700' : 'text-tinta-700/70'}">${completo ? '✓ Circuito completado' : `${nResueltos} de ${casos.length} resueltos`}</p>
       </div>
-      <ol class="grid gap-1.5" style="grid-template-columns:repeat(${casos.length},minmax(0,1fr))">${pasos}</ol>
+      <ol class="grid gap-1.5" style="grid-template-columns:repeat(${casos.length <= 7 ? casos.length : Math.ceil(casos.length / 2)},minmax(0,1fr))">${pasos}</ol>
       <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-tinta-900/10">
         <div class="h-full rounded-full bg-acento-500 transition-all duration-500" style="width:${(nResueltos / casos.length) * 100}%"></div>
       </div>
@@ -1814,6 +3064,11 @@ function renderizarCasos(bloque) {
 function cabeceraCaso(caso, numero, total) {
   return `
     <header class="border-b border-tinta-900/10 p-4 sm:p-5">
+      ${caso.cliente ? `
+        <p class="mb-2.5 flex items-center gap-2 rounded-lg bg-indigo-50 px-2.5 py-1.5 text-[12.5px] leading-tight text-indigo-950">
+          <span class="shrink-0 text-indigo-600">${svgIcono(ICONO_MALETIN, 'h-4 w-4')}</span>
+          <span class="min-w-0"><span class="font-semibold">Cliente: ${escaparHTML(caso.cliente.nombre)}</span> <span class="text-indigo-800/70">· ${escaparHTML(caso.cliente.actividad)}</span></span>
+        </p>` : ''}
       <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-acento-700">Caso ${numero} de ${total} · ${caso.tipo === 'asiento' ? 'Registra el asiento' : 'Clasifica'}</p>
       <h2 class="mt-0.5 text-lg font-bold leading-snug">${escaparHTML(caso.titulo)}</h2>
       <p class="mt-2 text-[15px] leading-relaxed text-tinta-900/85">${caso.enunciado}</p>
@@ -1833,9 +3088,19 @@ function agruparLineas(lineas) {
   return mapa;
 }
 
+// Corrige frente a la solución principal y las alternativas válidas;
+// si ninguna coincide, devuelve el diagnóstico más cercano.
 function corregirAsiento(caso, lineas) {
+  const soluciones = [caso.solucion, ...(caso.alternativas || [])];
+  const resultados = soluciones.map((sol) => corregirContra(sol, lineas));
+  const correcto = resultados.find((r) => r.correcto);
+  if (correcto) return correcto;
+  return resultados.reduce((mejor, r) => (r.mensajes.length < mejor.mensajes.length ? r : mejor));
+}
+
+function corregirContra(lineasSolucion, lineas) {
   const usuario = agruparLineas(lineas);
-  const solucion = agruparLineas(caso.solucion);
+  const solucion = agruparLineas(lineasSolucion);
   const mensajes = [];
   const estadoLinea = {}; // clave cuenta|lado → true/false
 
@@ -1843,7 +3108,7 @@ function corregirAsiento(caso, lineas) {
   const totalH = lineas.reduce((s, l) => s + centimos(l.haber || 0), 0);
   if (totalD !== totalH) mensajes.push(`El asiento no cuadra: el Debe suma ${formatoEuros(totalD / 100)} y el Haber ${formatoEuros(totalH / 100)}.`);
 
-  const cuentasSolucion = new Set(caso.solucion.map((l) => l.cuenta));
+  const cuentasSolucion = new Set(lineasSolucion.map((l) => l.cuenta));
   Object.keys(usuario).forEach((clave) => {
     const [cuenta, lado] = clave.split('|');
     if (!cuentasSolucion.has(cuenta)) {
@@ -1870,6 +3135,22 @@ function corregirAsiento(caso, lineas) {
 
   const correcto = mensajes.length === 0;
   return { correcto, mensajes: [...new Set(mensajes)], estadoLinea };
+}
+
+function htmlBloqueDocumento(caso, st) {
+  const oculto = Boolean(st.docOculto);
+  const etiqueta = caso.documento.tipo === 'ticket' ? 'el ticket' : 'la factura';
+  return `
+    <section id="documento-${caso.id}" class="scroll-mt-40 rounded-2xl bg-gradient-to-b from-tinta-900/[0.06] to-tinta-900/[0.02] p-3 sm:p-5 lg:scroll-mt-24">
+      <div class="mb-3 flex items-center justify-between gap-2">
+        <p class="flex items-center gap-2 text-sm font-bold">${svgIcono(ICONO_DOCUMENTO, 'h-4 w-4')} Documento del cliente</p>
+        <button type="button" data-accion="doc-toggle" data-foco="doc-toggle" aria-expanded="${!oculto}"
+                class="inline-flex min-h-[40px] items-center rounded-lg px-2.5 text-xs font-semibold text-tinta-700 hover:bg-white active:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">
+          ${oculto ? `Mostrar ${etiqueta}` : `Ocultar ${etiqueta}`}
+        </button>
+      </div>
+      ${oculto ? '' : htmlDocumento(caso.documento)}
+    </section>`;
 }
 
 function htmlCasoAsiento(caso, bloque) {
@@ -1948,7 +3229,10 @@ function htmlCasoAsiento(caso, bloque) {
 
   const formulario = resuelto ? '' : `
     <div class="rounded-xl border border-tinta-900/10 bg-tinta-900/[0.02] p-3.5 sm:p-4">
-      <p class="mb-3 text-sm font-bold">Añadir una línea al asiento</p>
+      <div class="mb-3 flex items-center justify-between gap-2">
+        <p class="text-sm font-bold">Añadir una línea al asiento</p>
+        ${caso.documento ? `<button type="button" data-accion="ver-documento" class="inline-flex min-h-[40px] items-center gap-1.5 rounded-lg px-2.5 text-xs font-semibold text-acento-700 hover:bg-acento-50 active:bg-acento-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">${svgIcono('M12 19V5M5 12l7-7 7 7', 'h-4 w-4', 2.2)} Ver documento</button>` : ''}
+      </div>
       <p class="mb-2 text-xs font-semibold text-tinta-700/70"><span class="mr-1 font-mono">1</span> Elige la cuenta</p>
       <div class="grid gap-2 sm:grid-cols-2">${chipsCuentas}</div>
       <p class="mb-2 mt-4 text-xs font-semibold text-tinta-700/70"><span class="mr-1 font-mono">2</span> ¿Debe o Haber?</p>
@@ -2001,13 +3285,15 @@ function htmlCasoAsiento(caso, bloque) {
     <article class="overflow-hidden rounded-2xl border border-tinta-900/10 bg-white shadow-sm">
       ${cabeceraCaso(caso, numero, bloque.contenido.casos.length)}
       <div class="space-y-4 p-4 sm:p-5">
-        <details class="group rounded-xl bg-amber-50/70 text-sm text-amber-950">
-          <summary class="flex min-h-[44px] cursor-pointer list-none items-center gap-2 px-3.5 font-semibold [&::-webkit-details-marker]:hidden">
+        ${caso.documento ? htmlBloqueDocumento(caso, st) : ''}
+        <div class="rounded-xl bg-amber-50/70 text-sm text-amber-950">
+          <button type="button" data-accion="pista-toggle" data-foco="pista" aria-expanded="${Boolean(st.pista)}"
+                  class="flex min-h-[44px] w-full items-center gap-2 rounded-xl px-3.5 text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500">
             <span class="text-amber-600">${svgIcono(ICONO_BOMBILLA, 'h-4 w-4')}</span> ¿Necesitas una pista?
-            <span class="ml-auto text-amber-600 transition group-open:rotate-180">${svgIcono('M6 9l6 6 6-6', 'h-4 w-4', 2.5)}</span>
-          </summary>
-          <p class="px-3.5 pb-3.5 leading-relaxed">${escaparHTML(caso.pista)}</p>
-        </details>
+            <span class="ml-auto text-amber-600 transition ${st.pista ? 'rotate-180' : ''}">${svgIcono('M6 9l6 6 6-6', 'h-4 w-4', 2.5)}</span>
+          </button>
+          ${st.pista ? `<p class="px-3.5 pb-3.5 leading-relaxed">${escaparHTML(caso.pista)}</p>` : ''}
+        </div>
         <div>
           <p class="mb-2 text-sm font-bold">Tu asiento</p>
           ${diario}
@@ -2026,46 +3312,55 @@ const TONO_OPCION = {
   pasivo: 'border-amber-300 text-amber-900',
 };
 
+const claveItem = (c) => c.codigo || c.id;
+
 function htmlCasoClasificar(caso, bloque) {
   const st = estadoCaso(caso);
   const numero = bloque.contenido.casos.indexOf(caso) + 1;
-  const hechas = caso.cuentas.filter((c) => st.respuestas[c.codigo]).length;
+  const hechas = caso.cuentas.filter((c) => st.respuestas[claveItem(c)]).length;
   const total = caso.cuentas.length;
   const terminado = hechas === total;
   const opcionPorValor = (v) => caso.opciones.find((o) => o.valor === v);
 
   const tarjetas = caso.cuentas.map((c) => {
-    const acertada = st.respuestas[c.codigo];
-    const fallos = st.fallos[c.codigo] || [];
+    const clave = claveItem(c);
+    const acertada = st.respuestas[clave];
+    const fallos = st.fallos[clave] || [];
+    const titulo = c.codigo
+      ? `<span class="font-mono">${c.codigo}</span> · ${escaparHTML(nombreCuenta(c.codigo))}`
+      : escaparHTML(c.texto);
     if (acertada) {
       return `
-        <li class="${ui.sacudir === 'ok-' + c.codigo ? 'animate-aparecer' : ''} rounded-xl border-2 border-acento-500/40 bg-acento-50 p-3">
+        <li class="${ui.sacudir === 'ok-' + clave ? 'animate-aparecer' : ''} rounded-xl border-2 border-acento-500/40 bg-acento-50 p-3">
           <div class="flex items-center gap-3">
             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-acento-500 text-white">${svgIcono(ICONO_OK, 'h-4 w-4', 3)}</span>
             <span class="min-w-0 flex-1">
-              <span class="block text-sm font-semibold leading-snug"><span class="font-mono">${c.codigo}</span> · ${escaparHTML(nombreCuenta(c.codigo))}</span>
-              <span class="block text-[13px] leading-snug text-acento-800"><strong>${escaparHTML(opcionPorValor(acertada).etiqueta)}</strong> — ${escaparHTML(c.explicacion)}</span>
+              <span class="block text-sm font-semibold leading-snug">${titulo}</span>
+              <span class="block text-[13px] leading-snug text-acento-800"><strong>${escaparHTML(opcionPorValor(acertada).etiqueta)}${opcionPorValor(acertada).detalle ? ' · ' + escaparHTML(opcionPorValor(acertada).detalle) : ''}</strong> — ${escaparHTML(c.explicacion)}</span>
             </span>
           </div>
         </li>`;
     }
     const botones = caso.opciones.map((o) => {
       const fallado = fallos.includes(o.valor);
-      const sacude = ui.sacudir === `${c.codigo}-${o.valor}`;
+      const sacude = ui.sacudir === `${clave}-${o.valor}`;
       const estilo = fallado
         ? 'border-rose-300 bg-rose-50 text-rose-400 line-through'
         : `bg-white hover:bg-tinta-900/[0.03] active:bg-tinta-900/5 ${TONO_OPCION[o.tono] || 'border-tinta-900/15 text-tinta-900'}`;
       return `
-        <button type="button" data-accion="clasif-elegir" data-cuenta="${c.codigo}" data-valor="${o.valor}" data-foco="cl-${c.codigo}-${o.valor}"
+        <button type="button" data-accion="clasif-elegir" data-cuenta="${clave}" data-valor="${o.valor}" data-foco="cl-${clave}-${o.valor}"
                 ${fallado ? 'disabled aria-disabled="true"' : ''}
-                class="min-h-[48px] rounded-lg border-2 px-2 py-1.5 text-[13px] font-semibold leading-tight transition active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${o.ancho ? 'col-span-2 sm:col-span-1' : ''} ${estilo} ${sacude ? 'animate-sacudir' : ''}">
-          ${escaparHTML(o.etiqueta)}
+                class="flex min-h-[48px] flex-col items-center justify-center rounded-lg border-2 px-2 py-1.5 text-[13px] font-semibold leading-tight transition active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-acento-500 ${o.ancho ? 'col-span-2 sm:col-span-1' : ''} ${estilo} ${sacude ? 'animate-sacudir' : ''}">
+          <span class="${o.detalle ? 'font-mono text-[15px]' : ''}">${escaparHTML(o.etiqueta)}</span>
+          ${o.detalle ? `<span class="mt-0.5 text-[10.5px] font-medium opacity-75">${escaparHTML(o.detalle)}</span>` : ''}
         </button>`;
     }).join('');
     return `
       <li class="rounded-xl border-2 ${fallos.length ? 'border-rose-200' : 'border-tinta-900/10'} bg-white p-3">
-        <p class="text-sm font-semibold leading-snug"><span class="mr-1 rounded-md bg-tinta-900/[0.06] px-1.5 py-0.5 font-mono">${c.codigo}</span> ${escaparHTML(nombreCuenta(c.codigo))}</p>
-        <div class="mt-3 grid gap-1.5 ${caso.rejilla || 'grid-cols-2'}" role="group" aria-label="Respuesta para la cuenta ${c.codigo}">${botones}</div>
+        <p class="text-sm font-semibold leading-snug">${c.codigo
+          ? `<span class="mr-1 rounded-md bg-tinta-900/[0.06] px-1.5 py-0.5 font-mono">${c.codigo}</span> ${escaparHTML(nombreCuenta(c.codigo))}`
+          : escaparHTML(c.texto)}</p>
+        <div class="mt-3 grid gap-1.5 ${caso.rejilla || 'grid-cols-2'}" role="group" aria-label="Respuesta para: ${escaparHTML(c.codigo || c.texto)}">${botones}</div>
         ${fallos.length ? `<p class="${ui.animar ? 'animate-aparecer' : ''} mt-2 flex gap-1.5 text-[13px] leading-snug text-rose-700"><span class="mt-px shrink-0">${svgIcono(ICONO_BOMBILLA, 'h-4 w-4')}</span><span><strong>Pista:</strong> ${escaparHTML(c.pista)}</span></p>` : ''}
       </li>`;
   }).join('');
@@ -2132,6 +3427,13 @@ const ACCIONES = {
   'sim-anterior': () => { const st = estadoTeoria(estado.bloque); st.paso = Math.max(0, st.paso - 1); },
   'sim-reiniciar': () => { estadoTeoria(estado.bloque).paso = 0; },
 
+  'anatomia-campo': (el) => {
+    estadoTeoria(estado.bloque).campo = el.dataset.campo;
+    ui.animar = true;
+  },
+  'calc-iva': (el) => { estadoTeoria(estado.bloque).calc.iva = Number(el.dataset.valor); },
+  'calc-ret': (el) => { estadoTeoria(estado.bloque).calc.ret = Number(el.dataset.valor); },
+
   /* --- Test --- */
   'test-responder': (el) => {
     const bloque = bloqueActivo();
@@ -2181,6 +3483,25 @@ const ACCIONES = {
     if (!bloqueActivo().contenido.casos[indice]) return false;
     estadoCasos(estado.bloque).activo = indice;
     return () => asegurarVisible($('#tarjeta-caso'));
+  },
+
+  /* --- Casos: documento y pista --- */
+  'doc-toggle': () => {
+    const st = estadoCaso(casoActual());
+    st.docOculto = !st.docOculto;
+  },
+  'ver-documento': () => {
+    const caso = casoActual();
+    const st = estadoCaso(caso);
+    const yaVisible = !st.docOculto;
+    st.docOculto = false;
+    const ir = () => asegurarVisible(document.getElementById(`documento-${caso.id}`));
+    if (yaVisible) { ir(); return false; }
+    return ir;
+  },
+  'pista-toggle': () => {
+    const st = estadoCaso(casoActual());
+    st.pista = !st.pista;
   },
 
   /* --- Casos: asiento --- */
@@ -2241,7 +3562,11 @@ const ACCIONES = {
     return () => asegurarVisible(document.getElementById(`correccion-${caso.id}`), 'abajo');
   },
   'asiento-reiniciar': () => {
-    delete ui.caso[casoActual().id];
+    const caso = casoActual();
+    const anterior = ui.caso[caso.id] || {};
+    delete ui.caso[caso.id];
+    const nuevo = estadoCaso(caso);
+    nuevo.docOculto = anterior.docOculto;
     return () => asegurarVisible($('#tarjeta-caso'));
   },
 
@@ -2251,14 +3576,14 @@ const ACCIONES = {
     const st = estadoCaso(caso);
     const codigo = el.dataset.cuenta;
     const elegido = el.dataset.valor;
-    const cuenta = caso.cuentas.find((c) => c.codigo === codigo);
+    const cuenta = caso.cuentas.find((c) => claveItem(c) === codigo);
     if (!cuenta || st.respuestas[codigo]) return false;
 
     if (elegido === cuenta.correcta) {
       st.respuestas[codigo] = elegido;
       ui.sacudir = `ok-${codigo}`;
       vibrar(25);
-      if (caso.cuentas.every((c) => st.respuestas[c.codigo])) {
+      if (caso.cuentas.every((c) => st.respuestas[claveItem(c)])) {
         ui.animar = true;
         marcarCasoResuelto(caso);
         return () => asegurarVisible(document.getElementById(`correccion-${caso.id}`), 'abajo');
@@ -2420,11 +3745,23 @@ function registrarEventos() {
 
   // Importe del asiento: se guarda mientras se escribe (sin repintar)
   $('#contenido').addEventListener('input', (e) => {
-    if (e.target.dataset.entrada !== 'importe') return;
-    const caso = casoActual();
-    if (caso) estadoCaso(caso).borrador.importe = e.target.value;
+    const tipo = e.target.dataset.entrada;
+    if (tipo === 'importe') {
+      const caso = casoActual();
+      if (caso) estadoCaso(caso).borrador.importe = e.target.value;
+    } else if (tipo === 'calc-base') {
+      const st = estadoTeoria(estado.bloque);
+      st.calc.base = e.target.value;
+      const destino = $('#calc-resultado');
+      if (destino) destino.innerHTML = htmlCalcResultado(st.calc); // sin repintar: el teclado no se cierra
+    }
   });
   $('#contenido').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.dataset && e.target.dataset.entrada === 'calc-base') {
+      e.preventDefault();
+      e.target.blur();
+      return;
+    }
     if (e.key === 'Enter' && e.target.dataset && e.target.dataset.entrada === 'importe') {
       e.preventDefault();
       const boton = $('[data-accion="asiento-anadir"]');
